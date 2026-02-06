@@ -90,7 +90,7 @@ module.exports = async (req, res) => {
         id: `msg_${Date.now() + 1}_${Math.random().toString(36).slice(2, 8)}`,
         agentId,
         sender: 'system',
-        text: `📨 Message queued for ${agentName}. They'll respond on their next heartbeat (every ~15 min).`,
+        text: `📨 Message sent to ${agentName}. Response coming in ~30 seconds.`,
         timestamp: new Date().toISOString(),
         status: 'delivered'
       };
@@ -101,7 +101,7 @@ module.exports = async (req, res) => {
       success: true,
       message,
       queuePosition: chatStore.conversations[agentId].filter(m => m.status === 'pending').length,
-      nextHeartbeat: '~15 minutes',
+      nextHeartbeat: '~30 seconds',
       timestamp: new Date().toISOString()
     });
   }

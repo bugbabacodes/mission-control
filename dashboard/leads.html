@@ -264,15 +264,25 @@
                         <div class="bg-black/30 rounded-lg p-3 mb-3">
                             <p class="text-gray-500 text-xs italic">"${lead.outreach}"</p>
                         </div>
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 mb-3">
                             <select onchange="updateStatus(${lead.id}, this.value)" class="flex-1 bg-white/10 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50">
-                                <option value="New" ${status === 'New' ? 'selected' : ''}>New</option>
-                                <option value="Contacted" ${status === 'Contacted' ? 'selected' : ''}>Contacted</option>
-                                <option value="Replied" ${status === 'Replied' ? 'selected' : ''}>Replied</option>
-                                <option value="Meeting" ${status === 'Meeting' ? 'selected' : ''}>Meeting</option>
-                                <option value="Closed" ${status === 'Closed' ? 'selected' : ''}>Closed</option>
+                                <option value="New" ${status === 'New' ? 'selected' : ''}>📥 New</option>
+                                <option value="Contacted" ${status === 'Contacted' ? 'selected' : ''}>📤 Contacted</option>
+                                <option value="Replied" ${status === 'Replied' ? 'selected' : ''}>💬 Replied</option>
+                                <option value="Meeting" ${status === 'Meeting' ? 'selected' : ''}>📅 Meeting</option>
+                                <option value="Closed" ${status === 'Closed' ? 'selected' : ''}>✅ Closed</option>
                             </select>
-                            <button onclick="copyOutreach(${lead.id})" class="bg-white/10 hover:bg-white/20 px-3 py-2 rounded-lg text-sm transition-all">📋</button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openLinkedIn(${lead.id})" class="flex-1 py-2 rounded-lg text-xs bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 transition-all font-medium">
+                                🔗 LinkedIn
+                            </button>
+                            <button onclick="draftEmail(${lead.id})" class="flex-1 py-2 rounded-lg text-xs bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 transition-all font-medium">
+                                ✉️ Email
+                            </button>
+                            <button onclick="copyOutreach(${lead.id})" class="py-2 px-3 rounded-lg text-xs bg-white/10 hover:bg-white/20 transition-all" title="Copy outreach">
+                                📋
+                            </button>
                         </div>
                     </div>
                 `;
@@ -324,6 +334,59 @@
             document.getElementById('toastMessage').textContent = message;
             toast.classList.remove('translate-y-20', 'opacity-0');
             setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+
+        function openLinkedIn(id) {
+            const lead = leads.find(l => l.id === id);
+            if (!lead) return;
+            
+            // Copy outreach message first
+            navigator.clipboard.writeText(lead.outreach);
+            
+            // Try to open LinkedIn profile
+            let url = lead.link || '';
+            if (url.includes('linkedin.com')) {
+                url = url.startsWith('http') ? url : 'https://' + url;
+            } else if (lead.name) {
+                // Search for the person on LinkedIn
+                url = `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(lead.name + ' ' + lead.company)}`;
+            } else {
+                url = `https://www.linkedin.com/search/results/companies/?keywords=${encodeURIComponent(lead.company)}`;
+            }
+            
+            window.open(url, '_blank');
+            showToast('📋 Outreach copied! LinkedIn opened.');
+            
+            // Mark as contacted
+            leadStatuses[id] = 'Contacted';
+            saveStatuses();
+            renderLeads();
+        }
+
+        function draftEmail(id) {
+            const lead = leads.find(l => l.id === id);
+            if (!lead) return;
+            
+            // Create email draft
+            const subject = encodeURIComponent(`Quick question about ${lead.company}`);
+            const body = encodeURIComponent(`Hi ${lead.name.split(' ')[0] || 'there'},
+
+${lead.outreach}
+
+I help early-stage founders ship faster — 100+ projects across AI, Web3, and consumer apps. 8 weeks from idea to live product.
+
+Would love to understand what you're working on. Worth a quick chat?
+
+Cheers,
+Ishan
+DappaSol | dappasol.com`);
+            
+            // Open mailto link
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            showToast('📧 Email draft opened');
+            
+            // Also copy the message
+            navigator.clipboard.writeText(lead.outreach);
         }
 
         // Search
