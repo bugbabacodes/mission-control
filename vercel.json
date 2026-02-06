@@ -41,6 +41,7 @@
     { "src": "/api/control", "dest": "/api/control.js" },
     { "src": "/api/logs", "dest": "/api/logs.js" },
     { "src": "/api/chat", "dest": "/api/chat.js" },
+    { "src": "/api/tasks", "dest": "/api/tasks.js" },
     { "src": "/api/dashboard/(.*)", "dest": "/api/live-dashboard.js" },
     { "src": "/api/(.*)", "dest": "/api/index.js" },
     { "src": "/", "dest": "/dashboard/index.html" }
