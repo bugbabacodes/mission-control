@@ -1,101 +1,75 @@
 {
   "actionItems": [
     {
-      "id": "ai-mlail2f5-ridtf",
-      "agent": "dexter",
-      "type": "clarification",
-      "title": "Test action item",
-      "description": "This is a test description",
-      "priority": "medium",
-      "created_at": "2026-02-06T06:38:36.929Z",
-      "status": "resolved",
-      "context_links": [],
-      "user_response": "Test response - approved",
-      "resolved_at": "2026-02-06T06:38:46.700Z"
-    },
-    {
       "id": "ai-001",
-      "agent": "dexter",
+      "agent": "Marie Curie",
       "type": "clarification",
       "title": "Need clarification on research scope for zero-to-one content",
       "description": "I'm researching zero-to-one startup trends, but need to know: Should I focus on B2B SaaS only, or include D2C/consumer apps? Also, any specific industries you want prioritized (fintech, healthtech, AI infra)?",
       "priority": "high",
       "created_at": "2026-02-06T06:30:00Z",
       "status": "pending",
-      "context_links": [
-        "mission-control/memory/dexter/research-queue.md"
-      ],
+      "context_links": ["mission-control/memory/marie-curie/research-queue.md"],
       "user_response": null,
       "resolved_at": null
     },
     {
       "id": "ai-002",
-      "agent": "blossom",
+      "agent": "Shakespeare",
       "type": "review",
       "title": "Review this LinkedIn post before I finalize",
-      "description": "I've drafted your next LinkedIn post about 'The Project That Almost Broke Me' - a personal story about the early startup days. It's emotional and vulnerable. Want your eyes on it before scheduling. File: content/linkedin/personal-story-draft.md",
+      "description": "I've drafted your next LinkedIn post about 'The Project That Almost Broke Me' - a personal story about the early startup days. It's emotional and vulnerable. Want your eyes on it before scheduling.",
       "priority": "medium",
       "created_at": "2026-02-06T07:15:00Z",
       "status": "pending",
-      "context_links": [
-        "content/linkedin/personal-story-draft.md",
-        "content/calendar/week-1-schedule.md"
-      ],
+      "context_links": ["content/linkedin/personal-story-draft.md"],
       "user_response": null,
       "resolved_at": null
     },
     {
       "id": "ai-003",
-      "agent": "johnny",
+      "agent": "Jobs",
       "type": "decision",
       "title": "Which of these 3 outreach templates should I use?",
       "description": "I've created 3 variations of the cold outreach email for Tier 1 prospects. Template A is direct/aggressive, Template B is consultative/educational, Template C uses social proof heavily. Which voice fits your brand best?",
       "priority": "high",
       "created_at": "2026-02-06T08:00:00Z",
       "status": "pending",
-      "context_links": [
-        "mission-control/memory/johnny/outreach-templates.md",
-        "mission-control/database/leads-tier1.json"
-      ],
+      "context_links": ["mission-control/memory/jobs/outreach-templates.md"],
       "user_response": null,
       "resolved_at": null
     },
     {
       "id": "ai-004",
-      "agent": "samurai",
+      "agent": "Turing",
       "type": "decision",
       "title": "Technical decision needed on database choice",
-      "description": "Building the new lead scoring system. Should I use PostgreSQL for relational integrity (better for complex queries) or stick with JSON files for simplicity (easier to version control)? Trade-off: SQL = more powerful, JSON = easier to debug.",
+      "description": "Building the new lead scoring system. Should I use PostgreSQL for relational integrity (better for complex queries) or stick with JSON files for simplicity (easier to version control)?",
       "priority": "medium",
       "created_at": "2026-02-06T09:45:00Z",
       "status": "pending",
-      "context_links": [
-        "mission-control/tools/lead-scorer-design.md"
-      ],
+      "context_links": ["mission-control/tools/lead-scorer-design.md"],
       "user_response": null,
       "resolved_at": null
     },
     {
       "id": "ai-005",
-      "agent": "courage",
+      "agent": "Nightingale",
       "type": "approval",
       "title": "Client asking about pricing, need your input",
       "description": "A prospect replied to the nurture sequence asking about pricing packages. Should I send the standard rate card ($5K/month retainer) or schedule a discovery call first? They're a Series A startup, 50 employees, potentially high value.",
       "priority": "urgent",
       "created_at": "2026-02-06T11:30:00Z",
       "status": "pending",
-      "context_links": [
-        "mission-control/memory/courage/client-conversations.md",
-        "pricing/rate-card-2026.md"
-      ],
+      "context_links": ["mission-control/memory/nightingale/client-conversations.md"],
       "user_response": null,
       "resolved_at": null
     }
   ],
   "metadata": {
-    "total_count": 6,
+    "total_count": 5,
     "pending_count": 5,
-    "resolved_count": 1,
-    "last_updated": "2026-02-06T06:38:46.700Z"
+    "resolved_count": 0,
+    "last_updated": "2026-02-06T11:45:00Z"
   }
 }

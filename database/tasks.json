@@ -4,7 +4,7 @@
     "title": "Setup Mission Control System",
     "description": "Initialize shared database, setup cron jobs, test heartbeats, generate first standup",
     "status": "done",
-    "assignee_ids": ["raven"],
+    "assignee_ids": ["turing"],
     "priority": "high",
     "created_at": "2026-02-03T00:00:00.000Z",
     "updated_at": "2026-02-03T00:38:00.000Z",
@@ -12,11 +12,11 @@
     "tags": ["setup", "infrastructure", "mission-control"]
   },
   {
-    "id": "task_dexter_research_template",
+    "id": "task_research_template",
     "title": "Create Research Report Template",
     "description": "Build standardized template for competitive analysis reports",
     "status": "inbox",
-    "assignee_ids": ["dexter"],
+    "assignee_ids": ["marie_curie"],
     "priority": "medium",
     "created_at": "2026-02-03T00:00:00.000Z",
     "updated_at": "2026-02-03T00:00:00.000Z",
@@ -24,11 +24,11 @@
     "tags": ["template", "research"]
   },
   {
-    "id": "task_blossom_content_calendar",
+    "id": "task_content_calendar",
     "title": "Q1 Content Calendar Planning",
     "description": "Plan content schedule for Q1 2026 including LinkedIn posts and blog articles",
     "status": "inbox",
-    "assignee_ids": ["blossom"],
+    "assignee_ids": ["shakespeare"],
     "priority": "medium",
     "created_at": "2026-02-03T00:00:00.000Z",
     "updated_at": "2026-02-03T00:00:00.000Z",
@@ -36,11 +36,11 @@
     "tags": ["content", "planning", "q1"]
   },
   {
-    "id": "task_samurai_code_review",
+    "id": "task_code_review",
     "title": "Code Review: Mission Control Scripts",
     "description": "Review and optimize database.js, heartbeat.js, and standup.js for production",
     "status": "inbox",
-    "assignee_ids": ["samurai_jack"],
+    "assignee_ids": ["turing"],
     "priority": "medium",
     "created_at": "2026-02-03T00:00:00.000Z",
     "updated_at": "2026-02-03T00:00:00.000Z",
@@ -48,27 +48,39 @@
     "tags": ["code-review", "optimization"]
   },
   {
-    "id": "task_johnny_lead_list",
+    "id": "task_lead_list",
     "title": "Build Target Lead List",
     "description": "Research and compile list of 50 potential leads in SaaS space",
-    "status": "inbox",
-    "assignee_ids": ["johnny_bravo"],
+    "status": "done",
+    "assignee_ids": ["jobs"],
     "priority": "high",
     "created_at": "2026-02-03T00:00:00.000Z",
-    "updated_at": "2026-02-03T00:00:00.000Z",
+    "updated_at": "2026-02-05T00:00:00.000Z",
     "due_date": "2026-02-10",
     "tags": ["leads", "research", "outreach"]
   },
   {
-    "id": "task_courage_email_setup",
+    "id": "task_email_setup",
     "title": "Setup Email Monitoring Workflow",
     "description": "Configure email monitoring and response templates for client success",
     "status": "inbox",
-    "assignee_ids": ["courage"],
+    "assignee_ids": ["nightingale"],
     "priority": "medium",
     "created_at": "2026-02-03T00:00:00.000Z",
     "updated_at": "2026-02-03T00:00:00.000Z",
     "due_date": null,
     "tags": ["email", "workflow", "automation"]
+  },
+  {
+    "id": "task_visual_assets",
+    "title": "Create Brand Visual Assets",
+    "description": "Design social media templates, avatar variations, and brand graphics",
+    "status": "inbox",
+    "assignee_ids": ["van_gogh_jr"],
+    "priority": "medium",
+    "created_at": "2026-02-06T00:00:00.000Z",
+    "updated_at": "2026-02-06T00:00:00.000Z",
+    "due_date": "2026-02-15",
+    "tags": ["design", "branding", "visual"]
   }
 ]
