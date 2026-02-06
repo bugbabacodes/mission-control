@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "name": "mission-control-dashboard",
   "builds": [
     {
       "src": "api/**/*.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "dashboard/**",
+      "use": "@vercel/static"
     }
   ],
   "rewrites": [
@@ -15,6 +18,10 @@
     {
       "source": "/api/:path*",
       "destination": "/api/index.js"
+    },
+    {
+      "source": "/",
+      "destination": "/dashboard/index.html"
     },
     {
       "source": "/:path*",
