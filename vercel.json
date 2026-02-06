@@ -8,6 +8,10 @@
     {
       "src": "dashboard/**",
       "use": "@vercel/static"
+    },
+    {
+      "src": "database/**",
+      "use": "@vercel/static"
     }
   ],
   "rewrites": [
@@ -22,10 +26,6 @@
     {
       "source": "/",
       "destination": "/dashboard/index.html"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/dashboard/:path*"
     }
   ],
   "headers": [
@@ -33,6 +33,13 @@
       "source": "/dashboard/:path*",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/database/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
       ]
     },
     {
