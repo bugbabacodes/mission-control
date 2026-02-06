@@ -254,11 +254,11 @@
                             <label class="block text-sm text-gray-400 mb-2">Assigned Agent</label>
                             <select id="taskAgent" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50">
                                 <option value="">Select an agent...</option>
-                                <option value="Dexter">🧪 Dexter</option>
-                                <option value="Blossom">🌸 Blossom</option>
-                                <option value="Samurai Jack">⚔️ Samurai Jack</option>
-                                <option value="Johnny Bravo">🕶️ Johnny Bravo</option>
-                                <option value="Courage">🐾 Courage</option>
+                                <option value="Marie Curie">☢️ Marie Curie</option>
+                                <option value="Shakespeare">🪶 Shakespeare</option>
+                                <option value="Turing">🧠 Turing</option>
+                                <option value="Jobs">🍎 Jobs</option>
+                                <option value="Nightingale">🕯️ Nightingale</option>
                             </select>
                         </div>
                         <div>
@@ -309,11 +309,11 @@
         function initSampleTasks() {
             if (tasks.length === 0) {
                 tasks = [
-                    { id: 1, title: 'Research competitor analysis', agent: 'Dexter', priority: 'high', status: 'in-progress', completed: false, createdAt: Date.now() },
-                    { id: 2, title: 'Create social media content calendar', agent: 'Blossom', priority: 'medium', status: 'pending', completed: false, createdAt: Date.now() - 86400000 },
-                    { id: 3, title: 'Fix authentication bug', agent: 'Samurai Jack', priority: 'high', status: 'done', completed: true, createdAt: Date.now() - 172800000 },
-                    { id: 4, title: 'Update landing page copy', agent: 'Johnny Bravo', priority: 'low', status: 'pending', completed: false, createdAt: Date.now() - 259200000 },
-                    { id: 5, title: 'Qualify new leads from campaign', agent: 'Courage', priority: 'medium', status: 'done', completed: true, createdAt: Date.now() - 345600000 },
+                    { id: 1, title: 'Research competitor analysis', agent: 'Marie Curie', priority: 'high', status: 'in-progress', completed: false, createdAt: Date.now() },
+                    { id: 2, title: 'Create social media content calendar', agent: 'Shakespeare', priority: 'medium', status: 'pending', completed: false, createdAt: Date.now() - 86400000 },
+                    { id: 3, title: 'Fix authentication bug', agent: 'Turing', priority: 'high', status: 'done', completed: true, createdAt: Date.now() - 172800000 },
+                    { id: 4, title: 'Update landing page copy', agent: 'Jobs', priority: 'low', status: 'pending', completed: false, createdAt: Date.now() - 259200000 },
+                    { id: 5, title: 'Qualify new leads from campaign', agent: 'Nightingale', priority: 'medium', status: 'done', completed: true, createdAt: Date.now() - 345600000 },
                 ];
                 saveTasks();
             }
@@ -350,11 +350,11 @@
 
         function getAgentEmoji(agent) {
             const emojis = {
-                'Dexter': '🧪',
-                'Blossom': '🌸',
-                'Samurai Jack': '⚔️',
-                'Johnny Bravo': '🕶️',
-                'Courage': '🐾'
+                'Marie Curie': '☢️',
+                'Shakespeare': '🪶',
+                'Turing': '🧠',
+                'Jobs': '🍎',
+                'Nightingale': '🕯️'
             };
             return emojis[agent] || '🤖';
         }
