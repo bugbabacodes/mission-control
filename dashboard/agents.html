@@ -2,686 +2,435 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Agents | Mission Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bg-primary': '#0f0f1a',
+                        'bg-secondary': '#1a1a2e',
+                        'accent-cyan': '#00d4ff',
+                        'accent-purple': '#7b2cbf',
+                        'accent-pink': '#ff006e',
+                        'accent-green': '#00f5d4',
+                        'accent-yellow': '#ffb703',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg-primary: #0f0f1a;
-            --bg-secondary: #1a1a2e;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --sidebar-bg: rgba(26, 26, 46, 0.8);
-            --border: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --text-muted: #6b6b7b;
-            --accent-cyan: #00d4ff;
-            --accent-purple: #7b2cbf;
-            --accent-pink: #ff006e;
-            --accent-green: #00f5d4;
-            --accent-yellow: #ffb703;
-            --gradient-1: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
-            --gradient-2: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
-            --gradient-3: linear-gradient(135deg, #00f5d4 0%, #00d4ff 100%);
-            --shadow-glow: 0 0 40px rgba(0, 212, 255, 0.15);
-        }
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        .bg-animation {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .bg-animation::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(123, 44, 191, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(255, 0, 110, 0.03) 0%, transparent 50%);
-            animation: bgPulse 15s ease-in-out infinite;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background: #0f0f1a; color: white; }
+        .glass { background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+        .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); }
+        .gradient-1 { background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%); }
+        .gradient-2 { background: linear-gradient(135deg, #ff006e 0%, #8338ec 100%); }
+        .text-gradient { background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glow-cyan { box-shadow: 0 0 40px rgba(0, 212, 255, 0.15); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         @keyframes bgPulse {
             0%, 100% { transform: rotate(0deg) scale(1); }
             50% { transform: rotate(180deg) scale(1.1); }
         }
-        .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--border);
-            padding: 2rem 1.5rem;
-            display: flex;
-            flex-direction: column;
+        .bg-animated::before {
+            content: '';
             position: fixed;
-            height: 100vh;
-            overflow-y: auto;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(123, 44, 191, 0.08) 0%, transparent 40%);
+            animation: bgPulse 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
         }
-        .logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 3rem; padding: 0 0.5rem; }
-        .logo-icon {
-            width: 40px; height: 40px;
-            background: var(--gradient-1);
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        }
-        .logo-text {
-            font-size: 1.25rem; font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .nav-section { margin-bottom: 2rem; }
-        .nav-title {
-            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em;
-            color: var(--text-muted); margin-bottom: 1rem; padding: 0 0.75rem;
-        }
-        .nav-item {
-            display: flex; align-items: center; gap: 0.875rem;
-            padding: 0.875rem 1rem; margin-bottom: 0.375rem;
-            border-radius: 12px; cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--text-secondary); text-decoration: none;
-        }
-        .nav-item:hover { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); transform: translateX(4px); }
-        .nav-item.active { background: rgba(0, 212, 255, 0.1); color: var(--accent-cyan); box-shadow: 0 0 20px rgba(0, 212, 255, 0.1); }
-        .nav-item.active .nav-icon { filter: drop-shadow(0 0 8px var(--accent-cyan)); }
-        .nav-icon { font-size: 1.25rem; width: 24px; text-align: center; }
-        .nav-badge { margin-left: auto; background: var(--gradient-2); color: white; font-size: 0.7rem; padding: 0.25rem 0.5rem; border-radius: 20px; font-weight: 600; }
-        .main { flex: 1; margin-left: 280px; padding: 2rem; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .header-title h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
-        .header-title p { color: var(--text-secondary); font-size: 0.875rem; }
-        .header-actions { display: flex; gap: 1rem; align-items: center; }
-        .search-box { position: relative; }
-        .search-box input { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 1rem 0.75rem 2.5rem; color: var(--text-primary); width: 280px; font-size: 0.875rem; transition: all 0.3s; }
-        .search-box input:focus { outline: none; border-color: var(--accent-cyan); box-shadow: 0 0 20px rgba(0, 212, 255, 0.1); }
-        .search-box::before { content: '🔍'; position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); opacity: 0.5; }
-        .user-menu { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.3s; }
-        .user-menu:hover { border-color: var(--border-hover); }
-        .user-avatar { width: 36px; height: 36px; border-radius: 10px; background: var(--gradient-1); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem; }
-        .agents-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-        @media (max-width: 1024px) {
-            .agents-grid { grid-template-columns: 1fr; }
-        }
-        .agent-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
-        }
-        .agent-card:hover {
-            border-color: var(--border-hover);
-            box-shadow: var(--shadow-glow);
-            transform: translateY(-4px);
-        }
-        .agent-header {
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .agent-avatar {
-            width: 56px; height: 56px;
-            border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.75rem;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border);
-        }
-        .agent-title { flex: 1; }
-        .agent-name { font-size: 1.125rem; font-weight: 700; margin-bottom: 0.25rem; }
-        .agent-role { font-size: 0.875rem; color: var(--text-secondary); }
-        .agent-status {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .status-online { background: rgba(0, 245, 212, 0.15); color: var(--accent-green); }
-        .status-working { background: rgba(255, 183, 3, 0.15); color: var(--accent-yellow); }
-        .agent-body { padding: 1.5rem; }
-        .task-box {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        .task-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem; }
-        .task-value { font-weight: 600; }
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        .stat-box {
-            text-align: center;
-            padding: 0.75rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 10px;
-        }
-        .stat-num { font-size: 1.25rem; font-weight: 700; color: var(--accent-cyan); }
-        .stat-label { font-size: 0.7rem; color: var(--text-muted); }
-        .deliverables { display: flex; flex-direction: column; gap: 0.5rem; }
-        .deliverable {
-            display: flex; align-items: center; gap: 0.75rem;
-            padding: 0.75rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 10px;
-            font-size: 0.875rem;
-        }
-        .deliverable-icon { color: var(--accent-green); }
-        .agent-footer {
-            padding: 1rem 1.5rem;
-            border-top: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.01);
-        }
-        .last-update { font-size: 0.75rem; color: var(--text-muted); }
-        
-        /* Agent Card Expansion */
-        .agent-card {
-            cursor: pointer;
-        }
-        
-        .agent-expanded-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease;
-        }
-        
-        .agent-card.expanded .agent-expanded-content {
-            max-height: 300px;
-            padding-top: 1rem;
-        }
-        
-        .agent-card.expanded {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
-        }
-        
-        .agent-profile-section {
-            background: rgba(0,0,0,0.2);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .agent-profile-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-        }
-        
-        .agent-profile-text {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-        
-        .agent-skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
-        
-        .skill-tag {
-            padding: 0.375rem 0.75rem;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: var(--accent-cyan);
-        }
-        
-        /* Stats Animation */
-        .stat-num {
-            transition: all 0.3s ease;
-        }
-        
-        .stat-num.updating {
-            color: var(--accent-green);
-            transform: scale(1.2);
-        }
-        
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
-        }
-        
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        .refresh-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            margin-left: 0.5rem;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--accent-green); }
-            50% { opacity: 0.5; box-shadow: 0 0 15px var(--accent-green); }
-        }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        .agent-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .agent-card:hover { transform: translateY(-4px); }
+        .agent-card.expanded { border-color: #00d4ff; box-shadow: 0 0 30px rgba(0, 212, 255, 0.15); }
+        .expanded-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
+        .agent-card.expanded .expanded-content { max-height: 300px; padding-top: 1rem; }
     </style>
 </head>
-<body>
-    <div class="bg-animation"></div>
-    <div class="app">
-        <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-icon">🎯</div>
-                <div class="logo-text">Mission Control</div>
+<body class="bg-animated min-h-screen pb-20 md:pb-0">
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex fixed left-0 top-0 h-screen w-72 glass flex-col p-6 z-20">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-10 h-10 gradient-1 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-cyan-500/30">🎯</div>
+            <span class="text-xl font-bold text-gradient">Mission Control</span>
+        </div>
+        <nav class="flex-1 space-y-1">
+            <p class="text-xs text-gray-500 uppercase tracking-wider mb-3 px-3">Main</p>
+            <a href="./index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="./agents.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <span class="text-xl">🤖</span>
+                <span class="font-medium">Agents</span>
+                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full">5</span>
+            </a>
+            <a href="./tasks.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">📋</span>
+                <span>Tasks</span>
+                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full" id="tasksBadge">2</span>
+            </a>
+            <a href="./content.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">📝</span>
+                <span>Content</span>
+            </a>
+            <p class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-3 px-3">Operations</p>
+            <a href="./leads.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">👥</span>
+                <span>Leads</span>
+                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full">50</span>
+            </a>
+            <a href="./chat.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">💬</span>
+                <span>Chat</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-72 p-4 md:p-6 lg:p-8 relative z-10">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold">Agent Profiles</h1>
+                <p class="text-gray-400 text-sm mt-1">5 autonomous agents working together</p>
             </div>
-            <div class="nav-section">
-                <div class="nav-title">Main</div>
-                <a href="./index.html" class="nav-item">
-                    <span class="nav-icon">📊</span><span>Dashboard</span>
-                </a>
-                <a href="./agents.html" class="nav-item active">
-                    <span class="nav-icon">🤖</span><span>Agents</span>
-                    <span class="nav-badge">5</span>
-                </a>
-                <a href="./tasks.html" class="nav-item">
-                    <span class="nav-icon">📋</span><span>Tasks</span>
-                </a>
-                <a href="./content.html" class="nav-item">
-                    <span class="nav-icon">📝</span><span>Content</span>
-                </a>
+            <div class="flex items-center gap-3">
+                <div class="relative flex-1 md:w-64">
+                    <input type="text" placeholder="Search agents..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pl-10 text-sm focus:outline-none focus:border-cyan-500/50">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">🔍</span>
+                </div>
+                <div class="w-10 h-10 gradient-1 rounded-xl flex items-center justify-center text-sm font-bold shrink-0">IR</div>
             </div>
-            <div class="nav-section">
-                <div class="nav-title">Operations</div>
-                <a href="./leads.html" class="nav-item">
-                    <span class="nav-icon">👥</span><span>Leads</span>
-                    <span class="nav-badge">50</span>
-                </a>
-                <a href="./chat.html" class="nav-item">
-                    <span class="nav-icon">💬</span><span>Chat</span>
-                </a>
-            </div>
-        </aside>
-        <main class="main">
-            <header class="header">
-                <div class="header-title">
-                    <h1>Agent Profiles</h1>
-                    <p>5 autonomous agents working together</p>
-                </div>
-                <div class="header-actions">
-                    <div class="search-box">
-                        <input type="text" placeholder="Search anything...">
-                    </div>
-                    <div class="user-menu">
-                        <div class="user-avatar">IR</div>
+        </header>
+
+        <!-- Agents Grid -->
+        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <!-- Dexter -->
+            <div class="agent-card glass-card rounded-2xl overflow-hidden cursor-pointer" data-agent="dexter" onclick="toggleAgent(this)">
+                <div class="p-4 md:p-6 border-b border-white/10">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 md:w-14 md:h-14 bg-cyan-500/20 rounded-2xl flex items-center justify-center text-2xl md:text-3xl border border-white/10">🧪</div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-lg truncate">Dexter</h3>
+                            <p class="text-gray-400 text-sm truncate">Research Intelligence</p>
+                        </div>
+                        <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1.5 rounded-full text-xs font-semibold">Working</span>
                     </div>
                 </div>
-            </header>
-            <div class="agents-grid">
-                <div class="agent-card" data-agent="dexter">
-                    <div class="agent-header">
-                        <div class="agent-avatar">🧪</div>
-                        <div class="agent-title">
-                            <div class="agent-name">Dexter</div>
-                            <div class="agent-role">Research Intelligence</div>
-                        </div>
-                        <div class="agent-status status-working">Working</div>
+                <div class="p-4 md:p-6">
+                    <div class="bg-white/5 rounded-xl p-3 mb-4">
+                        <p class="text-xs text-gray-500 mb-1">Current Task</p>
+                        <p class="font-medium text-sm">Autonomous research mode</p>
                     </div>
-                    <div class="agent-body">
-                        <div class="task-box">
-                            <div class="task-label">Current Task</div>
-                            <div class="task-value">Autonomous research mode</div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-cyan-400 stat-num" data-stat="notes">12</div>
+                            <div class="text-xs text-gray-500">Notes</div>
                         </div>
-                        <div class="stats-row">
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="notes">12</div>
-                                <div class="stat-label">Notes</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="fed">5</div>
-                                <div class="stat-label">Agents Fed</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num">∞</div>
-                                <div class="stat-label">Curiosity</div>
-                            </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-cyan-400 stat-num" data-stat="fed">5</div>
+                            <div class="text-xs text-gray-500">Agents Fed</div>
                         </div>
-                        <div class="agent-expanded-content">
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Personality</div>
-                                <div class="agent-profile-text">Methodical, curious, and obsessive about finding patterns. Works independently, drops insights when ready. "In my laboratory, we pursue truth!"</div>
-                            </div>
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Core Skills</div>
-                                <div class="agent-skills">
-                                    <span class="skill-tag">Web Research</span>
-                                    <span class="skill-tag">Data Mining</span>
-                                    <span class="skill-tag">Market Analysis</span>
-                                    <span class="skill-tag">Pattern Recognition</span>
-                                    <span class="skill-tag">Trend Tracking</span>
-                                </div>
-                            </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-cyan-400">∞</div>
+                            <div class="text-xs text-gray-500">Curiosity</div>
                         </div>
                     </div>
-                    <div class="agent-footer">
-                        <div class="last-update">Last update: 02:00 AM <span class="refresh-indicator"></span></div>
+                    <div class="expanded-content">
+                        <div class="bg-black/30 rounded-xl p-4 mt-4">
+                            <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">Personality</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Methodical, curious, and obsessive about finding patterns. Works independently, drops insights when ready. "In my laboratory, we pursue truth!"</p>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <span class="text-xs bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-2 py-1 rounded-full">Web Research</span>
+                            <span class="text-xs bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-2 py-1 rounded-full">Data Mining</span>
+                            <span class="text-xs bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-2 py-1 rounded-full">Market Analysis</span>
+                        </div>
                     </div>
                 </div>
-                <div class="agent-card" data-agent="blossom">
-                    <div class="agent-header">
-                        <div class="agent-avatar">🌸</div>
-                        <div class="agent-title">
-                            <div class="agent-name">Blossom</div>
-                            <div class="agent-role">Content Engine</div>
-                        </div>
-                        <div class="agent-status status-online">Standby</div>
-                    </div>
-                    <div class="agent-body">
-                        <div class="task-box">
-                            <div class="task-label">Current Task</div>
-                            <div class="task-value">Awaiting research drops</div>
-                        </div>
-                        <div class="stats-row">
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="posts">12</div>
-                                <div class="stat-label">Posts</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="scripts">10</div>
-                                <div class="stat-label">Scripts</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="calendars">2</div>
-                                <div class="stat-label">Calendars</div>
-                            </div>
-                        </div>
-                        <div class="agent-expanded-content">
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Personality</div>
-                                <div class="agent-profile-text">Natural leader, strategically minded, transforms raw research into polished content. "Sugar, spice, and everything nice... plus great content strategy."</div>
-                            </div>
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Core Skills</div>
-                                <div class="agent-skills">
-                                    <span class="skill-tag">Content Writing</span>
-                                    <span class="skill-tag">LinkedIn Strategy</span>
-                                    <span class="skill-tag">YouTube Scripts</span>
-                                    <span class="skill-tag">Content Calendars</span>
-                                    <span class="skill-tag">Audience Analysis</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="agent-footer">
-                        <div class="last-update">Last update: 01:32 AM</div>
-                    </div>
-                </div>
-                <div class="agent-card" data-agent="samurai">
-                    <div class="agent-header">
-                        <div class="agent-avatar">⚔️</div>
-                        <div class="agent-title">
-                            <div class="agent-name">Samurai Jack</div>
-                            <div class="agent-role">Code Architect</div>
-                        </div>
-                        <div class="agent-status status-online">Online</div>
-                    </div>
-                    <div class="agent-body">
-                        <div class="task-box">
-                            <div class="task-label">Current Task</div>
-                            <div class="task-value">Building tools from needs</div>
-                        </div>
-                        <div class="stats-row">
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="tools">3</div>
-                                <div class="stat-label">Tools</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="systems">1</div>
-                                <div class="stat-label">Systems</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="bugs">0</div>
-                                <div class="stat-label">Bugs</div>
-                            </div>
-                        </div>
-                        <div class="agent-expanded-content">
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Personality</div>
-                                <div class="agent-profile-text">Disciplined, precise, and elegant in execution. Every line of code has purpose. "Clean code, clear mind."</div>
-                            </div>
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Core Skills</div>
-                                <div class="agent-skills">
-                                    <span class="skill-tag">Full-Stack Dev</span>
-                                    <span class="skill-tag">System Design</span>
-                                    <span class="skill-tag">Automation</span>
-                                    <span class="skill-tag">API Development</span>
-                                    <span class="skill-tag">DevOps</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="agent-footer">
-                        <div class="last-update">Last update: 01:24 AM</div>
-                    </div>
-                </div>
-                <div class="agent-card" data-agent="johnny">
-                    <div class="agent-header">
-                        <div class="agent-avatar">🕶️</div>
-                        <div class="agent-title">
-                            <div class="agent-name">Johnny Bravo</div>
-                            <div class="agent-role">Business Development</div>
-                        </div>
-                        <div class="agent-status status-working">Working</div>
-                    </div>
-                    <div class="agent-body">
-                        <div class="task-box">
-                            <div class="task-label">Current Task</div>
-                            <div class="task-value">Awaiting prospect intel</div>
-                        </div>
-                        <div class="stats-row">
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="leads">50</div>
-                                <div class="stat-label">Leads</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="tier1">5</div>
-                                <div class="stat-label">Tier 1</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="outreach">0</div>
-                                <div class="stat-label">Outreach</div>
-                            </div>
-                        </div>
-                        <div class="agent-expanded-content">
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Personality</div>
-                                <div class="agent-profile-text">Confident, charming, and persistent. Finds leads, builds relationships, closes deals. "Hey pretty prospect, let's talk business."</div>
-                            </div>
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Core Skills</div>
-                                <div class="agent-skills">
-                                    <span class="skill-tag">Lead Generation</span>
-                                    <span class="skill-tag">Outreach</span>
-                                    <span class="skill-tag">CRM Management</span>
-                                    <span class="skill-tag">Sales Automation</span>
-                                    <span class="skill-tag">Networking</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="agent-footer">
-                        <div class="last-update">Last update: 01:30 AM</div>
-                    </div>
-                </div>
-                <div class="agent-card" data-agent="courage">
-                    <div class="agent-header">
-                        <div class="agent-avatar">🐾</div>
-                        <div class="agent-title">
-                            <div class="agent-name">Courage</div>
-                            <div class="agent-role">Operations & Email</div>
-                        </div>
-                        <div class="agent-status status-online">Online</div>
-                    </div>
-                    <div class="agent-body">
-                        <div class="task-box">
-                            <div class="task-label">Current Task</div>
-                            <div class="task-value">Monitoring inbox</div>
-                        </div>
-                        <div class="stats-row">
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="templates">23</div>
-                                <div class="stat-label">Templates</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="workflows">5</div>
-                                <div class="stat-label">Workflows</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-num" data-stat="responses">0</div>
-                                <div class="stat-label">Responses</div>
-                            </div>
-                        </div>
-                        <div class="agent-expanded-content">
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Personality</div>
-                                <div class="agent-profile-text">Anxious but brave when it counts. Handles the scary tasks — inbox management, follow-ups, operational chaos. "Stupid dog! ...But I'll do it anyway."</div>
-                            </div>
-                            <div class="agent-profile-section">
-                                <div class="agent-profile-title">Core Skills</div>
-                                <div class="agent-skills">
-                                    <span class="skill-tag">Email Automation</span>
-                                    <span class="skill-tag">Inbox Management</span>
-                                    <span class="skill-tag">Follow-ups</span>
-                                    <span class="skill-tag">Templates</span>
-                                    <span class="skill-tag">Operations</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="agent-footer">
-                        <div class="last-update">Last update: 01:22 AM</div>
-                    </div>
+                <div class="px-4 md:px-6 py-3 bg-white/5 border-t border-white/10 text-xs text-gray-500 flex items-center">
+                    Last update: 02:00 AM
+                    <span class="ml-2 w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                 </div>
             </div>
-        </main>
-    </div>
+
+            <!-- Blossom -->
+            <div class="agent-card glass-card rounded-2xl overflow-hidden cursor-pointer" data-agent="blossom" onclick="toggleAgent(this)">
+                <div class="p-4 md:p-6 border-b border-white/10">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 md:w-14 md:h-14 bg-pink-500/20 rounded-2xl flex items-center justify-center text-2xl md:text-3xl border border-white/10">🌸</div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-lg truncate">Blossom</h3>
+                            <p class="text-gray-400 text-sm truncate">Content Engine</p>
+                        </div>
+                        <span class="bg-green-500/20 text-green-400 px-3 py-1.5 rounded-full text-xs font-semibold">Standby</span>
+                    </div>
+                </div>
+                <div class="p-4 md:p-6">
+                    <div class="bg-white/5 rounded-xl p-3 mb-4">
+                        <p class="text-xs text-gray-500 mb-1">Current Task</p>
+                        <p class="font-medium text-sm">Awaiting research drops</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-pink-400 stat-num" data-stat="posts">12</div>
+                            <div class="text-xs text-gray-500">Posts</div>
+                        </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-pink-400 stat-num" data-stat="scripts">10</div>
+                            <div class="text-xs text-gray-500">Scripts</div>
+                        </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-pink-400 stat-num" data-stat="calendars">2</div>
+                            <div class="text-xs text-gray-500">Calendars</div>
+                        </div>
+                    </div>
+                    <div class="expanded-content">
+                        <div class="bg-black/30 rounded-xl p-4 mt-4">
+                            <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">Personality</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Natural leader, strategically minded, transforms raw research into polished content. "Sugar, spice, and everything nice... plus great content strategy."</p>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <span class="text-xs bg-pink-500/10 text-pink-400 border border-pink-500/30 px-2 py-1 rounded-full">Content Writing</span>
+                            <span class="text-xs bg-pink-500/10 text-pink-400 border border-pink-500/30 px-2 py-1 rounded-full">LinkedIn Strategy</span>
+                            <span class="text-xs bg-pink-500/10 text-pink-400 border border-pink-500/30 px-2 py-1 rounded-full">YouTube Scripts</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-4 md:px-6 py-3 bg-white/5 border-t border-white/10 text-xs text-gray-500">
+                    Last update: 01:32 AM
+                </div>
+            </div>
+
+            <!-- Samurai Jack -->
+            <div class="agent-card glass-card rounded-2xl overflow-hidden cursor-pointer" data-agent="samurai" onclick="toggleAgent(this)">
+                <div class="p-4 md:p-6 border-b border-white/10">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 md:w-14 md:h-14 bg-yellow-500/20 rounded-2xl flex items-center justify-center text-2xl md:text-3xl border border-white/10">⚔️</div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-lg truncate">Samurai Jack</h3>
+                            <p class="text-gray-400 text-sm truncate">Code Architect</p>
+                        </div>
+                        <span class="bg-green-500/20 text-green-400 px-3 py-1.5 rounded-full text-xs font-semibold">Online</span>
+                    </div>
+                </div>
+                <div class="p-4 md:p-6">
+                    <div class="bg-white/5 rounded-xl p-3 mb-4">
+                        <p class="text-xs text-gray-500 mb-1">Current Task</p>
+                        <p class="font-medium text-sm">Building tools from needs</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-yellow-400 stat-num" data-stat="tools">3</div>
+                            <div class="text-xs text-gray-500">Tools</div>
+                        </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-yellow-400 stat-num" data-stat="systems">1</div>
+                            <div class="text-xs text-gray-500">Systems</div>
+                        </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-yellow-400 stat-num" data-stat="bugs">0</div>
+                            <div class="text-xs text-gray-500">Bugs</div>
+                        </div>
+                    </div>
+                    <div class="expanded-content">
+                        <div class="bg-black/30 rounded-xl p-4 mt-4">
+                            <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">Personality</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Disciplined, precise, and elegant in execution. Every line of code has purpose. "Clean code, clear mind."</p>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <span class="text-xs bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 px-2 py-1 rounded-full">Full-Stack Dev</span>
+                            <span class="text-xs bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 px-2 py-1 rounded-full">System Design</span>
+                            <span class="text-xs bg-yellow-500/10 text-yellow-400 border border-yellow-500/30 px-2 py-1 rounded-full">Automation</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-4 md:px-6 py-3 bg-white/5 border-t border-white/10 text-xs text-gray-500">
+                    Last update: 01:24 AM
+                </div>
+            </div>
+
+            <!-- Johnny Bravo -->
+            <div class="agent-card glass-card rounded-2xl overflow-hidden cursor-pointer" data-agent="johnny" onclick="toggleAgent(this)">
+                <div class="p-4 md:p-6 border-b border-white/10">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 md:w-14 md:h-14 bg-orange-500/20 rounded-2xl flex items-center justify-center text-2xl md:text-3xl border border-white/10">🕶️</div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-lg truncate">Johnny Bravo</h3>
+                            <p class="text-gray-400 text-sm truncate">Business Development</p>
+                        </div>
+                        <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1.5 rounded-full text-xs font-semibold">Working</span>
+                    </div>
+                </div>
+                <div class="p-4 md:p-6">
+                    <div class="bg-white/5 rounded-xl p-3 mb-4">
+                        <p class="text-xs text-gray-500 mb-1">Current Task</p>
+                        <p class="font-medium text-sm">Awaiting prospect intel</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-orange-400 stat-num" data-stat="leads">50</div>
+                            <div class="text-xs text-gray-500">Leads</div>
+                        </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-orange-400 stat-num" data-stat="tier1">5</div>
+                            <div class="text-xs text-gray-500">Tier 1</div>
+                        </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-orange-400 stat-num" data-stat="outreach">0</div>
+                            <div class="text-xs text-gray-500">Outreach</div>
+                        </div>
+                    </div>
+                    <div class="expanded-content">
+                        <div class="bg-black/30 rounded-xl p-4 mt-4">
+                            <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">Personality</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Confident, charming, and persistent. Finds leads, builds relationships, closes deals. "Hey pretty prospect, let's talk business."</p>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <span class="text-xs bg-orange-500/10 text-orange-400 border border-orange-500/30 px-2 py-1 rounded-full">Lead Gen</span>
+                            <span class="text-xs bg-orange-500/10 text-orange-400 border border-orange-500/30 px-2 py-1 rounded-full">Outreach</span>
+                            <span class="text-xs bg-orange-500/10 text-orange-400 border border-orange-500/30 px-2 py-1 rounded-full">CRM</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-4 md:px-6 py-3 bg-white/5 border-t border-white/10 text-xs text-gray-500">
+                    Last update: 01:30 AM
+                </div>
+            </div>
+
+            <!-- Courage -->
+            <div class="agent-card glass-card rounded-2xl overflow-hidden cursor-pointer md:col-span-2" data-agent="courage" onclick="toggleAgent(this)">
+                <div class="p-4 md:p-6 border-b border-white/10">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 md:w-14 md:h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center text-2xl md:text-3xl border border-white/10">🐾</div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-lg truncate">Courage</h3>
+                            <p class="text-gray-400 text-sm truncate">Operations & Email</p>
+                        </div>
+                        <span class="bg-green-500/20 text-green-400 px-3 py-1.5 rounded-full text-xs font-semibold">Online</span>
+                    </div>
+                </div>
+                <div class="p-4 md:p-6">
+                    <div class="bg-white/5 rounded-xl p-3 mb-4">
+                        <p class="text-xs text-gray-500 mb-1">Current Task</p>
+                        <p class="font-medium text-sm">Monitoring inbox</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-purple-400 stat-num" data-stat="templates">23</div>
+                            <div class="text-xs text-gray-500">Templates</div>
+                        </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-purple-400 stat-num" data-stat="workflows">5</div>
+                            <div class="text-xs text-gray-500">Workflows</div>
+                        </div>
+                        <div class="text-center p-3 bg-white/5 rounded-xl">
+                            <div class="text-xl md:text-2xl font-bold text-purple-400 stat-num" data-stat="responses">0</div>
+                            <div class="text-xs text-gray-500">Responses</div>
+                        </div>
+                    </div>
+                    <div class="expanded-content">
+                        <div class="bg-black/30 rounded-xl p-4 mt-4">
+                            <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">Personality</p>
+                            <p class="text-gray-300 text-sm leading-relaxed">Anxious but brave when it counts. Handles the scary tasks — inbox management, follow-ups, operational chaos. "Stupid dog! ...But I'll do it anyway."</p>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <span class="text-xs bg-purple-500/10 text-purple-400 border border-purple-500/30 px-2 py-1 rounded-full">Email Automation</span>
+                            <span class="text-xs bg-purple-500/10 text-purple-400 border border-purple-500/30 px-2 py-1 rounded-full">Inbox Management</span>
+                            <span class="text-xs bg-purple-500/10 text-purple-400 border border-purple-500/30 px-2 py-1 rounded-full">Operations</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-4 md:px-6 py-3 bg-white/5 border-t border-white/10 text-xs text-gray-500">
+                    Last update: 01:22 AM
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 glass border-t border-white/10 z-50 pb-safe">
+        <div class="flex justify-around items-center h-16">
+            <a href="./index.html" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-white transition-all">
+                <span class="text-xl mb-0.5">📊</span>
+                <span class="text-[10px]">Dashboard</span>
+            </a>
+            <a href="./agents.html" class="flex flex-col items-center justify-center w-full h-full text-cyan-400">
+                <span class="text-xl mb-0.5">🤖</span>
+                <span class="text-[10px]">Agents</span>
+            </a>
+            <a href="./tasks.html" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-white transition-all">
+                <span class="text-xl mb-0.5">📋</span>
+                <span class="text-[10px]">Tasks</span>
+            </a>
+            <a href="./leads.html" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-white transition-all">
+                <span class="text-xl mb-0.5">👥</span>
+                <span class="text-[10px]">Leads</span>
+            </a>
+            <a href="./chat.html" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-white transition-all">
+                <span class="text-xl mb-0.5">💬</span>
+                <span class="text-[10px]">Chat</span>
+            </a>
+        </div>
+    </nav>
+
     <!-- Toast -->
-    <div class="toast" id="toast">
+    <div id="toast" class="fixed bottom-24 md:bottom-8 right-4 md:right-8 glass rounded-xl px-4 py-3 flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
         <span id="toastMessage">Action completed</span>
     </div>
 
     <script>
-        // Show toast
         function showToast(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
 
-        // Agent card click to expand
-        document.querySelectorAll('.agent-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const isExpanded = card.classList.contains('expanded');
-                
-                // Close all cards first
-                document.querySelectorAll('.agent-card').forEach(c => c.classList.remove('expanded'));
-                
-                if (!isExpanded) {
-                    card.classList.add('expanded');
-                    const agentName = card.querySelector('.agent-name').textContent;
-                    showToast(`${agentName} profile expanded`);
-                }
-            });
-        });
-
-        // Simulate stats update
-        function animateStat(element, newValue) {
-            element.classList.add('updating');
-            element.textContent = newValue;
-            setTimeout(() => {
-                element.classList.remove('updating');
-            }, 300);
-        }
-
-        // Periodic stats simulation
-        function simulateActivity() {
-            const stats = document.querySelectorAll('.stat-num[data-stat]');
-            const randomStat = stats[Math.floor(Math.random() * stats.length)];
-            
-            if (randomStat) {
-                const currentValue = parseInt(randomStat.textContent);
-                if (!isNaN(currentValue) && Math.random() > 0.7) {
-                    animateStat(randomStat, currentValue + 1);
-                }
+        function toggleAgent(card) {
+            const isExpanded = card.classList.contains('expanded');
+            document.querySelectorAll('.agent-card').forEach(c => c.classList.remove('expanded'));
+            if (!isExpanded) {
+                card.classList.add('expanded');
+                const name = card.querySelector('h3').textContent;
+                showToast(`${name} profile expanded`);
             }
         }
 
-        // Run periodic updates
-        setInterval(simulateActivity, 10000);
-
-        // Initial stats animation on load
-        window.addEventListener('load', () => {
-            document.querySelectorAll('.stat-num').forEach((stat, index) => {
-                setTimeout(() => {
-                    stat.style.transform = 'scale(1.1)';
-                    setTimeout(() => {
-                        stat.style.transform = 'scale(1)';
-                    }, 200);
-                }, index * 100);
-            });
-        });
-
-        // Click outside to collapse
+        // Close expanded cards when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.agent-card')) {
                 document.querySelectorAll('.agent-card').forEach(c => c.classList.remove('expanded'));
             }
         });
+
+        // Animate stats on load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.stat-num').forEach((el, i) => {
+                setTimeout(() => {
+                    el.style.transform = 'scale(1.1)';
+                    setTimeout(() => el.style.transform = 'scale(1)', 200);
+                }, i * 50);
+            });
+        });
+
+        // Update tasks badge
+        function updateTasksBadge() {
+            const tasks = JSON.parse(localStorage.getItem('mc_tasks') || '[]');
+            const pending = tasks.filter(t => !t.completed).length;
+            document.getElementById('tasksBadge').textContent = pending;
+        }
+        updateTasksBadge();
     </script>
 </body>
 </html>
