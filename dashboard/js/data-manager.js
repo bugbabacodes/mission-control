@@ -1,5 +1,5 @@
 // Mission Control Data Manager
-// Loads real data from JSON files (no dummy data/localStorage)
+// Loads real data from JSON files via API or static paths
 
 const DataManager = {
     cache: {
@@ -10,19 +10,35 @@ const DataManager = {
         leads: []
     },
 
-    paths: {
-        agents: '../database/agents.json',
-        tasks: '../database/tasks.json',
-        actionItems: '../database/action-items.json',
-        content: '../database/content-library.json',
-        leads: '../database/leads.json'
+    // Detect if running on Vercel (production) or locally
+    getBasePath() {
+        const isVercel = window.location.hostname.includes('vercel.app') || 
+                         window.location.hostname !== 'localhost' && 
+                         !window.location.hostname.includes('127.0.0.1');
+        return isVercel ? '/database' : '../database';
+    },
+
+    paths() {
+        const base = this.getBasePath();
+        return {
+            agents: `${base}/agents.json`,
+            tasks: `${base}/tasks.json`,
+            actionItems: `${base}/action-items.json`,
+            content: `${base}/content-library.json`,
+            leads: `${base}/leads.json`
+        };
     },
 
     async fetchJson(path, fallback = []) {
         try {
             const res = await fetch(path, { cache: 'no-store' });
-            if (!res.ok) throw new Error(`Failed to load ${path}`);
-            return await res.json();
+            if (!res.ok) {
+                console.warn(`[DataManager] Failed to load ${path}: ${res.status}`);
+                throw new Error(`Failed to load ${path}`);
+            }
+            const data = await res.json();
+            console.log(`[DataManager] Loaded ${path}:`, Array.isArray(data) ? `${data.length} items` : 'object');
+            return data;
         } catch (err) {
             console.warn('[DataManager]', err.message);
             return fallback;
@@ -30,11 +46,14 @@ const DataManager = {
     },
 
     async loadAll() {
+        const paths = this.paths();
+        console.log('[DataManager] Loading from:', paths);
+        
         const [agents, tasks, actionItemsRaw, content] = await Promise.all([
-            this.fetchJson(this.paths.agents, []),
-            this.fetchJson(this.paths.tasks, []),
-            this.fetchJson(this.paths.actionItems, { actionItems: [] }),
-            this.fetchJson(this.paths.content, [])
+            this.fetchJson(paths.agents, []),
+            this.fetchJson(paths.tasks, []),
+            this.fetchJson(paths.actionItems, { actionItems: [] }),
+            this.fetchJson(paths.content, [])
         ]);
 
         const actionItems = Array.isArray(actionItemsRaw)
@@ -42,12 +61,19 @@ const DataManager = {
             : (actionItemsRaw.actionItems || []);
 
         this.cache = { agents, tasks, actionItems, content, leads: this.cache.leads };
+        console.log('[DataManager] Cache loaded:', {
+            agents: agents.length,
+            tasks: tasks.length,
+            content: content.length
+        });
         return this.cache;
     },
 
     async loadLeads() {
-        const leads = await this.fetchJson(this.paths.leads, []);
+        const paths = this.paths();
+        const leads = await this.fetchJson(paths.leads, []);
         this.cache.leads = Array.isArray(leads) ? leads : [];
+        console.log('[DataManager] Leads loaded:', this.cache.leads.length);
         return this.cache.leads;
     },
 
@@ -141,10 +167,20 @@ const DataManager = {
         this.cache.content = this.cache.content.filter(c => c.id !== id);
     },
 
+    // Lead CRUD (in-memory)
+    updateLead(id, updates) {
+        this.cache.leads = this.cache.leads.map(l =>
+            l.id === id ? { ...l, ...updates } : l
+        );
+        return this.cache.leads.find(l => l.id === id);
+    },
+
     getStats() {
         const agents = this.getAgents();
         const tasks = this.getTasks();
         const actionItems = this.getActionItems();
+        const content = this.getContent();
+        const leads = this.getLeads();
 
         return {
             totalAgents: agents.length,
@@ -154,7 +190,14 @@ const DataManager = {
             pendingTasks: tasks.filter(t => t.status === 'inbox' || t.status === 'pending').length,
             doneTasks: tasks.filter(t => t.status === 'done').length,
             totalActionItems: actionItems.length,
-            pendingActionItems: actionItems.filter(i => i.status === 'pending').length
+            pendingActionItems: actionItems.filter(i => i.status === 'pending').length,
+            totalContent: content.length,
+            draftContent: content.filter(c => c.status === 'draft').length,
+            publishedContent: content.filter(c => c.status === 'published').length,
+            totalLeads: leads.length
         };
     }
 };
+
+// Auto-initialize on load
+console.log('[DataManager] Initialized, base path:', DataManager.getBasePath());
