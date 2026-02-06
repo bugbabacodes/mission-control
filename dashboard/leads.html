@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leads | Mission Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./js/data-manager.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -77,6 +78,10 @@
             <a href="./content.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
                 <span class="text-xl">📝</span>
                 <span>Content</span>
+            </a>
+            <a href="./instructions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">📖</span>
+                <span>Instructions</span>
             </a>
             <p class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-3 px-3">Operations</p>
             <a href="./leads.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
@@ -190,34 +195,30 @@
     </div>
 
     <script>
-        const leads = [
-            {id: 1, name: "Eugene Sidorov", company: "Grindery", industry: "Web3", stage: "Seed", linkedin: "linkedin.com/in/eugenesidorov", website: "grindery.io", context: "Building Web3 Gateway for Zapier integration", outreach: "Offer seamless integration development to connect their gateway to more Web2 tools"},
-            {id: 2, name: "Normal Founders", company: "Normal", industry: "Fintech", stage: "Pre-seed", linkedin: "", website: "normal.finance", context: "Zero-fee crypto-to-cash platform, fintech + web3 hybrid", outreach: "Position as fintech dev partner who can handle compliance + crypto wallets"},
-            {id: 3, name: "Matt Li", company: "Second Talent", industry: "Web3", stage: "Pre-seed", linkedin: "linkedin.com/in/mattli", website: "secondtalent.com", context: "Global tech talent platform", outreach: "Help build talent matching algorithms and platform scaling"},
-            {id: 4, name: "BlackWood Portfolio", company: "Sidekick, Yonder, Particula", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "blackwood.vc", context: "$25M fund backing 30 fintech/Web3 startups", outreach: "Target portfolio companies with dev team augmentation"},
-            {id: 5, name: "XFounders Batch", company: "Various", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "x-founders.com", context: "Accelerator program for Web3 founders", outreach: "Position as tech partner for accelerator portfolio"},
-            {id: 6, name: "Trust Wallet Cohort", company: "Various", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "trustwallet.com", context: "Trust Moon accelerator backed by Binance", outreach: "Reach out to cohort companies for full-stack development"},
-            {id: 7, name: "Outlier Ventures", company: "Various DeFi", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "outlierventures.io", context: "Leading Web3 accelerator, 14% of capital at seed", outreach: "Offer technical development for DeFi infrastructure"},
-            {id: 8, name: "Fomo Founders", company: "Fomo", industry: "Fintech", stage: "Pre-seed", linkedin: "", website: "fomo.com", context: "Raised $2M pre-seed Feb 2025", outreach: "Congrats on raise + offer product scaling services"},
-            {id: 9, name: "OpenVC Community", company: "Various", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "openvc.app", context: "Founder tools and network of early-stage founders", outreach: "Partner to offer dev services to founder network"},
-            {id: 10, name: "Empromptu Team", company: "Empromptu", industry: "AI", stage: "Pre-seed", linkedin: "", website: "empromptu.io", context: "Raised $2M Dec 2025 for enterprise AI apps", outreach: "Offer enterprise app development as implementation partner"},
-            {id: 11, name: "Allie K. Miller", company: "Portfolio Companies", industry: "AI", stage: "Pre-seed", linkedin: "linkedin.com/in/alliekmiller", website: "", context: "Former Amazon, IBM, investing in AI startups", outreach: "Offer dev services to her portfolio companies"},
-            {id: 12, name: "Joe O'Connor", company: "Stealth AI", industry: "AI", stage: "Pre-seed", linkedin: "linkedin.com/in/joecoconnor", website: "", context: "MIT alum, building stealth AI in SF", outreach: "Offer technical co-founder/CTO services"},
-            {id: 13, name: "Michael Tildahl", company: "Stealth AI", industry: "AI", stage: "Pre-seed", linkedin: "linkedin.com/in/michael-tildahl", website: "", context: "Purdue alum, building stealth AI", outreach: "Full-stack development for stealth AI products"},
-            {id: 14, name: "Wabi Founder", company: "Wabi", industry: "AI", stage: "Pre-seed", linkedin: "", website: "wabi.ai", context: "Raised $20M pre-seed for 'YouTube of apps'", outreach: "Offer social platform development expertise"},
-            {id: 15, name: "FINNY Founders", company: "FINNY", industry: "AI", stage: "Series A", linkedin: "", website: "finny.ai", context: "Just raised $17M Series A, AI-powered prospecting", outreach: "Offer scaling services post-Series A"},
-            {id: 16, name: "YC S25 AI", company: "Various", industry: "AI", stage: "Pre-seed", linkedin: "", website: "ycombinator.com", context: "160 AI startups in YC Summer 2025 batch", outreach: "Target batch companies with dev services"},
-            {id: 17, name: "Reddit SaaS Founder", company: "B2B Marketplace", industry: "SaaS", stage: "Pre-seed", linkedin: "", website: "reddit.com/r/SaaS", context: "£500k pre-seed, actively hiring", outreach: "Respond offering dev services"},
-            {id: 18, name: "IndieHackers Founder", company: "B2B Marketplace", industry: "SaaS", stage: "Revenue", linkedin: "", website: "indiehackers.com", context: "Non-technical founder, 12+ years B2B sales", outreach: "Offer CTO-as-a-service"},
-            {id: 19, name: "LaunchFast Founder", company: "LaunchFast", industry: "SaaS", stage: "Launching", linkedin: "", website: "launchfast.com", context: "Preparing Product Hunt launch", outreach: "Offer to be beta tester + long-term dev partner"},
-            {id: 20, name: "PageProofer Founder", company: "PageProofer", industry: "SaaS", stage: "Bootstrapped", linkedin: "", website: "pageproofer.com", context: "100% bootstrapped, 3 years to launch", outreach: "Offer bootstrapped-friendly dev services"},
-        ];
+        let leads = [];
 
         let currentFilter = 'all';
-        let leadStatuses = JSON.parse(localStorage.getItem('mc_lead_statuses') || '{}');
+        let leadStatuses = {};
+
+        async function loadLeads() {
+            await DataManager.loadLeads();
+            leads = DataManager.getLeads();
+            leadStatuses = {};
+            updateStats();
+            renderLeads();
+        }
+
+        function getIndustryCategory(industry = '') {
+            const normalized = industry.toLowerCase();
+            if (normalized.includes('web3') || normalized.includes('blockchain') || normalized.includes('crypto')) return 'Web3';
+            if (normalized.includes('ai')) return 'AI';
+            if (normalized.includes('saas')) return 'SaaS';
+            if (normalized.includes('fintech')) return 'Fintech';
+            return 'Other';
+        }
 
         function getIndustryColor(industry) {
-            switch(industry) {
+            switch(getIndustryCategory(industry)) {
                 case 'Web3': return 'bg-pink-500/20 text-pink-400';
                 case 'AI': return 'bg-green-500/20 text-green-400';
                 case 'SaaS': return 'bg-yellow-500/20 text-yellow-400';
@@ -227,20 +228,22 @@
         }
 
         function saveStatuses() {
-            localStorage.setItem('mc_lead_statuses', JSON.stringify(leadStatuses));
             updateStats();
         }
 
         function updateStats() {
-            const newCount = Object.values(leadStatuses).filter(s => !s || s === 'New').length;
-            const contactedCount = Object.values(leadStatuses).filter(s => s === 'Contacted').length;
+            const statuses = leads.map(l => leadStatuses[l.id] || 'New');
+            const newCount = statuses.filter(s => s === 'New').length;
+            const contactedCount = statuses.filter(s => s === 'Contacted').length;
             document.getElementById('stat-new').textContent = newCount;
             document.getElementById('stat-contacted').textContent = contactedCount;
         }
 
         function renderLeads() {
             const list = document.getElementById('leadsList');
-            const filtered = currentFilter === 'all' ? leads : leads.filter(l => l.industry === currentFilter);
+            const filtered = currentFilter === 'all'
+                ? leads
+                : leads.filter(l => getIndustryCategory(l.industry) === currentFilter);
 
             list.innerHTML = filtered.map(lead => {
                 const status = leadStatuses[lead.id] || 'New';
@@ -251,14 +254,13 @@
                                 <h3 class="font-semibold text-base truncate">${lead.company}</h3>
                                 <p class="text-gray-400 text-sm truncate">${lead.name}</p>
                             </div>
-                            <span class="${getIndustryColor(lead.industry)} text-xs px-2 py-1 rounded-full font-medium">${lead.industry}</span>
+                            <span class="${getIndustryColor(lead.industry)} text-xs px-2 py-1 rounded-full font-medium">${getIndustryCategory(lead.industry)}</span>
                         </div>
                         <div class="flex flex-wrap gap-2 mb-3">
-                            <span class="bg-purple-500/20 text-purple-400 text-xs px-2 py-1 rounded-full">${lead.stage}</span>
-                            ${lead.linkedin ? `<a href="https://${lead.linkedin}" target="_blank" class="text-xs bg-white/10 px-2 py-1 rounded-full hover:bg-white/20 transition-all">🔗 LinkedIn</a>` : ''}
-                            ${lead.website ? `<a href="https://${lead.website}" target="_blank" class="text-xs bg-white/10 px-2 py-1 rounded-full hover:bg-white/20 transition-all">🌐 Website</a>` : ''}
+                            <span class="bg-purple-500/20 text-purple-400 text-xs px-2 py-1 rounded-full">${lead.stage || 'Unknown'}</span>
+                            ${lead.link ? `<a href="${lead.link.startsWith('http') ? lead.link : 'https://' + lead.link}" target="_blank" class="text-xs bg-white/10 px-2 py-1 rounded-full hover:bg-white/20 transition-all">🔗 Source</a>` : ''}
                         </div>
-                        <p class="text-gray-400 text-sm mb-3 line-clamp-2">${lead.context}</p>
+                        <p class="text-gray-400 text-sm mb-3 line-clamp-2">${lead.whyFit || ''}</p>
                         <div class="bg-black/30 rounded-lg p-3 mb-3">
                             <p class="text-gray-500 text-xs italic">"${lead.outreach}"</p>
                         </div>
@@ -304,9 +306,9 @@
         }
 
         function exportCSV() {
-            let csv = 'Company,Contact,Industry,Stage,LinkedIn,Website,Context,Outreach,Status\n';
+            let csv = 'Company,Contact,Industry,Stage,Source,WhyFit,Outreach,Status\n';
             leads.forEach(l => {
-                csv += `"${l.company}","${l.name}","${l.industry}","${l.stage}","${l.linkedin}","${l.website}","${l.context}","${l.outreach}","${leadStatuses[l.id] || 'New'}"\n`;
+                csv += `"${l.company}","${l.name}","${l.industry}","${l.stage}","${l.link || ''}","${(l.whyFit || '').replace(/"/g, '""')}","${(l.outreach || '').replace(/"/g, '""')}","${leadStatuses[l.id] || 'New'}"\n`;
             });
             const blob = new Blob([csv], {type: 'text/csv'});
             const url = URL.createObjectURL(blob);
@@ -333,15 +335,19 @@
         });
 
         function updateTasksBadge() {
-            const tasks = JSON.parse(localStorage.getItem('mc_tasks') || '[]');
-            const pending = tasks.filter(t => !t.completed).length;
+            const tasks = DataManager.getTasks();
+            const pending = tasks.filter(t => t.status === 'inbox' || t.status === 'pending').length;
             document.getElementById('tasksBadge').textContent = pending;
         }
 
+        async function initPage() {
+            await DataManager.loadAll();
+            await loadLeads();
+            updateTasksBadge();
+        }
+
         // Init
-        updateStats();
-        renderLeads();
-        updateTasksBadge();
+        window.addEventListener('load', initPage);
     </script>
 </body>
 </html>

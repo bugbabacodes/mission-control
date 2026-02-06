@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mission Control | Content</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./js/data-manager.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -84,6 +85,10 @@
                 <span class="text-xl">📝</span>
                 <span class="font-medium">Content</span>
                 <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full">12</span>
+            </a>
+            <a href="./instructions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">📖</span>
+                <span>Instructions</span>
             </a>
             <p class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-3 px-3">Operations</p>
             <a href="./leads.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
@@ -220,21 +225,40 @@
     </div>
 
     <script>
-        // Sample content data
-        let posts = JSON.parse(localStorage.getItem('mc_posts') || '[]');
-        if (posts.length === 0) {
-            posts = [
-                { id: 1, title: "The Future of AI Agents", content: "AI agents are transforming how we work. Here's what you need to know about the next generation of autonomous systems...", platform: "linkedin", status: "published", date: "2026-02-05", likes: 42, comments: 8 },
-                { id: 2, title: "Web3 Development Tips", content: "Building in Web3? Here are 5 lessons I've learned from shipping 100+ projects...", platform: "twitter", status: "scheduled", date: "2026-02-07", likes: 0, comments: 0 },
-                { id: 3, title: "Instagram Growth Strategy", content: "How I grew from 0 to 1300 followers in 3 months without paid ads...", platform: "instagram", status: "draft", date: null, likes: 0, comments: 0 },
-                { id: 4, title: "Remote Team Management", content: "Managing distributed teams across 5 time zones? Here's my playbook...", platform: "linkedin", status: "draft", date: null, likes: 0, comments: 0 },
-                { id: 5, title: "Startup Lessons Learned", content: "After 100+ projects, here are the patterns that separate successful founders from the rest...", platform: "twitter", status: "review", date: null, likes: 0, comments: 0 }
-            ];
-            savePosts();
+// Content loaded from JSON
+        let posts = [];
+
+        async function loadContent() {
+            await DataManager.loadAll();
+            posts = DataManager.getContent().map(post => ({
+                id: post.id,
+                title: post.title,
+                content: post.content,
+                platform: (post.platforms && post.platforms[0]) || 'linkedin',
+                status: post.status || 'draft',
+                date: post.publishedAt ? post.publishedAt.split('T')[0] : (post.scheduledFor ? post.scheduledFor.split('T')[0] : null),
+                likes: post.likes || 0,
+                comments: post.comments || 0
+            }));
+            updateStats();
+            renderPosts();
+        }
+
+        function syncCache() {
+            DataManager.cache.content = posts.map(post => ({
+                id: post.id,
+                title: post.title,
+                content: post.content,
+                platforms: [post.platform],
+                status: post.status,
+                scheduledFor: post.date ? new Date(post.date).toISOString() : null,
+                publishedAt: post.status === 'published' && post.date ? new Date(post.date).toISOString() : null,
+                updatedAt: new Date().toISOString()
+            }));
         }
 
         function savePosts() {
-            localStorage.setItem('mc_posts', JSON.stringify(posts));
+            syncCache();
             updateStats();
         }
 
@@ -267,7 +291,12 @@
         function renderPosts(filter = 'all') {
             const grid = document.getElementById('contentGrid');
             const filtered = filter === 'all' ? posts : posts.filter(p => p.status === filter);
-            
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p class="text-gray-400 col-span-full text-center py-8">No posts found.</p>';
+                return;
+            }
+
             grid.innerHTML = filtered.map(post => `
                 <div class="glass-card rounded-xl p-4 hover:border-white/20 transition-all group">
                     <div class="flex justify-between items-start mb-3">
@@ -351,9 +380,7 @@
             }
         }
 
-        // Init
-        renderPosts();
-        updateStats();
+        window.addEventListener('load', loadContent);
     </script>
 </body>
 </html>

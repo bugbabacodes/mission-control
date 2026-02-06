@@ -1,0 +1,512 @@
+[
+  {
+    "id": 1,
+    "name": "Eugene Sidorov",
+    "company": "Grindery",
+    "industry": "Web3/SaaS",
+    "stage": "Seed",
+    "whyFit": "Building Web3 Gateway for Zapier integration, shows need for dev resources to expand integrations",
+    "link": "linkedin.com/in/eugenesidorov",
+    "outreach": "Offer seamless integration development to connect their gateway to more Web2 tools"
+  },
+  {
+    "id": 2,
+    "name": "Founders at Normal",
+    "company": "Normal",
+    "industry": "Fintech/Web3",
+    "stage": "Pre-seed",
+    "whyFit": "Zero-fee crypto-to-cash platform, fintech + web3 hybrid with clear need for full-stack devs",
+    "link": "producthunt.com/posts/normal-3",
+    "outreach": "Position as fintech dev partner who can handle compliance + crypto wallets"
+  },
+  {
+    "id": 3,
+    "name": "Matt Li",
+    "company": "Second Talent",
+    "industry": "Web3/HR Tech",
+    "stage": "Pre-seed",
+    "whyFit": "Co-founder building global tech talent platform, mentioned in Nov 2025 funding coverage",
+    "link": "linkedin.com/in/mattli",
+    "outreach": "Help build talent matching algorithms and platform scaling"
+  },
+  {
+    "id": 4,
+    "name": "BlackWood Ventures Portfolio",
+    "company": "Various (Sidekick, Yonder, Particula)",
+    "industry": "Web3/Fintech",
+    "stage": "Pre-seed",
+    "whyFit": "$25M fund backing 30 fintech/Web3 startups across Europe, all need tech teams",
+    "link": "company LinkedIn pages",
+    "outreach": "Target portfolio companies with dev team augmentation services"
+  },
+  {
+    "id": 5,
+    "name": "XFounders Batch Companies",
+    "company": "Various",
+    "industry": "Web3",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "Accelerator program for Web3 founders covering tokenomics, community, fundraising - all need product",
+    "link": "x-founders.com",
+    "outreach": "Position as tech partner for accelerator portfolio"
+  },
+  {
+    "id": 6,
+    "name": "Trust Wallet Accelerator Cohort",
+    "company": "Various",
+    "industry": "Web3",
+    "stage": "Pre-seed",
+    "whyFit": "Trust Moon accelerator backed by Binance, MoonPay, AWS - portfolio companies need dev help",
+    "link": "trustwallet.com",
+    "outreach": "Reach out to cohort companies for full-stack development"
+  },
+  {
+    "id": 7,
+    "name": "Outlier Ventures Portfolio",
+    "company": "Various DeFi/Infrastructure",
+    "industry": "Web3",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "Leading Web3 accelerator, 14% of capital at seed stage, technical teams need support",
+    "link": "outlierventures.io",
+    "outreach": "Offer technical development for their DeFi infrastructure portfolio"
+  },
+  {
+    "id": 8,
+    "name": "Fomo Founders",
+    "company": "Fomo",
+    "industry": "Fintech",
+    "stage": "Pre-seed",
+    "whyFit": "Raised $2M pre-seed Feb 2025, emerging fintech leader, needs to scale product",
+    "link": "fomo.com",
+    "outreach": "Congrats on raise + offer product scaling services"
+  },
+  {
+    "id": 9,
+    "name": "OpenVC Community Founders",
+    "company": "Various",
+    "industry": "Web3/AI",
+    "stage": "Pre-seed",
+    "whyFit": "Stephane Nasser/Lucas Roquilly building founder tools, network of early-stage founders",
+    "link": "openvc.app",
+    "outreach": "Partner with OpenVC to offer dev services to their founder network"
+  },
+  {
+    "id": 10,
+    "name": "Empromptu Team",
+    "company": "Empromptu",
+    "industry": "AI/Web3 Enterprise",
+    "stage": "Pre-seed",
+    "whyFit": "Raised $2M Dec 2025 to help enterprises build AI apps, enterprise clients need execution",
+    "link": "empromptu.io",
+    "outreach": "Offer enterprise app development as implementation partner"
+  },
+  {
+    "id": 11,
+    "name": "Allie K. Miller",
+    "company": "Angel Investor/Advisor",
+    "industry": "AI",
+    "stage": "Pre-seed to Series B",
+    "whyFit": "Former Amazon, IBM, investing in AI startups with strong PMF, knows the space",
+    "link": "linkedin.com/in/alliekmiller",
+    "outreach": "Offer dev services to her portfolio companies"
+  },
+  {
+    "id": 12,
+    "name": "Joe O'Connor",
+    "company": "Stealth AI Startup",
+    "industry": "AI",
+    "stage": "Pre-seed",
+    "whyFit": "MIT alum, building stealth AI in SF, early stage with 500+ connections",
+    "link": "linkedin.com/in/joecoconnor",
+    "outreach": "Offer technical co-founder/CTO services for stealth builds"
+  },
+  {
+    "id": 13,
+    "name": "Michael Tildahl",
+    "company": "Stealth AI Startup",
+    "industry": "AI",
+    "stage": "Pre-seed",
+    "whyFit": "Purdue alum, building stealth AI in San Mateo, needs technical execution",
+    "link": "linkedin.com/in/michael-tildahl",
+    "outreach": "Full-stack development for stealth AI products"
+  },
+  {
+    "id": 14,
+    "name": "Stealth AI Community Members",
+    "company": "Various",
+    "industry": "AI",
+    "stage": "Pre-seed",
+    "whyFit": "LinkedIn community for stealth AI founders seeking early team building",
+    "link": "linkedin.com/company/stealthaistartup",
+    "outreach": "Join community and offer dev services"
+  },
+  {
+    "id": 15,
+    "name": "Level AI Founder",
+    "company": "Level AI",
+    "industry": "AI/ML",
+    "stage": "Pre-seed",
+    "whyFit": "Ashish Nagar from Stanford GSB building AI product, needs dev team",
+    "link": "linkedin.com/in/ashishnagar",
+    "outreach": "Offer AI/ML product development expertise"
+  },
+  {
+    "id": 16,
+    "name": "Andrew Ng Portfolio",
+    "company": "AI Fund Companies",
+    "industry": "AI",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "Managing Partner at AI Fund, multiple portfolio companies need technical teams",
+    "link": "deeplearning.ai",
+    "outreach": "Partner with AI Fund to offer dev services"
+  },
+  {
+    "id": 17,
+    "name": "Wabi Founder (Replika)",
+    "company": "Wabi",
+    "industry": "AI/Social",
+    "stage": "Pre-seed",
+    "whyFit": "Raised $20M pre-seed Nov 2025 for \"YouTube of apps\", needs platform development",
+    "link": "wabi.ai",
+    "outreach": "Offer social platform development expertise"
+  },
+  {
+    "id": 18,
+    "name": "FINNY Founders",
+    "company": "FINNY",
+    "industry": "AI/Fintech",
+    "stage": "Series A",
+    "whyFit": "Just raised $17M Series A, AI-powered prospecting for advisors, needs scaling",
+    "link": "finny.ai",
+    "outreach": "Offer scaling services post-Series A"
+  },
+  {
+    "id": 19,
+    "name": "YC S25 AI Companies",
+    "company": "Various",
+    "industry": "AI",
+    "stage": "Pre-seed",
+    "whyFit": "160 AI startups in YC Summer 2025 batch, most need technical execution",
+    "link": "ycombinator.com/companies",
+    "outreach": "Target batch companies with dev services"
+  },
+  {
+    "id": 20,
+    "name": "Techstars London 2025 AI Cohort",
+    "company": "Various",
+    "industry": "AI/Vertical",
+    "stage": "Pre-seed",
+    "whyFit": "Cohort focused on AI across legal, insurance, payments, healthcare, climate, edtech",
+    "link": "techstars.com",
+    "outreach": "Offer vertical-specific AI development"
+  },
+  {
+    "id": 21,
+    "name": "Techstars NYC Fall 2025",
+    "company": "Various",
+    "industry": "AI/Biotech/Fintech",
+    "stage": "Pre-seed",
+    "whyFit": "AI infra, biotech/genomics, fintech, proptech - all need dev teams",
+    "link": "techstars.com",
+    "outreach": "Offer specialized development for biotech/fintech AI"
+  },
+  {
+    "id": 22,
+    "name": "Workforce Development Accelerator 2025",
+    "company": "11 Startups",
+    "industry": "AI/HR",
+    "stage": "Pre-seed",
+    "whyFit": "Techstars cohort addressing labor market challenges with cutting-edge tech",
+    "link": "techstars.com",
+    "outreach": "Offer HR tech development expertise"
+  },
+  {
+    "id": 23,
+    "name": "Techstars Emory Founders Catalyst",
+    "company": "Various",
+    "industry": "AI/Various",
+    "stage": "Pre-seed",
+    "whyFit": "First cohort of Emory partnership, early-stage founders need technical support",
+    "link": "emory.edu",
+    "outreach": "Offer mentorship + dev services to early founders"
+  },
+  {
+    "id": 24,
+    "name": "Crescendo AI Covered Startups",
+    "company": "Various",
+    "industry": "AI",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "Platform covering latest AI startup funding, database of recently funded companies",
+    "link": "crescendo.ai",
+    "outreach": "Access database for recently funded leads"
+  },
+  {
+    "id": 25,
+    "name": "Second Talent Founders",
+    "company": "Second Talent",
+    "industry": "AI/Talent",
+    "stage": "Seed",
+    "whyFit": "Connecting businesses with top-tier tech professionals, platform needs development",
+    "link": "secondtalent.com",
+    "outreach": "Offer marketplace development expertise"
+  },
+  {
+    "id": 26,
+    "name": "Reddit SaaS Founder (r/SaaS)",
+    "company": "Unknown B2B Marketplace",
+    "industry": "SaaS",
+    "stage": "Pre-seed",
+    "whyFit": "Posted Dec 2025 seeking software engineer, \u00a3500k pre-seed valuation, has revenue",
+    "link": "reddit.com/r/SaaS",
+    "outreach": "Respond to post offering dev services"
+  },
+  {
+    "id": 27,
+    "name": "IndieHackers Marketplace Founder",
+    "company": "B2B Marketplace",
+    "industry": "SaaS",
+    "stage": "Revenue-generating",
+    "whyFit": "Posted seeking tech lead/product builder, non-technical founder with 12+ years B2B sales, cash reserves",
+    "link": "indiehackers.com",
+    "outreach": "Offer CTO-as-a-service for non-technical founders"
+  },
+  {
+    "id": 28,
+    "name": "LaunchFast Founder",
+    "company": "LaunchFast",
+    "industry": "SaaS/Dev Tools",
+    "stage": "Launching",
+    "whyFit": "Preparing Product Hunt launch, looking for developers to test product in real-world scenarios",
+    "link": "launchfast.com",
+    "outreach": "Offer to be beta tester + long-term dev partner"
+  },
+  {
+    "id": 29,
+    "name": "PageProofer Founder",
+    "company": "PageProofer",
+    "industry": "SaaS",
+    "stage": "Bootstrapped",
+    "whyFit": "100% bootstrapped, took 3 years to launch, web dev business funding it, needs help scaling",
+    "link": "pageproofer.com",
+    "outreach": "Offer bootstrapped-friendly dev services"
+  },
+  {
+    "id": 30,
+    "name": "cmason (IndieHackers)",
+    "company": "Unknown",
+    "industry": "SaaS",
+    "stage": "Pre-launch",
+    "whyFit": "Launched product with no money/customers, partnered with developer from forums, needs ongoing dev",
+    "link": "indiehackers.com",
+    "outreach": "Partner for ongoing product development"
+  },
+  {
+    "id": 31,
+    "name": "Top Startups SaaS List",
+    "company": "254+ Companies",
+    "industry": "SaaS",
+    "stage": "Seed+",
+    "whyFit": "Database of SaaS startups funded by Sequoia, YC, A16Z - many need dev teams",
+    "link": "topstartups.io",
+    "outreach": "Target by funding stage and tech stack"
+  },
+  {
+    "id": 32,
+    "name": "Wellfound SaaS Companies",
+    "company": "Various",
+    "industry": "SaaS",
+    "stage": "All stages",
+    "whyFit": "Platform listing SaaS companies hiring - direct signal they need developers",
+    "link": "wellfound.com",
+    "outreach": "Filter by early-stage + actively hiring"
+  },
+  {
+    "id": 33,
+    "name": "Cobloom SaaS List",
+    "company": "Various",
+    "industry": "SaaS",
+    "stage": "Growing",
+    "whyFit": "Most promising SaaS companies to work for, growth-stage needs dev resources",
+    "link": "cobloom.com",
+    "outreach": "Target growth-stage companies"
+  },
+  {
+    "id": 34,
+    "name": "Development Corporate Clients",
+    "company": "Early-stage SaaS",
+    "industry": "SaaS",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "John Mecke advises pre-seed/seed CEOs on strategy, his network needs execution",
+    "link": "developmentcorporate.com",
+    "outreach": "Partner with John to offer dev services"
+  },
+  {
+    "id": 35,
+    "name": "Fundraise Insider Database",
+    "company": "1,500+ Pre-seed",
+    "industry": "SaaS/Various",
+    "stage": "Pre-seed",
+    "whyFit": "Database of pre-seed startups with verified founder contacts, weekly updates",
+    "link": "fundraiseinsider.com",
+    "outreach": "Subscribe for weekly qualified leads"
+  },
+  {
+    "id": 36,
+    "name": "GrowthList Pre-seed",
+    "company": "1,500+ Startups",
+    "industry": "SaaS/Various",
+    "stage": "Pre-seed",
+    "whyFit": "Database with $300M early 2025 funding tracked, verified contacts",
+    "link": "growthlist.co",
+    "outreach": "Access for pre-qualified leads"
+  },
+  {
+    "id": 37,
+    "name": "OpenVC Pre-seed Database",
+    "company": "Various",
+    "industry": "SaaS/Various",
+    "stage": "Pre-seed",
+    "whyFit": "Transparent fundraising platform with founder database",
+    "link": "openvc.app",
+    "outreach": "Partner to offer dev services to founders"
+  },
+  {
+    "id": 38,
+    "name": "Papermark Pre-seed Investors",
+    "company": "Portfolio Companies",
+    "industry": "SaaS",
+    "stage": "Pre-seed",
+    "whyFit": "50 pre-seed investors in US, portfolio companies need dev teams",
+    "link": "papermark.com",
+    "outreach": "Target investor portfolios"
+  },
+  {
+    "id": 39,
+    "name": "Flowjam Seed Guide Readers",
+    "company": "Various",
+    "industry": "SaaS",
+    "stage": "Seed",
+    "whyFit": "Companies at seed stage raising $2-3M at $8-12M pre-money, need to build product",
+    "link": "flowjam.com",
+    "outreach": "Target companies post-fundraising"
+  },
+  {
+    "id": 40,
+    "name": "Qubit Capital Fintech Portfolio",
+    "company": "Fintech Startups",
+    "industry": "Fintech",
+    "stage": "Pre-seed to Series C",
+    "whyFit": "Funding database from pre-seed through growth stages",
+    "link": "qubit.capital",
+    "outreach": "Target early-stage fintech"
+  },
+  {
+    "id": 41,
+    "name": "SeedBlink European VCs Portfolio",
+    "company": "Sidekick, Yonder, Particula",
+    "industry": "Fintech/Web3",
+    "stage": "Pre-seed",
+    "whyFit": "H2 2025 fresh funds, backing fintech/cleantech/Web3 across Europe",
+    "link": "seedblink.com",
+    "outreach": "Target European pre-seed companies"
+  },
+  {
+    "id": 42,
+    "name": "Speedinvest Fintech Portfolio",
+    "company": "Various",
+    "industry": "Fintech",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "VC investing in banking, insurance, investing, lending, real estate innovation",
+    "link": "speedinvest.com",
+    "outreach": "Portfolio dev services"
+  },
+  {
+    "id": 43,
+    "name": "SoFi Socially Financed Portfolio",
+    "company": "Various",
+    "industry": "Fintech",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "$100K-$500K checks in pre-seed/seed fintech across NA, Europe, Africa",
+    "link": "vcsheet.com",
+    "outreach": "Target underrepresented founder portfolio"
+  },
+  {
+    "id": 44,
+    "name": "Hashlock Web3 Portfolio",
+    "company": "40+ Crypto/Web3",
+    "industry": "Web3",
+    "stage": "All stages",
+    "whyFit": "Top crypto VC firms with active portfolios needing development",
+    "link": "hashlock.com",
+    "outreach": "Target portfolio companies"
+  },
+  {
+    "id": 44,
+    "name": "VCSheet Web3 Funds Portfolio",
+    "company": "Various",
+    "industry": "Web3",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "Curated list of web3 funds with portfolio companies",
+    "link": "vcsheet.com",
+    "outreach": "Database of qualified leads"
+  },
+  {
+    "id": 45,
+    "name": "Crunchbase Web3 Tracker Companies",
+    "company": "Various",
+    "industry": "Web3",
+    "stage": "All stages",
+    "whyFit": "Database of Web3 companies with funding data, trends tracking",
+    "link": "crunchbase.com/web3",
+    "outreach": "Filter by stage for qualified leads"
+  },
+  {
+    "id": 46,
+    "name": "BitcoinKE Web3 VC Portfolio",
+    "company": "Various",
+    "industry": "Web3",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "Top 15 Web3 VCs 2025 outlook, portfolio companies need dev help",
+    "link": "bitcoinke.io",
+    "outreach": "Target technical teams"
+  },
+  {
+    "id": 47,
+    "name": "XFounders Portfolio 2025",
+    "company": "Web3 Startups",
+    "industry": "Web3",
+    "stage": "Seed/Series A",
+    "whyFit": "Accelerator with go-to-market support, portfolio needs product development",
+    "link": "x-founders.com",
+    "outreach": "Offer product development partnership"
+  },
+  {
+    "id": 48,
+    "name": "Outlier Ventures Base Camp",
+    "company": "DeFi/Infrastructure",
+    "industry": "Web3",
+    "stage": "Pre-seed/Seed",
+    "whyFit": "Accelerator program for technical teams, need execution support",
+    "link": "outlierventures.io",
+    "outreach": "Offer development services"
+  },
+  {
+    "id": 49,
+    "name": "Arbitrum/Gitcoin Grantees",
+    "company": "Various Web3 Projects",
+    "industry": "Web3",
+    "stage": "Early-stage",
+    "whyFit": "DAOs and community grants funding early Web3 projects",
+    "link": "gitcoin.co",
+    "outreach": "Target grant recipients with dev needs"
+  },
+  {
+    "id": 50,
+    "name": "YC Winter 2025 Batch",
+    "company": "250+ Companies",
+    "industry": "AI/SaaS/Fintech",
+    "stage": "Pre-seed",
+    "whyFit": "Four batches per year, 250-300 companies each, many need technical teams",
+    "link": "ycombinator.com/companies",
+    "outreach": "Target W25, S25, X25 batches"
+  }
+]

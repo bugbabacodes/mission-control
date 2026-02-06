@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "title": "The Future of AI Agents",
+    "content": "AI agents are transforming how we work. Here's what you need to know about the next generation of autonomous systems and how they're changing the landscape of productivity.",
+    "platforms": ["twitter", "linkedin"],
+    "status": "published",
+    "scheduledFor": null,
+    "publishedAt": "2026-02-05T14:30:00Z",
+    "imageUrl": null,
+    "createdAt": "2026-02-04T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "title": "Web3 Development Tips",
+    "content": "Building in Web3? Here are 5 lessons I've learned from shipping 100+ projects on various blockchains. From smart contract security to UX patterns.",
+    "platforms": ["linkedin"],
+    "status": "scheduled",
+    "scheduledFor": "2026-02-08T09:00:00Z",
+    "publishedAt": null,
+    "imageUrl": null,
+    "createdAt": "2026-02-05T16:00:00Z"
+  },
+  {
+    "id": 3,
+    "title": "Remote Team Management",
+    "content": "Managing distributed teams across 5 time zones? Here's my playbook for async communication, documentation, and keeping everyone aligned without endless meetings.",
+    "platforms": ["twitter", "linkedin"],
+    "status": "draft",
+    "scheduledFor": null,
+    "publishedAt": null,
+    "imageUrl": null,
+    "createdAt": "2026-02-06T08:00:00Z"
+  },
+  {
+    "id": 4,
+    "title": "Startup Lessons Learned",
+    "content": "After 100+ projects, here are the patterns that separate successful founders from the rest. It's not about the idea—it's about execution speed.",
+    "platforms": ["twitter"],
+    "status": "draft",
+    "scheduledFor": null,
+    "publishedAt": null,
+    "imageUrl": null,
+    "createdAt": "2026-02-06T11:00:00Z"
+  },
+  {
+    "id": 5,
+    "title": "Product-Market Fit Signals",
+    "content": "How do you know when you've found product-market fit? These are the undeniable signals that tell you it's time to scale.",
+    "platforms": ["linkedin"],
+    "status": "published",
+    "scheduledFor": null,
+    "publishedAt": "2026-02-03T10:00:00Z",
+    "imageUrl": null,
+    "createdAt": "2026-02-02T14:00:00Z"
+  }
+]

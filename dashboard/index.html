@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mission Control | Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./js/data-manager.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -70,16 +71,20 @@
             <a href="./agents.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
                 <span class="text-xl">🤖</span>
                 <span>Agents</span>
-                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full">5</span>
+                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full" id="sidebarAgentCount">6</span>
             </a>
             <a href="./tasks.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
                 <span class="text-xl">📋</span>
                 <span>Tasks</span>
-                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full" id="tasksBadge">2</span>
+                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full" id="sidebarTasksBadge">0</span>
             </a>
             <a href="./content.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
                 <span class="text-xl">📝</span>
                 <span>Content</span>
+            </a>
+            <a href="./instructions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">📖</span>
+                <span>Instructions</span>
             </a>
             <p class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-3 px-3">Operations</p>
             <a href="./leads.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
@@ -100,7 +105,7 @@
         <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold">Dashboard</h1>
-                <p class="text-gray-400 text-sm mt-1">Welcome back, Ishan. Your agents are working.</p>
+                <p class="text-gray-400 text-sm mt-1">Welcome back, Ishan. Your agents are ready.</p>
             </div>
             <div class="flex items-center gap-3">
                 <div class="relative flex-1 md:w-64">
@@ -113,23 +118,23 @@
 
         <!-- Stats Grid -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
-            <div class="glass-card rounded-2xl p-4 md:p-5 hover:glow-cyan transition-all cursor-pointer group">
+            <div class="glass-card rounded-2xl p-4 md:p-5 hover:glow-cyan transition-all cursor-pointer group" onclick="window.location.href='./agents.html'">
                 <div class="flex justify-between items-start mb-3">
                     <div class="w-10 h-10 md:w-12 md:h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-cyan-500/20">🤖</div>
-                    <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">+2</span>
+                    <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">Active</span>
                 </div>
-                <div class="text-2xl md:text-3xl font-bold">5</div>
+                <div class="text-2xl md:text-3xl font-bold" id="statTotalAgents">0</div>
                 <div class="text-gray-400 text-sm">Active Agents</div>
             </div>
-            <div class="glass-card rounded-2xl p-4 md:p-5 hover:glow-pink transition-all cursor-pointer group">
+            <div class="glass-card rounded-2xl p-4 md:p-5 hover:glow-pink transition-all cursor-pointer group" onclick="window.location.href='./tasks.html'">
                 <div class="flex justify-between items-start mb-3">
                     <div class="w-10 h-10 md:w-12 md:h-12 bg-pink-500/20 rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-pink-500/20">📝</div>
-                    <span class="text-xs text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded-full">Ready</span>
+                    <span class="text-xs text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded-full" id="taskStatusBadge">Pending</span>
                 </div>
-                <div class="text-2xl md:text-3xl font-bold">12</div>
-                <div class="text-gray-400 text-sm">Content Ready</div>
+                <div class="text-2xl md:text-3xl font-bold" id="statPendingTasks">0</div>
+                <div class="text-gray-400 text-sm">Pending Tasks</div>
             </div>
-            <div class="glass-card rounded-2xl p-4 md:p-5 hover:glow-cyan transition-all cursor-pointer group">
+            <div class="glass-card rounded-2xl p-4 md:p-5 hover:glow-cyan transition-all cursor-pointer group" onclick="window.location.href='./leads.html'">
                 <div class="flex justify-between items-start mb-3">
                     <div class="w-10 h-10 md:w-12 md:h-12 bg-green-500/20 rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-green-500/20">👥</div>
                     <span class="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded-full">+5</span>
@@ -151,41 +156,21 @@
         <div class="grid lg:grid-cols-3 gap-4 md:gap-6">
             <!-- Left Column -->
             <div class="lg:col-span-2 space-y-4 md:space-y-6">
-                <!-- Activity Chart -->
-                <div class="glass-card rounded-2xl p-4 md:p-6">
+                <!-- Action Items -->
+                <div class="glass-card rounded-2xl p-4 md:p-6 border-t-4 border-t-pink-500">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-semibold text-lg">Agent Activity</h3>
-                        <span class="text-cyan-400 text-sm cursor-pointer hover:text-cyan-300">View All</span>
+                        <h3 class="font-semibold text-lg">🎯 Action Items</h3>
+                        <span class="text-cyan-400 text-xs cursor-pointer hover:text-cyan-300" onclick="window.location.href='./agents.html'">View All</span>
                     </div>
-                    <div class="h-40 md:h-48 flex items-end justify-around gap-2 pt-4">
-                        <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                            <div class="w-full bg-gradient-to-t from-cyan-500 to-purple-600 rounded-t-lg transition-all group-hover:opacity-80" style="height: 40%"></div>
-                            <span class="text-xs text-gray-500">Mon</span>
+                    <div id="actionItemsContainer">
+                        <!-- Action items will be rendered here -->
+                    </div>
+                    <div class="mt-4 flex items-center gap-3 text-xs text-gray-400">
+                        <span><strong class="text-white" id="actionItemCurrent">0</strong> of <strong class="text-white" id="actionItemTotal">0</strong></span>
+                        <div class="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full gradient-2 rounded-full" id="actionItemProgress" style="width: 0%"></div>
                         </div>
-                        <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                            <div class="w-full bg-gradient-to-t from-cyan-500 to-purple-600 rounded-t-lg transition-all group-hover:opacity-80" style="height: 65%"></div>
-                            <span class="text-xs text-gray-500">Tue</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                            <div class="w-full bg-gradient-to-t from-cyan-500 to-purple-600 rounded-t-lg transition-all group-hover:opacity-80" style="height: 45%"></div>
-                            <span class="text-xs text-gray-500">Wed</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                            <div class="w-full bg-gradient-to-t from-cyan-500 to-purple-600 rounded-t-lg transition-all group-hover:opacity-80" style="height: 80%"></div>
-                            <span class="text-xs text-gray-500">Thu</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                            <div class="w-full bg-gradient-to-t from-cyan-500 to-purple-600 rounded-t-lg transition-all group-hover:opacity-80" style="height: 55%"></div>
-                            <span class="text-xs text-gray-500">Fri</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                            <div class="w-full bg-gradient-to-t from-cyan-500 to-purple-600 rounded-t-lg transition-all group-hover:opacity-80" style="height: 90%"></div>
-                            <span class="text-xs text-gray-500">Sat</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2 group cursor-pointer">
-                            <div class="w-full bg-gradient-to-t from-cyan-500 to-purple-600 rounded-t-lg transition-all group-hover:opacity-80" style="height: 70%"></div>
-                            <span class="text-xs text-gray-500">Sun</span>
-                        </div>
+                        <span id="actionItemRemaining">0 remaining</span>
                     </div>
                 </div>
 
@@ -195,105 +180,40 @@
                         <h3 class="font-semibold text-lg">Recent Activity</h3>
                         <span class="text-cyan-400 text-sm cursor-pointer hover:text-cyan-300">View All</span>
                     </div>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-4 p-3 bg-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition-all">
-                            <div class="w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center text-xl">☢️</div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium truncate"><strong>Marie Curie</strong> started autonomous research</p>
-                                <p class="text-xs text-gray-500">2 hours ago</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 p-3 bg-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition-all">
-                            <div class="w-10 h-10 bg-pink-500/20 rounded-xl flex items-center justify-center text-xl">🪶</div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium truncate"><strong>Shakespeare</strong> delivered sports content calendar</p>
-                                <p class="text-xs text-gray-500">3 hours ago</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 p-3 bg-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition-all">
-                            <div class="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center text-xl">🧠</div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium truncate"><strong>Turing</strong> deployed heartbeat fix</p>
-                                <p class="text-xs text-gray-500">4 hours ago</p>
-                            </div>
-                        </div>
+                    <div class="space-y-3" id="recentActivityContainer">
+                        <!-- Activity will be rendered here -->
                     </div>
                 </div>
             </div>
 
             <!-- Right Column -->
             <div class="space-y-4 md:space-y-6">
-                <!-- Action Items -->
-                <div class="glass-card rounded-2xl p-4 md:p-6 border-t-4 border-t-pink-500">
+                <!-- Agent Status -->
+                <div class="glass-card rounded-2xl p-4 md:p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-semibold text-lg">🎯 Action Items</h3>
-                        <span class="text-cyan-400 text-xs cursor-pointer">View All</span>
+                        <h3 class="font-semibold text-lg">Agent Status</h3>
+                        <a href="./agents.html" class="text-xs text-cyan-400 hover:text-cyan-300">Manage</a>
                     </div>
-                    <div class="bg-white/5 rounded-xl p-4">
-                        <div class="flex items-center gap-2 mb-3 flex-wrap">
-                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">🕯️ Nightingale</span>
-                            <span class="text-xs bg-pink-500/20 text-pink-400 px-2 py-1 rounded-full">Approval</span>
-                            <span class="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded-full ml-auto">Urgent</span>
-                        </div>
-                        <h4 class="font-semibold mb-2 text-sm md:text-base">Client asking about pricing</h4>
-                        <p class="text-gray-400 text-xs md:text-sm mb-4 line-clamp-3">A prospect replied asking about pricing packages. Should I send the standard rate card or schedule a discovery call first?</p>
-                        <div class="flex gap-2 flex-wrap">
-                            <button class="flex-1 bg-gradient-to-r from-green-400 to-cyan-500 text-black font-semibold py-2 px-3 rounded-xl text-xs md:text-sm hover:opacity-90 transition-all">✓ Resolve</button>
-                            <button class="flex-1 bg-white/10 py-2 px-3 rounded-xl text-xs md:text-sm hover:bg-white/20 transition-all">↷ Skip</button>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex items-center gap-3 text-xs text-gray-400">
-                        <span><strong class="text-white">1</strong> of <strong class="text-white">5</strong></span>
-                        <div class="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full gradient-2 rounded-full" style="width: 20%"></div>
-                        </div>
-                        <span>4 remaining</span>
+                    <div class="space-y-3" id="agentStatusContainer">
+                        <!-- Agent status will be rendered here -->
                     </div>
                 </div>
 
-                <!-- Agent Status -->
+                <!-- Quick Stats -->
                 <div class="glass-card rounded-2xl p-4 md:p-6">
-                    <h3 class="font-semibold text-lg mb-4">Agent Status</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-all cursor-pointer">
-                            <div class="w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center text-xl border border-white/10">☢️</div>
-                            <div class="flex-1 min-w-0">
-                                <p class="font-medium text-sm">Marie Curie</p>
-                                <p class="text-xs text-gray-500 truncate">Researching...</p>
-                            </div>
-                            <div class="w-2.5 h-2.5 bg-yellow-400 rounded-full animate-pulse shadow-lg shadow-yellow-400/50"></div>
+                    <h3 class="font-semibold text-lg mb-4">Today's Overview</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400 text-sm">Tasks Completed</span>
+                            <span class="text-green-400 font-semibold" id="statCompletedTasks">0</span>
                         </div>
-                        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-all cursor-pointer">
-                            <div class="w-10 h-10 bg-pink-500/20 rounded-xl flex items-center justify-center text-xl border border-white/10">🪶</div>
-                            <div class="flex-1 min-w-0">
-                                <p class="font-medium text-sm">Shakespeare</p>
-                                <p class="text-xs text-gray-500 truncate">Standby</p>
-                            </div>
-                            <div class="w-2.5 h-2.5 bg-green-400 rounded-full shadow-lg shadow-green-400/50"></div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400 text-sm">Action Items Resolved</span>
+                            <span class="text-cyan-400 font-semibold" id="statResolvedActions">0</span>
                         </div>
-                        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-all cursor-pointer">
-                            <div class="w-10 h-10 bg-yellow-500/20 rounded-xl flex items-center justify-center text-xl border border-white/10">🧠</div>
-                            <div class="flex-1 min-w-0">
-                                <p class="font-medium text-sm">Turing</p>
-                                <p class="text-xs text-gray-500 truncate">Online</p>
-                            </div>
-                            <div class="w-2.5 h-2.5 bg-green-400 rounded-full shadow-lg shadow-green-400/50"></div>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-all cursor-pointer">
-                            <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center text-xl border border-white/10">🍎</div>
-                            <div class="flex-1 min-w-0">
-                                <p class="font-medium text-sm">Jobs</p>
-                                <p class="text-xs text-gray-500 truncate">Working</p>
-                            </div>
-                            <div class="w-2.5 h-2.5 bg-yellow-400 rounded-full animate-pulse shadow-lg shadow-yellow-400/50"></div>
-                        </div>
-                        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-all cursor-pointer">
-                            <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-xl border border-white/10">🕯️</div>
-                            <div class="flex-1 min-w-0">
-                                <p class="font-medium text-sm">Nightingale</p>
-                                <p class="text-xs text-gray-500 truncate">Online</p>
-                            </div>
-                            <div class="w-2.5 h-2.5 bg-green-400 rounded-full shadow-lg shadow-green-400/50"></div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400 text-sm">Agents Online</span>
+                            <span class="text-purple-400 font-semibold" id="statOnlineAgents">0</span>
                         </div>
                     </div>
                 </div>
@@ -342,8 +262,182 @@
             setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
 
+        function getAgentColor(name) {
+            const colors = {
+                'Marie Curie': 'bg-cyan-500/20 text-cyan-400',
+                'Shakespeare': 'bg-pink-500/20 text-pink-400',
+                'Turing': 'bg-yellow-500/20 text-yellow-400',
+                'Jobs': 'bg-orange-500/20 text-orange-400',
+                'Nightingale': 'bg-purple-500/20 text-purple-400',
+                'Van Gogh Jr.': 'bg-green-500/20 text-green-400'
+            };
+            return colors[name] || 'bg-gray-500/20 text-gray-400';
+        }
+
+        function getPriorityColor(priority) {
+            switch(priority) {
+                case 'urgent': return 'bg-red-500/20 text-red-400 border-red-500/30';
+                case 'high': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+                case 'medium': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+                default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+            }
+        }
+
+        function renderDashboard() {
+            const stats = DataManager.getStats();
+            const agents = DataManager.getAgents();
+            const tasks = DataManager.getTasks();
+            const actionItems = DataManager.getActionItems().filter(i => i.status === 'pending');
+
+            // Update stats
+            document.getElementById('statTotalAgents').textContent = stats.totalAgents;
+            document.getElementById('statPendingTasks').textContent = stats.pendingTasks;
+            document.getElementById('sidebarAgentCount').textContent = stats.totalAgents;
+            document.getElementById('sidebarTasksBadge').textContent = stats.pendingTasks;
+            document.getElementById('statCompletedTasks').textContent = stats.doneTasks;
+            document.getElementById('statResolvedActions').textContent = 
+                DataManager.getActionItems().filter(i => i.status === 'resolved').length;
+            document.getElementById('statOnlineAgents').textContent = stats.idleAgents;
+
+            // Action Items
+            const actionContainer = document.getElementById('actionItemsContainer');
+            const totalActions = DataManager.getActionItems().length;
+            const pendingCount = actionItems.length;
+            const resolvedCount = totalActions - pendingCount;
+            const progressPercent = totalActions > 0 ? (resolvedCount / totalActions) * 100 : 0;
+
+            document.getElementById('actionItemCurrent').textContent = resolvedCount;
+            document.getElementById('actionItemTotal').textContent = totalActions;
+            document.getElementById('actionItemRemaining').textContent = pendingCount + ' remaining';
+            document.getElementById('actionItemProgress').style.width = progressPercent + '%';
+
+            if (actionItems.length > 0) {
+                const item = actionItems[0];
+                const agent = agents.find(a => a.id === item.agent || a.id.includes(item.agent)) || { name: item.agent, emoji: '🤖' };
+                actionContainer.innerHTML = `
+                    <div class="bg-white/5 rounded-xl p-4">
+                        <div class="flex items-center gap-2 mb-3 flex-wrap">
+                            <span class="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">${agent.emoji} ${agent.name || item.agent}</span>
+                            <span class="text-xs bg-pink-500/20 text-pink-400 px-2 py-1 rounded-full capitalize">${item.type}</span>
+                            <span class="text-xs ${getPriorityColor(item.priority)} px-2 py-1 rounded-full border ml-auto">${item.priority}</span>
+                        </div>
+                        <h4 class="font-semibold mb-2 text-sm md:text-base">${item.title}</h4>
+                        <p class="text-gray-400 text-xs md:text-sm mb-4 line-clamp-3">${item.description}</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <button onclick="resolveActionItem('${item.id}')" class="flex-1 bg-gradient-to-r from-green-400 to-cyan-500 text-black font-semibold py-2 px-3 rounded-xl text-xs md:text-sm hover:opacity-90 transition-all">✓ Resolve</button>
+                            <button onclick="skipActionItem('${item.id}')" class="flex-1 bg-white/10 py-2 px-3 rounded-xl text-xs md:text-sm hover:bg-white/20 transition-all">↷ Skip</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                actionContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-2">🎉</div>
+                        <p class="text-gray-400 text-sm">All caught up! No pending action items.</p>
+                    </div>
+                `;
+            }
+
+            // Agent Status
+            const agentContainer = document.getElementById('agentStatusContainer');
+            agentContainer.innerHTML = agents.map(agent => `
+                <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-all cursor-pointer" onclick="window.location.href='./agents.html'">
+                    <div class="w-10 h-10 ${getAgentColor(agent.name).split(' ')[0]} rounded-xl flex items-center justify-center text-xl border border-white/10">${agent.emoji}</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-sm">${agent.name}</p>
+                        <p class="text-xs text-gray-500 truncate">${agent.status === 'working' ? 'Working...' : 'Online'}</p>
+                    </div>
+                    <div class="w-2.5 h-2.5 ${agent.status === 'working' ? 'bg-yellow-400 animate-pulse' : 'bg-green-400'} rounded-full shadow-lg ${agent.status === 'working' ? 'shadow-yellow-400/50' : 'shadow-green-400/50'}"></div>
+                </div>
+            `).join('');
+
+            // Recent Activity handled by loadRecentActivity()
+        }
+
+        function resolveActionItem(id) {
+            const response = prompt('Add a response (optional):');
+            if (response !== null) {
+                DataManager.resolveActionItem(id, response || 'Resolved from dashboard');
+                showToast('Action item resolved!', '✓');
+                renderDashboard();
+            }
+        }
+
+        function skipActionItem(id) {
+            DataManager.updateActionItem(id, { status: 'skipped' });
+            showToast('Action item skipped', '↷');
+            renderDashboard();
+        }
+
+        async function loadRecentActivity() {
+            const logSources = [
+                { id: 'marie_curie', file: '../logs/dexter-heartbeat.log' },
+                { id: 'shakespeare', file: '../logs/blossom-heartbeat.log' },
+                { id: 'turing', file: '../logs/samurai_jack-heartbeat.log' },
+                { id: 'jobs', file: '../logs/johnny_bravo-heartbeat.log' },
+                { id: 'nightingale', file: '../logs/courage-heartbeat.log' }
+            ];
+
+            const agents = DataManager.getAgents();
+            const activities = [];
+
+            await Promise.all(logSources.map(async (source) => {
+                try {
+                    const res = await fetch(source.file, { cache: 'no-store' });
+                    if (!res.ok) return;
+                    const text = await res.text();
+                    const lines = text.trim().split('\n').filter(Boolean);
+                    const lastRelevant = [...lines].reverse().find(line =>
+                        line.includes('Processing task:') ||
+                        line.includes('✅ Work completed') ||
+                        line.includes('Found work') ||
+                        line.includes('Running background') ||
+                        line.includes('HEARTBEAT COMPLETE')
+                    );
+                    if (!lastRelevant) return;
+                    const timeMatch = lastRelevant.match(/^\[(.*?)\]/);
+                    const timestamp = timeMatch ? timeMatch[1] : null;
+                    const message = lastRelevant.replace(/^\[.*?\]\s*/, '');
+                    const agent = agents.find(a => a.id === source.id) || { name: source.id, emoji: '🤖' };
+                    activities.push({
+                        agent,
+                        message,
+                        timestamp
+                    });
+                } catch (err) {
+                    console.warn('[RecentActivity]', err.message);
+                }
+            }));
+
+            activities.sort((a, b) => {
+                if (!a.timestamp || !b.timestamp) return 0;
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
+
+            const activityContainer = document.getElementById('recentActivityContainer');
+            const recent = activities.slice(0, 3);
+
+            if (!recent.length) {
+                activityContainer.innerHTML = '<p class="text-gray-400 text-sm">No recent activity logged.</p>';
+                return;
+            }
+
+            activityContainer.innerHTML = recent.map(item => `
+                <div class="flex items-center gap-4 p-3 bg-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition-all" onclick="window.location.href='./tasks.html'">
+                    <div class="w-10 h-10 ${getAgentColor(item.agent.name).split(' ')[0]} rounded-xl flex items-center justify-center text-xl">${item.agent.emoji}</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium truncate"><strong>${item.agent.name}</strong> ${item.message}</p>
+                        <p class="text-xs text-gray-500">${item.timestamp ? new Date(item.timestamp).toLocaleString() : ''}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         // Animate stats on load
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
+            await DataManager.loadAll();
+            renderDashboard();
+            await loadRecentActivity();
             document.querySelectorAll('.glass-card .text-2xl, .glass-card .text-3xl').forEach((el, i) => {
                 setTimeout(() => {
                     el.style.transform = 'scale(1.1)';
@@ -351,14 +445,6 @@
                 }, i * 100);
             });
         });
-
-        // Update tasks badge
-        function updateTasksBadge() {
-            const tasks = JSON.parse(localStorage.getItem('mc_tasks') || '[]');
-            const pending = tasks.filter(t => !t.completed).length;
-            document.getElementById('tasksBadge').textContent = pending;
-        }
-        updateTasksBadge();
     </script>
 </body>
 </html>

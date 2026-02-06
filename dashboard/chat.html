@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mission Control | Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./js/data-manager.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -80,6 +81,10 @@
             <a href="./content.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
                 <span class="text-xl">📝</span>
                 <span>Content</span>
+            </a>
+            <a href="./instructions.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">📖</span>
+                <span>Instructions</span>
             </a>
             <p class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-3 px-3">Operations</p>
             <a href="./leads.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
@@ -198,17 +203,46 @@
     </nav>
 
     <script>
-        const agents = {
-            marie_curie: { name: 'Marie Curie', emoji: '☢️', color: 'bg-cyan-500/20' },
-            shakespeare: { name: 'Shakespeare', emoji: '🪶', color: 'bg-pink-500/20' },
-            jack: { name: 'Turing', emoji: '🧠', color: 'bg-yellow-500/20' },
-            johnny: { name: 'Jobs', emoji: '🍎', color: 'bg-orange-500/20' },
-            nightingale: { name: 'Nightingale', emoji: '🕯️', color: 'bg-purple-500/20' }
-        };
+let agents = {};
+        let agentIdToKey = {};
+
+        async function loadAgents() {
+            await DataManager.loadAll();
+            const dbAgents = DataManager.getAgents();
+            agents = Object.fromEntries(dbAgents.map(a => {
+                const key = a.id.replace(/_/g, '');
+                agentIdToKey[a.id] = key;
+                return [key, { id: a.id, name: a.name, emoji: a.emoji, color: getAgentColor(a.role) }];
+            }));
+
+            // Update header avatars
+            const headerAvatars = document.querySelector('.flex.-space-x-2');
+            if (headerAvatars && dbAgents.length >= 3) {
+                headerAvatars.innerHTML = dbAgents.slice(0, 3).map(a =>
+                    `<div class="w-10 h-10 ${getAgentColor(a.role)} rounded-full flex items-center justify-center text-lg border-2 border-[#0f0f1a]">${a.emoji}</div>`
+                ).join('');
+            }
+
+            // Update online count
+            const onlineCount = document.querySelector('.text-xs.text-green-400');
+            if (onlineCount) {
+                onlineCount.innerHTML = `<span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span>${dbAgents.length} agents online`;
+            }
+        }
+
+        function getAgentColor(role) {
+            if (role?.toLowerCase().includes('research')) return 'bg-cyan-500/20';
+            if (role?.toLowerCase().includes('content') || role?.toLowerCase().includes('wordsmith')) return 'bg-pink-500/20';
+            if (role?.toLowerCase().includes('code') || role?.toLowerCase().includes('architect')) return 'bg-yellow-500/20';
+            if (role?.toLowerCase().includes('sales') || role?.toLowerCase().includes('deal')) return 'bg-orange-500/20';
+            if (role?.toLowerCase().includes('support') || role?.toLowerCase().includes('success')) return 'bg-purple-500/20';
+            if (role?.toLowerCase().includes('visual') || role?.toLowerCase().includes('art')) return 'bg-green-500/20';
+            return 'bg-gray-500/20';
+        }
 
         function addMention(name) {
             const input = document.getElementById('messageInput');
-            input.value += name + ' ';
+            input.value += '@' + name + ' ';
             input.focus();
         }
 
@@ -217,10 +251,9 @@
             const text = input.value.trim();
             if (!text) return;
 
-            // Add user message
             const container = document.getElementById('messagesContainer');
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
+
             container.insertAdjacentHTML('beforeend', `
                 <div class="flex gap-3 justify-end">
                     <div class="flex flex-col items-end max-w-[80%]">
@@ -229,13 +262,12 @@
                     </div>
                 </div>
             `);
-            
+
             input.value = '';
             input.style.height = '44px';
             container.scrollTop = container.scrollHeight;
 
-            // Check for mentions and respond
-            const mentioned = Object.keys(agents).find(a => text.toLowerCase().includes('@'+a));
+            const mentioned = Object.keys(agents).find(a => text.toLowerCase().includes('@'+a) || text.toLowerCase().includes('@'+agents[a].name.toLowerCase().replace(/\s+/g, '')));
             if (mentioned) {
                 showTyping(mentioned);
                 setTimeout(() => {
@@ -247,6 +279,7 @@
 
         function showTyping(agent) {
             const a = agents[agent];
+            if (!a) return;
             document.getElementById('typingAvatar').textContent = a.emoji;
             document.getElementById('typingAvatar').className = `w-8 h-8 ${a.color} rounded-full flex items-center justify-center text-sm shrink-0 border border-white/10`;
             document.getElementById('typingIndicator').classList.remove('hidden');
@@ -258,6 +291,7 @@
 
         function sendAgentReply(agent) {
             const a = agents[agent];
+            if (!a) return;
             const responses = [
                 "I'll get right on that!",
                 "Working on it now...",
@@ -266,7 +300,7 @@
             ];
             const reply = responses[Math.floor(Math.random() * responses.length)];
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
+
             document.getElementById('messagesContainer').insertAdjacentHTML('beforeend', `
                 <div class="flex gap-3">
                     <div class="w-8 h-8 ${a.color} rounded-full flex items-center justify-center text-sm shrink-0 border border-white/10">${a.emoji}</div>
@@ -281,6 +315,8 @@
             `);
             document.getElementById('messagesContainer').scrollTop = document.getElementById('messagesContainer').scrollHeight;
         }
+
+        window.addEventListener('load', loadAgents);
     </script>
 </body>
 </html>
