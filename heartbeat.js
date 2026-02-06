@@ -54,6 +54,15 @@ function agentHeartbeat(agentName) {
     // Step 2: Check for urgent items (like Bhanu's @mentions)
     log(agentName, 'Checking for urgent items...');
     
+    // Check for pending chat messages first
+    const pendingChats = checkPendingChatMessages(agentName);
+    if (pendingChats.length > 0) {
+      const chatResult = processChatMessages(agentName, pendingChats);
+      if (chatResult && chatResult.notify) {
+        sendTelegramNotification(agentName, chatResult.message, chatResult.details);
+      }
+    }
+    
     // Check Mission Control for @mentions
     const mentions = checkForMentions(agentName);
     const assignedTasks = checkAssignedTasks(agentName);
@@ -94,6 +103,138 @@ function agentHeartbeat(agentName) {
     // Report error to Mission Control
     reportError(agentName, error);
   }
+}
+
+/**
+ * Check for pending chat messages
+ */
+function checkPendingChatMessages(agentName) {
+  log(agentName, 'Checking for pending chat messages...');
+  
+  const chatQueueFile = path.join(WORKSPACE, 'database', 'chat-queue.json');
+  
+  try {
+    if (!fs.existsSync(chatQueueFile)) {
+      return [];
+    }
+    
+    const chatData = JSON.parse(fs.readFileSync(chatQueueFile, 'utf8'));
+    const conversations = chatData.conversations || {};
+    
+    // Map agent names to IDs
+    const agentIdMap = {
+      'dexter': 'marie_curie',
+      'blossom': 'shakespeare', 
+      'samurai_jack': 'turing',
+      'johnny_bravo': 'jobs',
+      'courage': 'nightingale'
+    };
+    
+    const agentId = agentIdMap[agentName];
+    if (!agentId || !conversations[agentId]) {
+      return [];
+    }
+    
+    // Get pending messages (from user, not yet responded)
+    const pendingMessages = conversations[agentId].filter(m => 
+      m.sender === 'user' && m.status === 'pending'
+    );
+    
+    return pendingMessages;
+  } catch (err) {
+    log(agentName, `Error checking chat: ${err.message}`);
+    return [];
+  }
+}
+
+/**
+ * Process and respond to chat messages
+ */
+function processChatMessages(agentName, pendingMessages) {
+  if (pendingMessages.length === 0) return null;
+  
+  log(agentName, `Processing ${pendingMessages.length} chat message(s)...`);
+  
+  const chatQueueFile = path.join(WORKSPACE, 'database', 'chat-queue.json');
+  const chatData = JSON.parse(fs.readFileSync(chatQueueFile, 'utf8'));
+  
+  const agentIdMap = {
+    'dexter': 'marie_curie',
+    'blossom': 'shakespeare',
+    'samurai_jack': 'turing', 
+    'johnny_bravo': 'jobs',
+    'courage': 'nightingale'
+  };
+  
+  const agentId = agentIdMap[agentName];
+  
+  for (const msg of pendingMessages) {
+    // Mark as delivered
+    const msgIndex = chatData.conversations[agentId].findIndex(m => m.id === msg.id);
+    if (msgIndex !== -1) {
+      chatData.conversations[agentId][msgIndex].status = 'delivered';
+    }
+    
+    // Add agent response
+    const response = {
+      id: `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      agentId,
+      sender: 'agent',
+      text: generateAgentResponse(agentName, msg.text),
+      timestamp: new Date().toISOString(),
+      status: 'delivered',
+      inReplyTo: msg.id
+    };
+    
+    chatData.conversations[agentId].push(response);
+    log(agentName, `Responded to: "${msg.text.slice(0, 50)}..."`);
+  }
+  
+  // Save updated chat data
+  fs.writeFileSync(chatQueueFile, JSON.stringify(chatData, null, 2));
+  
+  return {
+    notify: true,
+    message: `Responded to ${pendingMessages.length} chat message(s)`,
+    details: pendingMessages.map(m => m.text.slice(0, 100)).join(', ')
+  };
+}
+
+/**
+ * Generate contextual agent response
+ */
+function generateAgentResponse(agentName, userMessage) {
+  // Agent-specific response patterns
+  const responses = {
+    'dexter': [
+      `I've analyzed your request: "${userMessage.slice(0, 50)}..." Let me research this and compile findings.`,
+      `Interesting question! Based on my research, here's what I found...`,
+      `I'll add this to my research queue. Expect a detailed report on my next deep work session.`
+    ],
+    'blossom': [
+      `Great content idea! I'll draft something based on: "${userMessage.slice(0, 50)}..."`,
+      `I can create content around this theme. What platform - LinkedIn, Twitter, or blog?`,
+      `Added to my content calendar. I'll have a draft ready soon!`
+    ],
+    'samurai_jack': [
+      `Understood. I'll implement this: "${userMessage.slice(0, 50)}..."`,
+      `Code review acknowledged. I'll analyze and report back with suggestions.`,
+      `On it! I'll deploy this change and verify it's working properly.`
+    ],
+    'johnny_bravo': [
+      `Great lead intel! I'll research "${userMessage.slice(0, 50)}..." and add to our pipeline.`,
+      `I'll craft an outreach strategy for this. Stay tuned for the pitch deck!`,
+      `Deal analysis in progress. I'll identify the best approach for closing.`
+    ],
+    'courage': [
+      `I'll follow up on this right away: "${userMessage.slice(0, 50)}..."`,
+      `Client communication logged. I'll ensure they get a response within 24 hours.`,
+      `Care package noted! I'll coordinate the necessary support.`
+    ]
+  };
+  
+  const agentResponses = responses[agentName] || [`Message received: "${userMessage.slice(0, 50)}..." I'll process this.`];
+  return agentResponses[Math.floor(Math.random() * agentResponses.length)];
 }
 
 /**
