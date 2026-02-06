@@ -2,1249 +2,358 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content | Mission Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mission Control | Content</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bg-primary': '#0f0f1a',
+                        'bg-secondary': '#1a1a2e',
+                        'accent-cyan': '#00d4ff',
+                        'accent-purple': '#7b2cbf',
+                        'accent-pink': '#ff006e',
+                        'accent-green': '#00f5d4',
+                        'accent-yellow': '#ffb703',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        :root {
-            --bg-primary: #0f0f1a;
-            --bg-secondary: #1a1a2e;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --sidebar-bg: rgba(26, 26, 46, 0.8);
-            --border: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --text-muted: #6b6b7b;
-            --accent-cyan: #00d4ff;
-            --accent-purple: #7b2cbf;
-            --accent-pink: #ff006e;
-            --accent-green: #00f5d4;
-            --accent-yellow: #ffb703;
-            --accent-orange: #fb5607;
-            --gradient-1: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
-            --gradient-2: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
-            --gradient-3: linear-gradient(135deg, #00f5d4 0%, #00d4ff 100%);
-            --shadow-glow: 0 0 40px rgba(0, 212, 255, 0.15);
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        /* Animated Background */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        
-        .bg-animation::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(123, 44, 191, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(255, 0, 110, 0.03) 0%, transparent 50%);
-            animation: bgPulse 15s ease-in-out infinite;
-        }
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background: #0f0f1a; color: white; }
+        .glass { background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+        .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); }
+        .gradient-1 { background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%); }
+        .gradient-2 { background: linear-gradient(135deg, #ff006e 0%, #8338ec 100%); }
+        .gradient-3 { background: linear-gradient(135deg, #00f5d4 0%, #00d4ff 100%); }
+        .text-gradient { background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         @keyframes bgPulse {
             0%, 100% { transform: rotate(0deg) scale(1); }
             50% { transform: rotate(180deg) scale(1.1); }
         }
-        
-        /* Layout */
-        .app {
-            display: flex;
-            min-height: 100vh;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--border);
-            padding: 2rem 1.5rem;
-            display: flex;
-            flex-direction: column;
+        .bg-animated::before {
+            content: '';
             position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 3rem;
-            padding: 0 0.5rem;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        }
-        
-        .logo-text {
-            font-size: 1.25rem;
-            font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .nav-section {
-            margin-bottom: 2rem;
-        }
-        
-        .nav-title {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            padding: 0 0.75rem;
-        }
-        
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.875rem;
-            padding: 0.875rem 1rem;
-            margin-bottom: 0.375rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-        
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            transform: translateX(4px);
-        }
-        
-        .nav-item.active {
-            background: rgba(0, 212, 255, 0.1);
-            color: var(--accent-cyan);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
-        }
-        
-        .nav-item.active .nav-icon {
-            filter: drop-shadow(0 0 8px var(--accent-cyan));
-        }
-        
-        .nav-item.active .nav-icon {
-            filter: drop-shadow(0 0 8px var(--accent-cyan));
-        }
-        
-        .nav-icon {
-            font-size: 1.25rem;
-            width: 24px;
-            text-align: center;
-        }
-        
-        .nav-badge {
-            margin-left: auto;
-            background: var(--gradient-2);
-            color: white;
-            font-size: 0.7rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-        
-        /* Main Content */
-        .main {
-            flex: 1;
-            margin-left: 280px;
-            padding: 2rem;
-        }
-        
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        
-        .header-title h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-        
-        .header-title p {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-        
-        .header-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        .search-box {
-            position: relative;
-        }
-        
-        .search-box input {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            color: var(--text-primary);
-            width: 280px;
-            font-size: 0.875rem;
-            transition: all 0.3s;
-        }
-        
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
-        }
-        
-        .search-box::before {
-            content: '🔍';
-            position: absolute;
-            left: 0.875rem;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.5;
-        }
-        
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .user-menu:hover {
-            border-color: var(--border-hover);
-        }
-        
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: var(--gradient-1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-        
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
-        }
-        
-        .tab {
-            padding: 0.75rem 1.25rem;
-            border-radius: 12px;
-            background: transparent;
-            border: 1px solid transparent;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .tab:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-        }
-        
-        .tab.active {
-            background: rgba(0, 212, 255, 0.1);
-            color: var(--accent-cyan);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
-        }
-        
-        /* Card */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            margin-bottom: 1.5rem;
-            transition: all 0.3s;
-        }
-        
-        .card:hover {
-            border-color: var(--border-hover);
-            box-shadow: var(--shadow-glow);
-        }
-        
-        .card-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .card-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-        
-        .card-body {
-            padding: 1.5rem;
-        }
-        
-        /* Content Post */
-        .content-post {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .content-post:hover {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
-            transform: translateX(4px);
-        }
-        
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.75rem;
-        }
-        
-        .post-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .post-meta {
-            font-size: 0.8125rem;
-            color: var(--text-muted);
-        }
-        
-        .post-badge {
-            padding: 0.375rem 0.875rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .badge-ready {
-            background: rgba(0, 245, 212, 0.15);
-            color: var(--accent-green);
-            box-shadow: 0 0 10px rgba(0, 245, 212, 0.1);
-        }
-        
-        .post-preview {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 10px;
-            border-left: 3px solid var(--accent-cyan);
-        }
-        
-        .post-actions {
-            display: flex;
-            gap: 0.75rem;
-        }
-        
-        .btn {
-            padding: 0.625rem 1.125rem;
-            border-radius: 10px;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.375rem;
-        }
-        
-        .btn-primary {
-            background: var(--gradient-1);
-            color: var(--bg-primary);
-        }
-        
-        .btn-primary:hover {
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            border-color: var(--border-hover);
-        }
-        
-        /* Script Card */
-        .script-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s;
-        }
-        
-        .script-card:hover {
-            border-color: var(--accent-pink);
-            box-shadow: 0 0 20px rgba(255, 0, 110, 0.1);
-        }
-        
-        .script-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-        
-        .script-title {
-            font-weight: 600;
-        }
-        
-        .script-type {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.625rem;
-            background: rgba(255, 0, 110, 0.15);
-            color: var(--accent-pink);
-            border-radius: 6px;
-        }
-        
-        .script-content {
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 0.8125rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem;
-            border-radius: 10px;
-            color: var(--text-secondary);
-            white-space: pre-wrap;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-        }
-        
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-        }
-        
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 700px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            transform: scale(0.9);
-            transition: all 0.3s;
-        }
-        
-        .modal-overlay.active .modal {
-            transform: scale(1);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        
-        .modal-close:hover {
-            color: var(--text-primary);
-        }
-        
-        .modal-content-full {
-            font-size: 0.9375rem;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            white-space: pre-wrap;
-        }
-        
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1000;
-        }
-        
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        /* Tab content animation */
-        .tab-content {
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 3px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--border-hover);
-        }
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(123, 44, 191, 0.08) 0%, transparent 40%);
+            animation: bgPulse 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .platform-linkedin { background: rgba(0, 119, 181, 0.2); color: #00a0dc; border: 1px solid rgba(0, 160, 220, 0.3); }
+        .platform-twitter { background: rgba(29, 161, 242, 0.2); color: #1da1f2; border: 1px solid rgba(29, 161, 242, 0.3); }
+        .platform-instagram { background: linear-gradient(135deg, rgba(225, 48, 108, 0.2), rgba(255, 220, 128, 0.2)); color: #e1306c; border: 1px solid rgba(225, 48, 108, 0.3); }
+        .status-draft { background: rgba(156, 163, 175, 0.2); color: #9ca3af; }
+        .status-review { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .status-published { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+        .status-scheduled { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
     </style>
 </head>
-<body>
-    <div class="bg-animation"></div>
-    
-    <div class="app">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-icon">🎯</div>
-                <div class="logo-text">Mission Control</div>
+<body class="bg-animated min-h-screen pb-20 md:pb-0">
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex fixed left-0 top-0 h-screen w-72 glass flex-col p-6 z-20">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-10 h-10 gradient-1 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-cyan-500/30">🎯</div>
+            <span class="text-xl font-bold text-gradient">Mission Control</span>
+        </div>
+        <nav class="flex-1 space-y-1">
+            <p class="text-xs text-gray-500 uppercase tracking-wider mb-3 px-3">Main</p>
+            <a href="./index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="./agents.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">🤖</span>
+                <span>Agents</span>
+                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full">5</span>
+            </a>
+            <a href="./tasks.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">📋</span>
+                <span>Tasks</span>
+            </a>
+            <a href="./content.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <span class="text-xl">📝</span>
+                <span class="font-medium">Content</span>
+                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full">12</span>
+            </a>
+            <p class="text-xs text-gray-500 uppercase tracking-wider mt-6 mb-3 px-3">Operations</p>
+            <a href="./leads.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">👥</span>
+                <span>Leads</span>
+            </a>
+            <a href="./chat.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
+                <span class="text-xl">💬</span>
+                <span>Chat</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-72 p-4 md:p-6 lg:p-8 relative z-10">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold">Content Library</h1>
+                <p class="text-gray-400 text-sm mt-1">Manage posts across all platforms</p>
             </div>
-            
-            <div class="nav-section">
-                <div class="nav-title">Main</div>
-                <a href="./index.html" class="nav-item">
-                    <span class="nav-icon">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="./agents.html" class="nav-item">
-                    <span class="nav-icon">🤖</span>
-                    <span>Agents</span>
-                    <span class="nav-badge">5</span>
-                </a>
-                <a href="./tasks.html" class="nav-item">
-                    <span class="nav-icon">📋</span>
-                    <span>Tasks</span>
-                    <span class="nav-badge" id="tasksBadge">2</span>
-                </a>
-                <a href="./content.html" class="nav-item active">
-                    <span class="nav-icon">📝</span>
-                    <span>Content</span>
-                </a>
+            <div class="flex items-center gap-3">
+                <button onclick="openModal()" class="bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition-all flex items-center gap-2">
+                    <span>+</span> New Post
+                </button>
+                <div class="w-10 h-10 gradient-1 rounded-xl flex items-center justify-center text-sm font-bold shrink-0">IR</div>
             </div>
-            
-            <div class="nav-section">
-                <div class="nav-title">Operations</div>
-                <a href="./leads.html" class="nav-item">
-                    <span class="nav-icon">👥</span>
-                    <span>Leads</span>
-                    <span class="nav-badge">50</span>
-                </a>
-                <a href="./chat.html" class="nav-item">
-                    <span class="nav-icon">💬</span>
-                    <span>Chat</span>
-                </a>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <div class="glass-card rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-cyan-400" id="totalPosts">12</div>
+                <div class="text-xs text-gray-400">Total Posts</div>
             </div>
-        </aside>
-        
-        <!-- Main Content -->
-        <main class="main">
-            <!-- Header -->
-            <header class="header">
-                <div class="header-title">
-                    <h1>📝 Ready-to-Publish Content</h1>
-                    <p>LinkedIn posts, YouTube scripts, and sports content. All ready to go.</p>
-                </div>
-                <div class="header-actions">
-                    <div class="search-box">
-                        <input type="text" placeholder="Search content...">
-                    </div>
-                    <div class="user-menu">
-                        <div class="user-avatar">IR</div>
-                    </div>
-                </div>
-            </header>
-            
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('linkedin')">LinkedIn Posts</button>
-                <button class="tab" onclick="showTab('sports')">Sports Content</button>
-                <button class="tab" onclick="showTab('strategy')">Strategy</button>
+            <div class="glass-card rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-yellow-400" id="draftPosts">5</div>
+                <div class="text-xs text-gray-400">Drafts</div>
             </div>
-
-            <!-- LinkedIn Posts -->
-            <div id="linkedin-posts" class="tab-content">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Month 1 — Ready to Publish</div>
-                        <span style="font-size: 0.8125rem; color: var(--text-muted);">3 posts ready</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="content-post" data-post-id="1">
-                            <div class="post-header">
-                                <div>
-                                    <div class="post-title">The Project That Almost Broke Me</div>
-                                    <div class="post-meta">War Story Carousel • ~850 words • Published: Ready</div>
-                                </div>
-                                <span class="post-badge badge-ready">✓ Ready</span>
-                            </div>
-                            <div class="post-preview">spent an entire week debugging code that wasn't broken.
-
-it was project #47 — a web3 marketplace for fractional real estate. the client was breathing down my neck. the deadline was yesterday. and i was chasing a ghost...</div>
-                            <div class="post-actions">
-                                <button class="btn btn-primary" onclick="copyPost(1)">📋 Copy Full Post</button>
-                                <button class="btn btn-secondary" onclick="previewPost(1)">👁️ Preview</button>
-                            </div>
-                        </div>
-
-                        <div class="content-post" data-post-id="2">
-                            <div class="post-header">
-                                <div>
-                                    <div class="post-title">AI Won't Save Your Bad Process</div>
-                                    <div class="post-meta">Tool Review • ~920 words • Published: Ready</div>
-                                </div>
-                                <span class="post-badge badge-ready">✓ Ready</span>
-                            </div>
-                            <div class="post-preview">i spent $847 testing AI coding tools this month so you don't have to.
-
-here's what i learned: the best tool isn't the one with the most features. it's the one that fits your workflow. and most people are using AI wrong...</div>
-                            <div class="post-actions">
-                                <button class="btn btn-primary" onclick="copyPost(2)">📋 Copy Full Post</button>
-                                <button class="btn btn-secondary" onclick="previewPost(2)">👁️ Preview</button>
-                            </div>
-                        </div>
-
-                        <div class="content-post" data-post-id="3">
-                            <div class="post-header">
-                                <div>
-                                    <div class="post-title">The Magic of Shipping Ugly</div>
-                                    <div class="post-meta">Founder Journey • ~780 words • Published: Ready</div>
-                                </div>
-                                <span class="post-badge badge-ready">✓ Ready</span>
-                            </div>
-                            <div class="post-preview">i shipped something ugly last year.
-
-not intentionally. i'm a designer at heart. i like polish. i like things that feel complete.
-
-but i was running out of money...</div>
-                            <div class="post-actions">
-                                <button class="btn btn-primary" onclick="copyPost(3)">📋 Copy Full Post</button>
-                                <button class="btn btn-secondary" onclick="previewPost(3)">👁️ Preview</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="glass-card rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-purple-400" id="scheduledPosts">3</div>
+                <div class="text-xs text-gray-400">Scheduled</div>
             </div>
+            <div class="glass-card rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-green-400" id="publishedPosts">4</div>
+                <div class="text-xs text-gray-400">Published</div>
+            </div>
+        </div>
 
-            <!-- Sports Content -->
-            <div id="sports-content" class="tab-content" style="display: none;">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">@theishantake — YouTube Scripts</div>
-                        <span style="font-size: 0.8125rem; color: var(--text-muted);">10 scripts ready to film</span>
+        <!-- Filters -->
+        <div class="glass-card rounded-2xl p-4 mb-6">
+            <div class="flex flex-wrap gap-2">
+                <button onclick="filterPosts('all')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-cyan-500/20 text-cyan-400 border border-cyan-500/30" data-filter="all">All Posts</button>
+                <button onclick="filterPosts('draft')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium text-gray-400 hover:bg-white/5 transition-all" data-filter="draft">Drafts</button>
+                <button onclick="filterPosts('scheduled')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium text-gray-400 hover:bg-white/5 transition-all" data-filter="scheduled">Scheduled</button>
+                <button onclick="filterPosts('published')" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium text-gray-400 hover:bg-white/5 transition-all" data-filter="published">Published</button>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div id="contentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Content cards injected here -->
+        </div>
+    </main>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 glass border-t border-white/10 z-50 pb-safe">
+        <div class="flex justify-around items-center h-16">
+            <a href="./index.html" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-white transition-all">
+                <span class="text-xl mb-0.5">📊</span>
+                <span class="text-[10px]">Dashboard</span>
+            </a>
+            <a href="./agents.html" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-white transition-all">
+                <span class="text-xl mb-0.5">🤖</span>
+                <span class="text-[10px]">Agents</span>
+            </a>
+            <a href="./tasks.html" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-white transition-all">
+                <span class="text-xl mb-0.5">📋</span>
+                <span class="text-[10px]">Tasks</span>
+            </a>
+            <a href="./leads.html" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-white transition-all">
+                <span class="text-xl mb-0.5">👥</span>
+                <span class="text-[10px]">Leads</span>
+            </a>
+            <a href="./chat.html" class="flex flex-col items-center justify-center w-full h-full text-cyan-400">
+                <span class="text-xl mb-0.5">💬</span>
+                <span class="text-[10px]">Chat</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- New Post Modal -->
+    <div id="postModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="glass-card rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Create New Post</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <form onsubmit="createPost(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Title</label>
+                        <input type="text" id="postTitle" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50" placeholder="Post title...">
                     </div>
-                    <div class="card-body">
-                        <div class="script-card" data-script-id="1">
-                            <div class="script-header">
-                                <div class="script-title">Transfer News Reaction Template</div>
-                                <span class="script-type">Template</span>
-                            </div>
-                            <div class="script-content">HOOK: "[Club] just signed [Player] for [Amount] and I have THOUGHTS"
-
-SETUP: What happened — the transfer details
-REACTION: Your emotional take
-ANALYSIS: Why it matters for the team
-CTA: "Drop your thoughts below — am I wrong?"
-
-EXAMPLE: "Liverpool just signed [Player] for £50M and I have THOUGHTS..."</div>
-                            <div class="post-actions" style="margin-top: 1rem;">
-                                <button class="btn btn-primary" onclick="copyScript(1)">📋 Copy Script</button>
-                                <button class="btn btn-secondary" onclick="previewScript(1)">👁️ Preview</button>
-                            </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Content</label>
+                        <textarea id="postContent" rows="4" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50 resize-none" placeholder="Write your post..."></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Platform</label>
+                            <select id="postPlatform" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50 text-gray-300">
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="twitter">Twitter/X</option>
+                                <option value="instagram">Instagram</option>
+                            </select>
                         </div>
-
-                        <div class="script-card" data-script-id="2">
-                            <div class="script-header">
-                                <div class="script-title">Match Day Reaction — Liverpool</div>
-                                <span class="script-type">Short</span>
-                            </div>
-                            <div class="script-content">HOOK: "That [moment] just cost Liverpool [outcome]"
-
-SETUP: Match context
-THE MOMENT: What happened
-THE REACTION: Your live emotions
-THE TAKE: What this means
-
-FILM: Immediately after match ends</div>
-                            <div class="post-actions" style="margin-top: 1rem;">
-                                <button class="btn btn-primary" onclick="copyScript(2)">📋 Copy Script</button>
-                                <button class="btn btn-secondary" onclick="previewScript(2)">👁️ Preview</button>
-                            </div>
-                        </div>
-
-                        <div class="script-card" data-script-id="3">
-                            <div class="script-header">
-                                <div class="script-title">RCB Emotional Support Series</div>
-                                <span class="script-type">Series</span>
-                            </div>
-                            <div class="script-content">EP 1: "Why I Keep Coming Back to RCB"
-EP 2: "The Heartbreak Archive"
-EP 3: "This Year Feels Different (It Always Does)"
-
-FORMAT: Personal storytelling + community bonding
-ANGLE: Relatable fan experience, not analysis</div>
-                            <div class="post-actions" style="margin-top: 1rem;">
-                                <button class="btn btn-primary" onclick="copyScript(3)">📋 Copy Script</button>
-                                <button class="btn btn-secondary" onclick="previewScript(3)">👁️ Preview</button>
-                            </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Status</label>
+                            <select id="postStatus" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50 text-gray-300">
+                                <option value="draft">Draft</option>
+                                <option value="scheduled">Scheduled</option>
+                                <option value="published">Published</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Strategy -->
-            <div id="strategy-content" class="tab-content" style="display: none;">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Content Strategy Overview</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="content-post">
-                            <div class="post-header">
-                                <div>
-                                    <div class="post-title">LinkedIn Content Calendar — Month 1</div>
-                                    <div class="post-meta">3 posts per week • B2B Tech Founder Focus</div>
-                                </div>
-                            </div>
-                            <div class="post-preview">
-<strong>Week 1:</strong> War Story — The Project That Almost Broke Me
-<strong>Week 2:</strong> Tool Review — AI Won't Save Your Bad Process  
-<strong>Week 3:</strong> Founder Journey — The Magic of Shipping Ugly
-<strong>Week 4:</strong> Behind the Scenes — Building in Public
-                            </div>
-                            <div class="post-actions">
-                                <button class="btn btn-primary" onclick="copyStrategy('calendar')">📋 Copy Calendar</button>
-                                <button class="btn btn-secondary" onclick="showStrategyInfo()">ℹ️ Learn More</button>
-                            </div>
-                        </div>
-                        
-                        <div class="content-post" style="margin-top: 1rem;">
-                            <div class="post-header">
-                                <div>
-                                    <div class="post-title">Sports Content Strategy — @theishantake</div>
-                                    <div class="post-meta">YouTube + Instagram • 10 videos per month</div>
-                                </div>
-                            </div>
-                            <div class="post-preview">
-<strong>Content Pillars:</strong>
-• Transfer News Reactions (Real-time)
-• Match Day Analysis (Liverpool focus)
-• RCB Emotional Journey (IPL season)
-• Fan Community Building
-                            </div>
-                            <div class="post-actions">
-                                <button class="btn btn-primary" onclick="copyStrategy('sports')">📋 Copy Strategy</button>
-                                <button class="btn btn-secondary" onclick="showStrategyInfo()">ℹ️ Learn More</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex gap-3 mt-6">
+                    <button type="button" onclick="closeModal()" class="flex-1 py-3 rounded-xl text-sm font-medium text-gray-400 hover:bg-white/5 transition-all">Cancel</button>
+                    <button type="submit" class="flex-1 py-3 rounded-xl text-sm font-medium bg-gradient-to-r from-cyan-500 to-purple-600 text-white hover:opacity-90 transition-all">Create Post</button>
                 </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <span id="toastMessage">Copied to clipboard!</span>
-    </div>
-
-    <!-- Preview Modal -->
-    <div class="modal-overlay" id="previewModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 id="modalTitle">Content Preview</h3>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-content-full" id="modalContent"></div>
+            </form>
         </div>
     </div>
 
     <script>
-        // Full post content
-        const fullPosts = {
-            1: `The Project That Almost Broke Me
-
-spent an entire week debugging code that wasn't broken.
-
-it was project #47 — a web3 marketplace for fractional real estate. the client was breathing down my neck. the deadline was yesterday. and i was chasing a ghost.
-
-the bug? a timezone mismatch between our node.js backend and the smart contract. transactions were failing for users in asia but working fine for everyone else.
-
-i rewrote the entire authentication flow. refactored the database layer. even questioned my career choices at 3am.
-
-and then i found it.
-
-one line. one stupid line in the config file.
-
-TL;DR: always check your timezone settings before rewriting half your codebase.
-
----
-
-what's the dumbest bug you've ever chased? drop it below 👇`,
-            2: `AI Won't Save Your Bad Process
-
-i spent $847 testing AI coding tools this month so you don't have to.
-
-here's what i learned: the best tool isn't the one with the most features. it's the one that fits your workflow. and most people are using AI wrong.
-
-they're asking AI to think for them instead of with them.
-
-the developers who get the most value from AI tools:
-→ know their codebase inside out
-→ use AI for boilerplate, not architecture  
-→ review every suggestion carefully
-→ maintain their critical thinking
-
-the ones who struggle:
-→ blindly accept AI output
-→ skip code reviews because "AI wrote it"
-→ blame the tool when things break
-
-AI is a multiplier, not a replacement.
-
-good process × AI = 10x output
-bad process × AI = 10x mess
-
-fix your process first. then add AI.
-
-what's your AI workflow? curious how others are using these tools.`,
-            3: `The Magic of Shipping Ugly
-
-i shipped something ugly last year.
-
-not intentionally. i'm a designer at heart. i like polish. i like things that feel complete.
-
-but i was running out of money.
-
-so i launched a landing page with placeholder copy, a payment flow that barely worked, and a product that solved exactly one problem.
-
-it was embarrassing. i wanted to hide.
-
-but you know what? it made $12,000 in the first month.
-
-users didn't care about the polish. they cared that it solved their problem.
-
-since then, i've learned:
-→ perfect is the enemy of paid
-→ users forgive ugly, they don't forgive useless
-→ you can polish something that exists. you can't polish vapor.
-
-ship ugly. iterate in public. let your users tell you what matters.
-
-your ego will recover. your runway might not.`
-        };
-
-        const fullScripts = {
-            1: `TRANSFER NEWS REACTION TEMPLATE
-
-HOOK: "[Club] just signed [Player] for [Amount] and I have THOUGHTS"
-
-SETUP (30s):
-- What happened — the transfer details
-- Official announcement context
-- Fee breakdown if notable
-
-REACTION (60s):
-- Your immediate emotional take
-- Hot take or controversial opinion
-- Personal connection to the player/club
-
-ANALYSIS (45s):
-- Why it matters for the team
-- Tactical fit
-- How it changes their season outlook
-
-CTA: "Drop your thoughts below — am I wrong? Are you excited? Tell me!"
-
----
-
-FILMING NOTES:
-- Film within 2 hours of announcement
-- Use green screen with club colors
-- React to actual tweet/news article on screen
-- Keep energy HIGH in first 10 seconds`,
-            2: `MATCH DAY REACTION — LIVERPOOL
-
-HOOK: "That [moment] just cost Liverpool [outcome]"
-
-SETUP (20s):
-- Match context (opponent, stakes, table position)
-- Your pre-match expectations
-
-THE MOMENT (60s):
-- Describe what happened
-- Show clip/replay if possible
-- Your live reaction (be emotional!)
-
-THE REACTION (45s):
-- Raw emotions
-- What went wrong/right
-- Player ratings moment
-
-THE TAKE (30s):
-- What this means for the season
-- Next match implications
-- Title race/champions league context
-
-CTA: "Where do we go from here? Drop your thoughts!"
-
----
-
-FILMING NOTES:
-- Film immediately after match ends
-- Wear jersey if possible
-- Background: living room/lounge setup
-- Show live reactions, not just analysis`,
-            3: `RCB EMOTIONAL SUPPORT SERIES
-
-EPISODE 1: "Why I Keep Coming Back to RCB"
-Runtime: 8-10 minutes
-
-OPENING:
-"It's been 16 years. 16 years of hope, heartbreak, and questionable auction decisions. And I'm still here."
-
-SEGMENTS:
-1. The Hope (2 min)
-   - Every season starts the same
-   - "This year feels different"
-   - The auction optimism
-
-2. The Journey (3 min)
-   - Close calls over the years
-   - 2009, 2011, 2016 flashbacks
-   - Personal stories from each season
-
-3. The Community (3 min)
-   - RCB fans are different
-   - We suffer together
-   - Memes as coping mechanism
-
-4. The Promise (2 min)
-   - Why I'll be back next year
-   - Until we win or until I die
-   - RCB till I die
-
-CTA: "Tell me your RCB story. When did you start supporting them?"
-
----
-
-FILMING NOTES:
-- Emotional, personal tone
-- Show memorabilia if available
-- Include old clips/photos
-- Community comment highlights`
-        };
-
-        const strategies = {
-            calendar: `LINKEDIN CONTENT CALENDAR — MONTH 1
-
-CONTENT PILLAR: B2B Tech Founder Journey
-
-WEEK 1: War Story — The Project That Almost Broke Me
-- Type: Personal story carousel
-- Hook: Technical failure → learning
-- CTA: Share your war stories
-
-WEEK 2: AI Won't Save Your Bad Process  
-- Type: Tool review + opinion
-- Hook: Controversial take on AI usage
-- CTA: Share your AI workflow
-
-WEEK 3: The Magic of Shipping Ugly
-- Type: Founder journey
-- Hook: Vulnerability around imperfect launches
-- CTA: What's your ugly ship story?
-
-WEEK 4: Behind the Scenes — Building in Public
-- Type: Process reveal
-- Hook: How the sausage is made
-- CTA: What should I build next?
-
-POSTING SCHEDULE:
-- Tuesday 9 AM: Main post
-- Thursday 9 AM: Follow-up/engagement
-- Sunday 6 PM: Weekend reflection`,
-            sports: `SPORTS CONTENT STRATEGY — @theishantake
-
-PLATFORM MIX:
-- YouTube: Long-form (8-12 min)
-- Instagram Reels: Short clips (30-60s)
-- Twitter/X: Real-time reactions
-
-CONTENT PILLARS:
-
-1. Transfer News Reactions (Real-time)
-   - Post within 2 hours of announcement
-   - Hot takes + analysis
-   - Frequency: As news breaks
-
-2. Match Day Analysis (Liverpool focus)
-   - Pre-match predictions
-   - Live reactions
-   - Post-match analysis
-   - Frequency: Every Liverpool match
-
-3. RCB Emotional Journey (IPL season)
-   - Personal storytelling
-   - Community bonding
-   - Meme-driven content
-   - Frequency: Weekly during IPL
-
-4. Fan Community Building
-   - Q&As
-   - Fan story features
-   - Debate formats
-   - Frequency: Bi-weekly
-
-TARGET: 10 videos/month, 30+ shorts/reels`
-        };
-
-        // Show toast
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+        // Sample content data
+        let posts = JSON.parse(localStorage.getItem('mc_posts') || '[]');
+        if (posts.length === 0) {
+            posts = [
+                { id: 1, title: "The Future of AI Agents", content: "AI agents are transforming how we work. Here's what you need to know about the next generation of autonomous systems...", platform: "linkedin", status: "published", date: "2026-02-05", likes: 42, comments: 8 },
+                { id: 2, title: "Web3 Development Tips", content: "Building in Web3? Here are 5 lessons I've learned from shipping 100+ projects...", platform: "twitter", status: "scheduled", date: "2026-02-07", likes: 0, comments: 0 },
+                { id: 3, title: "Instagram Growth Strategy", content: "How I grew from 0 to 1300 followers in 3 months without paid ads...", platform: "instagram", status: "draft", date: null, likes: 0, comments: 0 },
+                { id: 4, title: "Remote Team Management", content: "Managing distributed teams across 5 time zones? Here's my playbook...", platform: "linkedin", status: "draft", date: null, likes: 0, comments: 0 },
+                { id: 5, title: "Startup Lessons Learned", content: "After 100+ projects, here are the patterns that separate successful founders from the rest...", platform: "twitter", status: "review", date: null, likes: 0, comments: 0 }
+            ];
+            savePosts();
         }
 
-        // Copy functions
-        function copyToClipboard(text, successMessage) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast(successMessage);
-            }).catch(() => {
-                // Fallback
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showToast(successMessage);
+        function savePosts() {
+            localStorage.setItem('mc_posts', JSON.stringify(posts));
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('totalPosts').textContent = posts.length;
+            document.getElementById('draftPosts').textContent = posts.filter(p => p.status === 'draft').length;
+            document.getElementById('scheduledPosts').textContent = posts.filter(p => p.status === 'scheduled').length;
+            document.getElementById('publishedPosts').textContent = posts.filter(p => p.status === 'published').length;
+        }
+
+        function getPlatformBadge(platform) {
+            const badges = {
+                linkedin: '<span class="platform-linkedin text-xs px-2 py-1 rounded-full">LinkedIn</span>',
+                twitter: '<span class="platform-twitter text-xs px-2 py-1 rounded-full">Twitter</span>',
+                instagram: '<span class="platform-instagram text-xs px-2 py-1 rounded-full">Instagram</span>'
+            };
+            return badges[platform] || badges.linkedin;
+        }
+
+        function getStatusBadge(status) {
+            const badges = {
+                draft: '<span class="status-draft text-xs px-2 py-1 rounded-full">Draft</span>',
+                review: '<span class="status-review text-xs px-2 py-1 rounded-full">Review</span>',
+                scheduled: '<span class="status-scheduled text-xs px-2 py-1 rounded-full">Scheduled</span>',
+                published: '<span class="status-published text-xs px-2 py-1 rounded-full">Published</span>'
+            };
+            return badges[status] || badges.draft;
+        }
+
+        function renderPosts(filter = 'all') {
+            const grid = document.getElementById('contentGrid');
+            const filtered = filter === 'all' ? posts : posts.filter(p => p.status === filter);
+            
+            grid.innerHTML = filtered.map(post => `
+                <div class="glass-card rounded-xl p-4 hover:border-white/20 transition-all group">
+                    <div class="flex justify-between items-start mb-3">
+                        ${getPlatformBadge(post.platform)}
+                        ${getStatusBadge(post.status)}
+                    </div>
+                    <h3 class="font-semibold mb-2 line-clamp-2">${post.title}</h3>
+                    <p class="text-sm text-gray-400 mb-4 line-clamp-3">${post.content}</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span>${post.date || 'No date'}</span>
+                        <div class="flex gap-3">
+                            ${post.likes > 0 ? `<span class="flex items-center gap-1">❤️ ${post.likes}</span>` : ''}
+                            ${post.comments > 0 ? `<span class="flex items-center gap-1">💬 ${post.comments}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mt-4 pt-3 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="editPost(${post.id})" class="flex-1 py-2 rounded-lg text-xs bg-white/5 hover:bg-white/10 transition-all">Edit</button>
+                        <button onclick="deletePost(${post.id})" class="flex-1 py-2 rounded-lg text-xs bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterPosts(type) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-500/20', 'text-cyan-400', 'border', 'border-cyan-500/30');
+                btn.classList.add('text-gray-400');
             });
+            document.querySelector(`[data-filter="${type}"]`).classList.add('bg-cyan-500/20', 'text-cyan-400', 'border', 'border-cyan-500/30');
+            document.querySelector(`[data-filter="${type}"]`).classList.remove('text-gray-400');
+            renderPosts(type);
         }
 
-        function copyPost(postId) {
-            copyToClipboard(fullPosts[postId], '✓ LinkedIn post copied to clipboard!');
-        }
-
-        function copyScript(scriptId) {
-            copyToClipboard(fullScripts[scriptId], '✓ YouTube script copied to clipboard!');
-        }
-
-        function copyStrategy(type) {
-            copyToClipboard(strategies[type], '✓ Strategy document copied!');
-        }
-
-        // Preview functions
-        function openModal(title, content) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalContent').textContent = content;
-            document.getElementById('previewModal').classList.add('active');
+        function openModal() {
+            document.getElementById('postModal').classList.remove('hidden');
+            document.getElementById('postModal').classList.add('flex');
         }
 
         function closeModal() {
-            document.getElementById('previewModal').classList.remove('active');
+            document.getElementById('postModal').classList.add('hidden');
+            document.getElementById('postModal').classList.remove('flex');
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postContent').value = '';
         }
 
-        function previewPost(postId) {
-            openModal('LinkedIn Post Preview', fullPosts[postId]);
+        function createPost(e) {
+            e.preventDefault();
+            const newPost = {
+                id: Date.now(),
+                title: document.getElementById('postTitle').value,
+                content: document.getElementById('postContent').value,
+                platform: document.getElementById('postPlatform').value,
+                status: document.getElementById('postStatus').value,
+                date: new Date().toISOString().split('T')[0],
+                likes: 0,
+                comments: 0
+            };
+            posts.unshift(newPost);
+            savePosts();
+            renderPosts();
+            closeModal();
         }
 
-        function previewScript(scriptId) {
-            openScriptModal(fullScripts[scriptId]);
-        }
-
-        function openScriptModal(content) {
-            document.getElementById('modalTitle').textContent = 'YouTube Script Preview';
-            document.getElementById('modalContent').innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">${content}</pre>`;
-            document.getElementById('previewModal').classList.add('active');
-        }
-
-        function showStrategyInfo() {
-            showToast('Full strategy documentation coming soon!');
-        }
-
-        // Tab switching with animation
-        function showTab(tabName) {
-            // Hide all content
-            const contents = ['linkedin-posts', 'sports-content', 'strategy-content'];
-            contents.forEach(id => {
-                document.getElementById(id).style.display = 'none';
-            });
-            
-            // Remove active from all tabs
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            
-            // Show selected content with animation
-            const selectedContent = document.getElementById(tabName + (tabName === 'linkedin' ? '-posts' : tabName === 'sports' ? '-content' : '-content'));
-            selectedContent.style.display = 'block';
-            selectedContent.style.animation = 'none';
-            setTimeout(() => {
-                selectedContent.style.animation = 'fadeIn 0.3s ease';
-            }, 10);
-            
-            // Mark tab active
-            const tabIndex = tabName === 'linkedin' ? 0 : tabName === 'sports' ? 1 : 2;
-            document.querySelectorAll('.tab')[tabIndex].classList.add('active');
-            
-            // Save preference
-            localStorage.setItem('contentTab', tabName);
-        }
-
-        // Close modal on overlay click
-        document.getElementById('previewModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('previewModal')) {
-                closeModal();
-            }
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-
-        // Restore last active tab
-        const savedTab = localStorage.getItem('contentTab');
-        if (savedTab) {
-            showTab(savedTab);
-        }
-        
-        // Sync tasks badge from localStorage
-        function updateTasksBadge() {
-            const tasks = JSON.parse(localStorage.getItem('tasks')) || {};
-            const pendingCount = Object.values(tasks).filter(t => !t.done).length;
-            const badge = document.getElementById('tasksBadge');
-            if (badge) {
-                badge.textContent = pendingCount;
-                badge.style.display = pendingCount > 0 ? 'block' : 'none';
+        function deletePost(id) {
+            if (confirm('Delete this post?')) {
+                posts = posts.filter(p => p.id !== id);
+                savePosts();
+                renderPosts();
             }
         }
-        
-        // Update badge on load
-        updateTasksBadge();
+
+        function editPost(id) {
+            const post = posts.find(p => p.id === id);
+            if (post) {
+                document.getElementById('postTitle').value = post.title;
+                document.getElementById('postContent').value = post.content;
+                document.getElementById('postPlatform').value = post.platform;
+                document.getElementById('postStatus').value = post.status;
+                openModal();
+                deletePost(id);
+            }
+        }
+
+        // Init
+        renderPosts();
+        updateStats();
     </script>
 </body>
 </html>
