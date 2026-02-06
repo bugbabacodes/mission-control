@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg-johnny" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0f0a"/>
+      <stop offset="100%" style="stop-color:#2d1f16"/>
+    </linearGradient>
+    <linearGradient id="suit" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c2c2c"/>
+      <stop offset="50%" style="stop-color:#1a1a1a"/>
+      <stop offset="100%" style="stop-color:#0d0d0d"/>
+    </linearGradient>
+    <linearGradient id="gold-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700"/>
+      <stop offset="100%" style="stop-color:#ff8c00"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#bg-johnny)"/>
+  
+  <!-- Spotlight effect -->
+  <ellipse cx="256" cy="450" rx="200" ry="40" fill="#ff8c00" opacity="0.1"/>
+  
+  <!-- Golden light rays -->
+  <g stroke="#ff8c00" stroke-width="1" opacity="0.15">
+    <line x1="256" y1="0" x2="100" y2="512"/>
+    <line x1="256" y1="0" x2="200" y2="512"/>
+    <line x1="256" y1="0" x2="256" y2="512"/>
+    <line x1="256" y1="0" x2="312" y2="512"/>
+    <line x1="256" y1="0" x2="412" y2="512"/>
+  </g>
+  
+  <!-- Character -->
+  <g transform="translate(256, 270)">
+    <!-- Shoulders/Suit -->
+    <path d="M-90 20 L-100 180 L100 180 L90 20 L60 -20 L-60 -20 Z" fill="url(#suit)"/>
+    
+    <!-- Lapels -->
+    <path d="M-60 -20 L-90 120 L-30 180 L-30 -20 Z" fill="#1a1a1a"/>
+    <path d="M60 -20 L90 120 L30 180 L30 -20 Z" fill="#1a1a1a"/>
+    
+    <!-- Shirt -->
+    <path d="M-30 -20 L0 100 L30 -20 Z" fill="#fff"/>
+    
+    <!-- Tie -->
+    <path d="M-10 -20 L10 -20 L5 80 L0 90 L-5 80 Z" fill="#8b0000"/>
+    
+    <!-- Gold accents on suit -->
+    <rect x="-80" y="40" width="15" height="3" fill="url(#gold-accent)" opacity="0.8"/>
+    <rect x="65" y="40" width="15" height="3" fill="url(#gold-accent)" opacity="0.8"/>
+    <circle cx="-72" cy="60" r="4" fill="url(#gold-accent)" opacity="0.6"/>
+    <circle cx="72" cy="60" r="4" fill="url(#gold-accent)" opacity="0.6"/>
+    
+    <!-- Neck -->
+    <rect x="-18" y="-70" width="36" height="35" fill="#fdbcb4"/>
+    
+    <!-- Head - confident shape -->
+    <ellipse cx="0" cy="-120" rx="52" ry="62" fill="#fdbcb4"/>
+    
+    <!-- Jawline - chiseled -->
+    <path d="M-40 -80 Q0 -65 40 -80 L40 -95 L-40 -95 Z" fill="#fdbcb4"/>
+    
+    <!-- Slicked back hair -->
+    <path d="M-52 -130 Q-55 -180 0 -185 Q55 -180 52 -130 L50 -110 Q55 -100 45 -95 L0 -100 L-45 -95 Q-55 -100 -50 -110 Z" fill="#1a1a1a"/>
+    <!-- Hair shine -->
+    <ellipse cx="-15" cy="-150" rx="12" ry="4" fill="#333" opacity="0.5"/>
+    
+    <!-- Sunglasses - stylish -->
+    <g>
+      <path d="M-42 -125 L-5 -125 L-5 -105 Q-23 -95 -42 -105 Z" fill="#000"/>
+      <path d="M5 -125 L42 -125 L42 -105 Q23 -95 5 -105 Z" fill="#000"/>
+      <line x1="-5" y1="-115" x2="5" y2="-115" stroke="#000" stroke-width="3"/>
+      <!-- Sunglasses reflection -->
+      <path d="M-35 -120 L-15 -120 L-20 -110 L-40 -110 Z" fill="#333" opacity="0.5"/>
+      <path d="M15 -120 L35 -120 L40 -110 L20 -110 Z" fill="#333" opacity="0.5"/>
+    </g>
+    
+    <!-- Confident smirk -->
+    <path d="M-18 -85 Q0 -78 22 -88" fill="none" stroke="#c4886a" stroke-width="2.5"/>
+    <path d="M18 -88 L22 -90" stroke="#c4886a" stroke-width="2"/>
+    
+    <!-- Chin dimple -->
+    <circle cx="0" cy="-72" r="1.5" fill="#e8b4a0"/>
+  </g>
+  
+  <!-- Sparkle effects -->
+  <g fill="#ffd700" opacity="0.6">
+    <polygon points="100,100 103,108 112,108 105,114 108,122 100,116 92,122 95,114 88,108 97,108"/>
+    <polygon points="420,150 422,156 428,156 423,160 425,166 420,162 415,166 417,160 412,156 418,156"/>
+    <polygon points="80,400 82,405 87,405 83,409 85,414 80,411 75,414 77,409 73,405 78,405"/>
+  </g>
+  
+  <!-- Sales chart graphics -->
+  <g transform="translate(60, 150)" opacity="0.3">
+    <rect x="0" y="0" width="50" height="60" fill="none" stroke="#ff8c00" stroke-width="1" rx="3"/>
+    <rect x="8" y="40" width="8" height="12" fill="#ff8c00"/>
+    <rect x="22" y="25" width="8" height="27" fill="#ff8c00"/>
+    <rect x="36" y="10" width="8" height="42" fill="#ff8c00"/>
+    <polyline points="12,40 26,25 40,10" fill="none" stroke="#ffd700" stroke-width="2"/>
+  </g>
+  
+  <!-- Dollar signs -->
+  <g fill="#ffd700" opacity="0.3" font-family="sans-serif" font-weight="bold" font-size="20">
+    <text x="430" y="350">$</text>
+    <text x="460" y="320">$</text>
+  </g>
+</svg>
