@@ -200,10 +200,29 @@
         let currentFilter = 'all';
         let leadStatuses = {};
 
+        // Load statuses from localStorage
+        function loadStatuses() {
+            try {
+                const saved = localStorage.getItem('mc_lead_statuses');
+                if (saved) leadStatuses = JSON.parse(saved);
+            } catch (e) {
+                console.warn('Failed to load lead statuses:', e);
+            }
+        }
+
+        // Save statuses to localStorage
+        function persistStatuses() {
+            try {
+                localStorage.setItem('mc_lead_statuses', JSON.stringify(leadStatuses));
+            } catch (e) {
+                console.warn('Failed to save lead statuses:', e);
+            }
+        }
+
         async function loadLeads() {
+            loadStatuses(); // Load saved statuses first
             await DataManager.loadLeads();
             leads = DataManager.getLeads();
-            leadStatuses = {};
             updateStats();
             renderLeads();
         }
@@ -228,6 +247,7 @@
         }
 
         function saveStatuses() {
+            persistStatuses(); // Save to localStorage
             updateStats();
         }
 

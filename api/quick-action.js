@@ -164,13 +164,39 @@ module.exports = async (req, res) => {
       completedAt: mockResult.eta ? null : new Date().toISOString()
     };
     
+    // Also save to artifacts for persistence
+    const artifactId = `art_${Date.now()}`;
+    const artifactTypes = {
+      'generate_post': 'linkedin_post',
+      'draft_email': 'email_draft',
+      'research_company': 'research_report',
+      'analyze_lead': 'lead_analysis'
+    };
+    
+    const savedArtifact = {
+      id: artifactId,
+      actionId,
+      agentId: targetAgent,
+      type: artifactTypes[action] || action,
+      title: getTitleForAction(action, params),
+      content: mockResult.content,
+      params,
+      createdAt: new Date().toISOString(),
+      status: mockResult.eta ? 'pending' : 'draft'
+    };
+    
+    // Store in global artifacts (shared with artifacts.js)
+    if (!global.quickActionArtifacts) global.quickActionArtifacts = [];
+    global.quickActionArtifacts.unshift(savedArtifact);
+    
     return res.status(200).json({
       success: true,
       actionId,
+      artifactId,
       action,
       agentId: targetAgent,
       result: mockResult,
-      message: `Action queued for ${targetAgent}`,
+      message: `Action completed by ${targetAgent}`,
       timestamp: new Date().toISOString()
     });
     
@@ -237,6 +263,22 @@ Would love to understand what you're working on. Worth a quick chat?
 
 Cheers,
 Ishan`;
+}
+
+// Helper: Get title for action
+function getTitleForAction(action, params) {
+  switch (action) {
+    case 'generate_post':
+      return `LinkedIn Post: ${params?.topic || 'Untitled'}`;
+    case 'draft_email':
+      return `Email Draft: ${params?.company || 'Outreach'}`;
+    case 'research_company':
+      return `Research: ${params?.company || 'Company Analysis'}`;
+    case 'analyze_lead':
+      return `Lead Analysis: ${params?.company || 'Prospect'}`;
+    default:
+      return `${action} - ${new Date().toLocaleDateString()}`;
+  }
 }
 
 // Export queue for external processing
