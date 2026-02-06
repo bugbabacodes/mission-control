@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leads | Mission Control</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --bg-primary: #0f0f1a; --bg-secondary: #1a1a2e; --bg-card: rgba(255,255,255,0.03); --sidebar-bg: rgba(26,26,46,0.8); --border: rgba(255,255,255,0.08); --text-primary: #fff; --text-secondary: #a0a0b0; --text-muted: #6b6b7b; --accent-cyan: #00d4ff; --accent-green: #00f5d4; --accent-yellow: #ffb703; --gradient-1: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%); --gradient-2: linear-gradient(135deg, #ff006e 0%, #8338ec 100%); }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; min-height: 100vh; }
+        .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+        .sidebar { width: 280px; background: var(--sidebar-bg); backdrop-filter: blur(20px); border-right: 1px solid var(--border); padding: 2rem 1.5rem; display: flex; flex-direction: column; position: fixed; height: 100vh; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 3rem; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gradient-1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .logo-text { font-size: 1.25rem; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-section { margin-bottom: 2rem; }
+        .nav-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 1rem; padding: 0 0.75rem; }
+        .nav-item { display: flex; align-items: center; gap: 0.875rem; padding: 0.875rem 1rem; margin-bottom: 0.375rem; border-radius: 12px; cursor: pointer; transition: all 0.3s; color: var(--text-secondary); text-decoration: none; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); transform: translateX(4px); }
+        .nav-item.active { background: rgba(0,212,255,0.1); color: var(--accent-cyan); }
+        .nav-icon { font-size: 1.25rem; width: 24px; text-align: center; }
+        .nav-badge { margin-left: auto; background: var(--gradient-2); color: white; font-size: 0.7rem; padding: 0.25rem 0.5rem; border-radius: 20px; font-weight: 600; }
+        .main { flex: 1; margin-left: 280px; padding: 2rem; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .header h1 { font-size: 1.75rem; font-weight: 700; }
+        .header-actions { display: flex; gap: 1rem; align-items: center; }
+        .search-box input { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 0.75rem 1rem; color: var(--text-primary); width: 300px; font-size: 0.875rem; }
+        .filter-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .filter-tab { padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.3s; border: none; background: rgba(255,255,255,0.03); color: var(--text-secondary); border: 1px solid var(--border); }
+        .filter-tab.active { background: rgba(0,212,255,0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); }
+        .leads-container { display: grid; gap: 1rem; }
+        .lead-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; transition: all 0.3s; }
+        .lead-card:hover { border-color: var(--accent-cyan); transform: translateY(-2px); }
+        .lead-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+        .lead-company { font-size: 1.1rem; font-weight: 600; }
+        .lead-contact { font-size: 0.875rem; color: var(--text-secondary); }
+        .lead-meta { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+        .badge { padding: 0.25rem 0.625rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-industry { background: rgba(0,212,255,0.15); color: var(--accent-cyan); }
+        .badge-stage { background: rgba(123,44,191,0.15); color: #a855f7; }
+        .badge-web3 { background: rgba(255,0,110,0.15); color: var(--accent-pink); }
+        .badge-ai { background: rgba(0,245,212,0.15); color: var(--accent-green); }
+        .badge-saas { background: rgba(255,183,3,0.15); color: var(--accent-yellow); }
+        .badge-fintech { background: rgba(59,130,246,0.15); color: #3b82f6; }
+        .lead-links { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; }
+        .lead-link { padding: 0.375rem 0.75rem; border-radius: 8px; font-size: 0.8rem; text-decoration: none; background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); }
+        .lead-link:hover { background: rgba(255,255,255,0.1); color: var(--accent-cyan); }
+        .lead-context { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem; line-height: 1.5; }
+        .lead-outreach { background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 8px; font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-bottom: 0.75rem; }
+        .lead-actions { display: flex; gap: 0.75rem; }
+        .status-select { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem; color: var(--text-primary); font-size: 0.875rem; cursor: pointer; }
+        .btn-copy { padding: 0.5rem 1rem; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: var(--text-secondary); font-size: 0.8rem; cursor: pointer; }
+        .btn-copy:hover { background: rgba(255,255,255,0.1); color: var(--accent-green); }
+        .stats-bar { display: flex; gap: 2rem; margin-bottom: 1.5rem; padding: 1rem; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); }
+        .stat { text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-cyan); }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+        @media (max-width: 768px) { .main { margin-left: 0; } .sidebar { display: none; } .search-box input { width: 200px; } }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="logo"><div class="logo-icon">🎯</div><div class="logo-text">Mission Control</div></div>
+            <div class="nav-section">
+                <div class="nav-title">Main</div>
+                <a href="./index.html" class="nav-item"><span class="nav-icon">📊</span><span>Dashboard</span></a>
+                <a href="./agents.html" class="nav-item"><span class="nav-icon">🤖</span><span>Agents</span><span class="nav-badge">5</span></a>
+                <a href="./tasks.html" class="nav-item"><span class="nav-icon">📋</span><span>Tasks</span></a>
+                <a href="./content.html" class="nav-item"><span class="nav-icon">📝</span><span>Content</span></a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-title">Operations</div>
+                <a href="./leads.html" class="nav-item active"><span class="nav-icon">👥</span><span>Leads</span><span class="nav-badge">50</span></a>
+                <a href="./chat.html" class="nav-item"><span class="nav-icon">💬</span><span>Chat</span></a>
+            </div>
+        </aside>
+        <main class="main">
+            <div class="header">
+                <div>
+                    <h1>👥 Lead Pipeline</h1>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem;">50 qualified prospects from Web3, AI/ML, SaaS, and Fintech</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box"><input type="text" id="searchInput" placeholder="Search leads..."></div>
+                    <button onclick="exportCSV()" style="padding: 0.75rem 1rem; border-radius: 8px; background: var(--gradient-1); color: white; border: none; cursor: pointer;">Export CSV</button>
+                </div>
+            </div>
+            <div class="stats-bar">
+                <div class="stat"><div class="stat-value" id="stat-total">50</div><div class="stat-label">Total</div></div>
+                <div class="stat"><div class="stat-value" id="stat-new">50</div><div class="stat-label">New</div></div>
+                <div class="stat"><div class="stat-value" id="stat-contacted">0</div><div class="stat-label">Contacted</div></div>
+                <div class="stat"><div class="stat-value" id="stat-web3">15</div><div class="stat-label">Web3</div></div>
+                <div class="stat"><div class="stat-value" id="stat-ai">14</div><div class="stat-label">AI/ML</div></div>
+                <div class="stat"><div class="stat-value" id="stat-saas">12</div><div class="stat-label">SaaS</div></div>
+            </div>
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterLeads('all')">All Leads</button>
+                <button class="filter-tab" onclick="filterLeads('Web3')">Web3</button>
+                <button class="filter-tab" onclick="filterLeads('AI')">AI/ML</button>
+                <button class="filter-tab" onclick="filterLeads('SaaS')">SaaS</button>
+                <button class="filter-tab" onclick="filterLeads('Fintech')">Fintech</button>
+                <button class="filter-tab" onclick="filterLeads('Pre-seed')">Pre-seed</button>
+                <button class="filter-tab" onclick="filterLeads('Seed')">Seed</button>
+            </div>
+            <div class="leads-container" id="leadsContainer"></div>
+        </main>
+    </div>
+    <script>
+        const leads = [
+            {id: 1, name: "Eugene Sidorov", company: "Grindery", industry: "Web3", stage: "Seed", linkedin: "linkedin.com/in/eugenesidorov", website: "grindery.io", context: "Building Web3 Gateway for Zapier integration", outreach: "Offer seamless integration development to connect their gateway to more Web2 tools"},
+            {id: 2, name: "Normal Founders", company: "Normal", industry: "Fintech", stage: "Pre-seed", linkedin: "", website: "normal.finance", context: "Zero-fee crypto-to-cash platform, fintech + web3 hybrid", outreach: "Position as fintech dev partner who can handle compliance + crypto wallets"},
+            {id: 3, name: "Matt Li", company: "Second Talent", industry: "Web3", stage: "Pre-seed", linkedin: "linkedin.com/in/mattli", website: "secondtalent.com", context: "Global tech talent platform", outreach: "Help build talent matching algorithms and platform scaling"},
+            {id: 4, name: "BlackWood Portfolio", company: "Sidekick, Yonder, Particula", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "blackwood.vc", context: "$25M fund backing 30 fintech/Web3 startups", outreach: "Target portfolio companies with dev team augmentation"},
+            {id: 5, name: "XFounders Batch", company: "Various", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "x-founders.com", context: "Accelerator program for Web3 founders", outreach: "Position as tech partner for accelerator portfolio"},
+            {id: 6, name: "Trust Wallet Cohort", company: "Various", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "trustwallet.com", context: "Trust Moon accelerator backed by Binance", outreach: "Reach out to cohort companies for full-stack development"},
+            {id: 7, name: "Outlier Ventures", company: "Various DeFi", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "outlierventures.io", context: "Leading Web3 accelerator, 14% of capital at seed", outreach: "Offer technical development for DeFi infrastructure"},
+            {id: 8, name: "Fomo Founders", company: "Fomo", industry: "Fintech", stage: "Pre-seed", linkedin: "", website: "fomo.com", context: "Raised $2M pre-seed Feb 2025", outreach: "Congrats on raise + offer product scaling services"},
+            {id: 9, name: "OpenVC Community", company: "Various", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "openvc.app", context: "Founder tools and network of early-stage founders", outreach: "Partner to offer dev services to founder network"},
+            {id: 10, name: "Empromptu Team", company: "Empromptu", industry: "AI", stage: "Pre-seed", linkedin: "", website: "empromptu.io", context: "Raised $2M Dec 2025 for enterprise AI apps", outreach: "Offer enterprise app development as implementation partner"},
+            {id: 11, name: "Allie K. Miller", company: "Portfolio Companies", industry: "AI", stage: "Pre-seed", linkedin: "linkedin.com/in/alliekmiller", website: "", context: "Former Amazon, IBM, investing in AI startups", outreach: "Offer dev services to her portfolio companies"},
+            {id: 12, name: "Joe O'Connor", company: "Stealth AI", industry: "AI", stage: "Pre-seed", linkedin: "linkedin.com/in/joecoconnor", website: "", context: "MIT alum, building stealth AI in SF", outreach: "Offer technical co-founder/CTO services"},
+            {id: 13, name: "Michael Tildahl", company: "Stealth AI", industry: "AI", stage: "Pre-seed", linkedin: "linkedin.com/in/michael-tildahl", website: "", context: "Purdue alum, building stealth AI", outreach: "Full-stack development for stealth AI products"},
+            {id: 14, name: "Wabi Founder", company: "Wabi", industry: "AI", stage: "Pre-seed", linkedin: "", website: "wabi.ai", context: "Raised $20M pre-seed for 'YouTube of apps'", outreach: "Offer social platform development expertise"},
+            {id: 15, name: "FINNY Founders", company: "FINNY", industry: "AI", stage: "Series A", linkedin: "", website: "finny.ai", context: "Just raised $17M Series A, AI-powered prospecting", outreach: "Offer scaling services post-Series A"},
+            {id: 16, name: "YC S25 AI", company: "Various", industry: "AI", stage: "Pre-seed", linkedin: "", website: "ycombinator.com", context: "160 AI startups in YC Summer 2025 batch", outreach: "Target batch companies with dev services"},
+            {id: 17, name: "Reddit SaaS Founder", company: "B2B Marketplace", industry: "SaaS", stage: "Pre-seed", linkedin: "", website: "reddit.com/r/SaaS", context: "£500k pre-seed, actively hiring", outreach: "Respond offering dev services"},
+            {id: 18, name: "IndieHackers Founder", company: "B2B Marketplace", industry: "SaaS", stage: "Revenue", linkedin: "", website: "indiehackers.com", context: "Non-technical founder, 12+ years B2B sales", outreach: "Offer CTO-as-a-service"},
+            {id: 19, name: "LaunchFast Founder", company: "LaunchFast", industry: "SaaS", stage: "Launching", linkedin: "", website: "launchfast.com", context: "Preparing Product Hunt launch", outreach: "Offer to be beta tester + long-term dev partner"},
+            {id: 20, name: "PageProofer Founder", company: "PageProofer", industry: "SaaS", stage: "Bootstrapped", linkedin: "", website: "pageproofer.com", context: "100% bootstrapped, 3 years to launch", outreach: "Offer bootstrapped-friendly dev services"},
+            {id: 21, name: "Techstars London", company: "Various", industry: "AI", stage: "Pre-seed", linkedin: "", website: "techstars.com", context: "AI across legal, insurance, payments, healthcare", outreach: "Offer vertical-specific AI development"},
+            {id: 22, name: "Techstars NYC", company: "Various", industry: "AI", stage: "Pre-seed", linkedin: "", website: "techstars.com", context: "AI infra, biotech, fintech, proptech", outreach: "Offer specialized development"},
+            {id: 23, name: "Hashlock Portfolio", company: "40+ Crypto", industry: "Web3", stage: "All", linkedin: "", website: "hashlock.com", context: "Top crypto VC firms with active portfolios", outreach: "Target portfolio companies"},
+            {id: 24, name: "Crunchbase Web3", company: "Various", industry: "Web3", stage: "All", linkedin: "", website: "crunchbase.com", context: "Database of Web3 companies with funding data", outreach: "Filter by stage for qualified leads"},
+            {id: 25, name: "Arbitrum Grantees", company: "Various", industry: "Web3", stage: "Early", linkedin: "", website: "gitcoin.co", context: "DAO and community grants funding Web3 projects", outreach: "Target grant recipients with dev needs"},
+            {id: 26, name: "YC Winter 2025", company: "250+ Companies", industry: "AI", stage: "Pre-seed", linkedin: "", website: "ycombinator.com", context: "Four batches per year, 250-300 companies each", outreach: "Target W25, S25, X25 batches"},
+            {id: 27, name: "Speedinvest", company: "Various", industry: "Fintech", stage: "Pre-seed", linkedin: "", website: "speedinvest.com", context: "VC investing in banking, insurance, lending", outreach: "Portfolio dev services"},
+            {id: 28, name: "SoFi Portfolio", company: "Various", industry: "Fintech", stage: "Pre-seed", linkedin: "", website: "sofi.com", context: "$100K-$500K checks in pre-seed/seed", outreach: "Target underrepresented founder portfolio"},
+            {id: 29, name: "SeedBlink", company: "Sidekick, Yonder", industry: "Fintech", stage: "Pre-seed", linkedin: "", website: "seedblink.com", context: "H2 2025 fresh funds in fintech/cleantech/Web3", outreach: "Target European pre-seed companies"},
+            {id: 30, name: "Qubit Capital", company: "Various", industry: "Fintech", stage: "Pre-seed", linkedin: "", website: "qubit.capital", context: "Funding database from pre-seed through growth", outreach: "Target early-stage fintech"},
+            {id: 31, name: "Cobloom List", company: "Various", industry: "SaaS", stage: "Growth", linkedin: "", website: "cobloom.com", context: "Most promising SaaS companies to work for", outreach: "Target growth-stage companies"},
+            {id: 32, name: "Wellfound SaaS", company: "Various", industry: "SaaS", stage: "All", linkedin: "", website: "wellfound.com", context: "Platform listing SaaS companies hiring", outreach: "Filter by early-stage + actively hiring"},
+            {id: 33, name: "Top Startups", company: "254+ Companies", industry: "SaaS", stage: "Seed+", linkedin: "", website: "topstartups.io", context: "Database of SaaS startups funded by Sequoia, YC, A16Z", outreach: "Target by funding stage and tech stack"},
+            {id: 34, name: "Fundraise Insider", company: "1,500+", industry: "SaaS", stage: "Pre-seed", linkedin: "", website: "fundraiseinsider.com", context: "Database of pre-seed startups with verified contacts", outreach: "Subscribe for weekly qualified leads"},
+            {id: 35, name: "GrowthList", company: "1,500+", industry: "SaaS", stage: "Pre-seed", linkedin: "", website: "growthlist.co", context: "Database with $300M early 2025 funding tracked", outreach: "Access for pre-qualified leads"},
+            {id: 36, name: "Flowjam", company: "Various", industry: "SaaS", stage: "Seed", linkedin: "", website: "flowjam.com", context: "Companies at seed stage raising $2-3M", outreach: "Target companies post-fundraising"},
+            {id: 37, name: "Papermark", company: "50 Investors", industry: "SaaS", stage: "Pre-seed", linkedin: "", website: "papermark.com", context: "50 pre-seed investors in US, portfolio needs dev", outreach: "Target investor portfolios"},
+            {id: 38, name: "VCSheet", company: "Various", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "vcsheet.com", context: "Curated list of web3 funds with portfolio companies", outreach: "Database of qualified leads"},
+            {id: 39, name: "BitcoinKE", company: "Various", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "bitcoinke.io", context: "Top 15 Web3 VCs 2025 outlook", outreach: "Target technical teams"},
+            {id: 40, name: "XFounders 2025", company: "Various", industry: "Web3", stage: "Seed", linkedin: "", website: "x-founders.com", context: "Accelerator with go-to-market support", outreach: "Offer product development partnership"},
+            {id: 41, name: "Outlier Base Camp", company: "DeFi", industry: "Web3", stage: "Pre-seed", linkedin: "", website: "outlierventures.io", context: "Accelerator for technical teams", outreach: "Offer development services"},
+            {id: 42, name: "Level AI", company: "Level AI", industry: "AI", stage: "Pre-seed", linkedin: "linkedin.com/in/ashishnagar", website: "level.ai", context: "Stanford GSB building AI product", outreach: "Offer AI/ML product development"},
+            {id: 43, name: "AI Fund", company: "Portfolio", industry: "AI", stage: "Pre-seed", linkedin: "", website: "deeplearning.ai", context: "Andrewng's AI Fund, multiple portfolio companies", outreach: "Partner to offer dev services"},
+            {id: 44, name: "Techstars Emory", company: "Various", industry: "AI", stage: "Pre-seed", linkedin: "", website: "emory.edu", context: "First cohort of Emory partnership", outreach: "Offer mentorship + dev services"},
+            {id: 45, name: "Workforce Dev", company: "11 Startups", industry: "AI", stage: "Pre-seed", linkedin: "", website: "techstars.com", context: "Labor market challenges with cutting-edge tech", outreach: "Offer HR tech development"},
+            {id: 46, name: "Crescendo AI", company: "Various", industry: "AI", stage: "Pre-seed", linkedin: "", website: "crescendo.ai", context: "Platform covering AI startup funding", outreach: "Access database for funded leads"},
+            {id: 47, name: "Development Corp", company: "Early-stage", industry: "SaaS", stage: "Pre-seed", linkedin: "", website: "developmentcorporate.com", context: "John Mecke advises pre-seed/seed CEOs", outreach: "Partner to offer dev services"},
+            {id: 48, name: "cmason", company: "Unknown", industry: "SaaS", stage: "Pre-launch", linkedin: "", website: "indiehackers.com", context: "Launched with no money, needs ongoing dev", outreach: "Partner for ongoing product development"},
+            {id: 49, name: "Stealth AI", company: "Community", industry: "AI", stage: "Pre-seed", linkedin: "linkedin.com/company/stealthaistartup", website: "", context: "LinkedIn community for stealth AI founders", outreach: "Join community and offer dev services"},
+            {id: 50, name: "OpenVC", company: "Various", industry: "SaaS", stage: "Pre-seed", linkedin: "", website: "openvc.app", context: "Transparent fundraising platform", outreach: "Partner to offer dev services to founders"}
+        ];
+        
+        let currentFilter = 'all';
+        let leadStatuses = JSON.parse(localStorage.getItem('mc_lead_statuses') || '{}');
+        
+        function saveStatuses() { localStorage.setItem('mc_lead_statuses', JSON.stringify(leadStatuses)); updateStats(); }
+        function updateStats() {
+            const newCount = Object.values(leadStatuses).filter(s => !s || s === 'New').length;
+            const contactedCount = Object.values(leadStatuses).filter(s => s === 'Contacted').length;
+            document.getElementById('stat-new').textContent = newCount;
+            document.getElementById('stat-contacted').textContent = contactedCount;
+        }
+        function renderLeads() {
+            const container = document.getElementById('leadsContainer');
+            const filtered = currentFilter === 'all' ? leads : leads.filter(l => 
+                l.industry === currentFilter || l.stage === currentFilter
+            );
+            container.innerHTML = filtered.map(lead => {
+                const status = leadStatuses[lead.id] || 'New';
+                const badgeClass = `badge-${lead.industry.toLowerCase().replace(/[^a-z]/g, '')}`;
+                return `
+                    <div class="lead-card">
+                        <div class="lead-header">
+                            <div>
+                                <div class="lead-company">${lead.company}</div>
+                                <div class="lead-contact">${lead.name}</div>
+                            </div>
+                        </div>
+                        <div class="lead-meta">
+                            <span class="badge ${badgeClass}">${lead.industry}</span>
+                            <span class="badge badge-stage">${lead.stage}</span>
+                        </div>
+                        <div class="lead-links">
+                            ${lead.linkedin ? `<a href="https://${lead.linkedin}" target="_blank" class="lead-link">🔗 LinkedIn</a>` : ''}
+                            ${lead.website ? `<a href="https://${lead.website}" target="_blank" class="lead-link">🌐 Website</a>` : ''}
+                        </div>
+                        <div class="lead-context">${lead.context}</div>
+                        <div class="lead-outreach">"${lead.outreach}"</div>
+                        <div class="lead-actions">
+                            <select class="status-select" onchange="updateStatus(${lead.id}, this.value)">
+                                <option value="New" ${status==='New'?'selected':''}>New</option>
+                                <option value="Contacted" ${status==='Contacted'?'selected':''}>Contacted</option>
+                                <option value="Replied" ${status==='Replied'?'selected':''}>Replied</option>
+                                <option value="Meeting" ${status==='Meeting'?'selected':''}>Meeting</option>
+                                <option value="Closed" ${status==='Closed'?'selected':''}>Closed</option>
+                            </select>
+                            <button class="btn-copy" onclick="copyOutreach(${lead.id})">Copy Message</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        function updateStatus(id, status) { leadStatuses[id] = status; saveStatuses(); }
+        function copyOutreach(id) {
+            const lead = leads.find(l => l.id === id);
+            if (lead) {
+                navigator.clipboard.writeText(lead.outreach);
+                alert('Outreach message copied!');
+            }
+        }
+        function filterLeads(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            renderLeads();
+        }
+        function exportCSV() {
+            let csv = 'Company,Contact,Industry,Stage,LinkedIn,Website,Context,Outreach,Status\n';
+            leads.forEach(l => {
+                csv += `"${l.company}","${l.name}","${l.industry}","${l.stage}","${l.linkedin}","${l.website}","${l.context}","${l.outreach}","${leadStatuses[l.id] || 'New'}"\n`;
+            });
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'leads.csv'; a.click();
+        }
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('.lead-card').forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(term) ? '' : 'none';
+            });
+        });
+        updateStats(); renderLeads();
+    </script>
+</body>
+</html>

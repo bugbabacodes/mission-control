@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="border-radius: 50%;">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="courageBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00f5d4;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#00f5d4;stop-opacity:0.1"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Circle Background -->
+  <circle cx="100" cy="100" r="95" fill="url(#courageBg)" stroke="#00f5d4" stroke-width="3"/>
+  
+  <!-- Small Body (Scared stance but standing) -->
+  <ellipse cx="100" cy="155" rx="25" ry="20" fill="#ff69b4"/>
+  
+  <!-- Spots on body -->
+  <ellipse cx="90" cy="150" rx="5" ry="4" fill="#1a1a2e"/>
+  <ellipse cx="110" cy="158" rx="4" ry="3" fill="#1a1a2e"/>
+  <ellipse cx="95" cy="165" rx="3" ry="4" fill="#1a1a2e"/>
+  
+  <!-- Thin Legs (Shaking) -->
+  <line x1="90" y1="170" x2="88" y2="185" stroke="#ff69b4" stroke-width="4" stroke-linecap="round"/>
+  <line x1="110" y1="170" x2="112" y2="185" stroke="#ff69b4" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Paws -->
+  <ellipse cx="86" cy="187" rx="6" ry="4" fill="#ff69b4"/>
+  <ellipse cx="114" cy="187" rx="6" ry="4" fill="#ff69b4"/>
+  
+  <!-- Pink Head (Large, worried) -->
+  <ellipse cx="100" cy="95" rx="40" ry="45" fill="#ff69b4"/>
+  
+  <!-- Dark Pink Ears (Flopped back - worried) -->
+  <ellipse cx="65" cy="75" rx="12" ry="25" fill="#ff1493" transform="rotate(-30 65 75)"/>
+  <ellipse cx="135" cy="75" rx="12" ry="25" fill="#ff1493" transform="rotate(30 135 75)"/>
+  <!-- Inner ear -->
+  <ellipse cx="68" cy="75" rx="6" ry="15" fill="#ff69b4" transform="rotate(-30 68 75)"/>
+  <ellipse cx="132" cy="75" rx="6" ry="15" fill="#ff69b4" transform="rotate(30 132 75)"/>
+  
+  <!-- Black Spot around eye (Right eye has spot) -->
+  <ellipse cx="115" cy="95" rx="18" ry="20" fill="#1a1a2e"/>
+  
+  <!-- HUGE Eyes (Big, worried) -->
+  <g>
+    <!-- Left Eye -->
+    <ellipse cx="88" cy="90" rx="16" ry="18" fill="#ffffff"/>
+    <ellipse cx="88" cy="92" rx="8" ry="10" fill="#4a3000"/>
+    <ellipse cx="88" cy="93" rx="4" ry="5" fill="#1a1a2e"/>
+    <circle cx="91" cy="86" r="4" fill="#ffffff"/>
+    <circle cx="85" cy="96" r="2" fill="#ffffff" opacity="0.7"/>
+    <!-- Worried eyebrow -->
+    <path d="M75 75 Q85 72 95 78" stroke="#1a1a2e" stroke-width="2" fill="none"/>
+    
+    <!-- Right Eye (in the black spot) -->
+    <ellipse cx="115" cy="90" rx="14" ry="16" fill="#ffffff"/>
+    <ellipse cx="115" cy="92" rx="7" ry="9" fill="#4a3000"/>
+    <ellipse cx="115" cy="93" rx="3.5" ry="4.5" fill="#1a1a2e"/>
+    <circle cx="117" cy="86" r="3" fill="#ffffff"/>
+    <circle cx="112" cy="96" r="1.5" fill="#ffffff" opacity="0.7"/>
+    <!-- Worried eyebrow -->
+    <path d="M105 78 Q115 72 125 75" stroke="#ffffff" stroke-width="2" fill="none"/>
+  </g>
+  
+  <!-- Nose -->
+  <ellipse cx="100" cy="115" rx="8" ry="6" fill="#ff1493"/>
+  <ellipse cx="100" cy="114" rx="3" ry="2" fill="#ff69b4"/>
+  
+  <!-- Wobbly Mouth (Worried) -->
+  <path d="M92 125 Q100 122 108 125" stroke="#1a1a2e" stroke-width="2" fill="none"/>
+  <path d="M94 126 Q100 130 106 126" stroke="#ff1493" stroke-width="1" fill="none"/>
+  
+  <!-- Whiskers -->
+  <line x1="60" y1="100" x2="45" y2="95" stroke="#1a1a2e" stroke-width="1"/>
+  <line x1="60" y1="110" x2="42" y2="112" stroke="#1a1a2e" stroke-width="1"/>
+  <line x1="140" y1="100" x2="155" y2="95" stroke="#1a1a2e" stroke-width="1"/>
+  <line x1="140" y1="110" x2="158" y2="112" stroke="#1a1a2e" stroke-width="1"/>
+  
+  <!-- Sweat Drop (Anxiety) -->
+  <path d="M135 60 Q140 50 142 60 Q142 68 135 68 Q128 68 128 60 Q130 50 135 60" fill="#00d4ff" opacity="0.7"/>
+  
+  <!-- Shiver Lines -->
+  <path d="M55 110 L50 108" stroke="#1a1a2e" stroke-width="1" opacity="0.5"/>
+  <path d="M145 120 L150 118" stroke="#1a1a2e" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Small Tail (Between legs, scared) -->
+  <path d="M100 168 Q105 175 102 182" stroke="#ff69b4" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <ellipse cx="102" cy="183" rx="5" ry="4" fill="#ff1493"/>
+</svg>

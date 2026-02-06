@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Control | Agent Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --sidebar-bg: rgba(26, 26, 46, 0.8);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7b;
+            --accent-cyan: #00d4ff;
+            --accent-purple: #7b2cbf;
+            --accent-pink: #ff006e;
+            --accent-green: #00f5d4;
+            --accent-yellow: #ffb703;
+            --accent-orange: #fb5607;
+            --gradient-1: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+            --gradient-2: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
+            --gradient-3: linear-gradient(135deg, #00f5d4 0%, #00d4ff 100%);
+            --shadow-glow: 0 0 40px rgba(0, 212, 255, 0.15);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(123, 44, 191, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 110, 0.03) 0%, transparent 50%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+        
+        @keyframes bgPulse {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+        }
+        
+        /* Layout */
+        .app {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+            padding: 0 0.5rem;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+        
+        .nav-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            padding: 0 0.75rem;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            margin-bottom: 0.375rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            transform: translateX(4px);
+        }
+        
+        .nav-item.active {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+        
+        .nav-item.active .nav-icon {
+            filter: drop-shadow(0 0 8px var(--accent-cyan));
+        }
+        
+        .nav-icon {
+            font-size: 1.25rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .nav-badge {
+            margin-left: auto;
+            background: var(--gradient-2);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .header-title h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box input {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            color: var(--text-primary);
+            width: 280px;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+        
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 0.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .user-menu:hover {
+            border-color: var(--border-hover);
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-glow);
+        }
+        
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+        
+        .stat-card.cyan::before { background: var(--gradient-1); }
+        .stat-card.pink::before { background: var(--gradient-2); }
+        .stat-card.green::before { background: var(--gradient-3); }
+        .stat-card.orange::before { background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow)); }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .stat-icon.cyan {
+            background: rgba(0, 212, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+        
+        .stat-icon.pink {
+            background: rgba(255, 0, 110, 0.15);
+            box-shadow: 0 0 20px rgba(255, 0, 110, 0.2);
+        }
+        
+        .stat-icon.green {
+            background: rgba(0, 245, 212, 0.15);
+            box-shadow: 0 0 20px rgba(0, 245, 212, 0.2);
+        }
+        
+        .stat-icon.orange {
+            background: rgba(255, 183, 3, 0.15);
+            box-shadow: 0 0 20px rgba(255, 183, 3, 0.2);
+        }
+        
+        .stat-trend {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            background: rgba(0, 245, 212, 0.1);
+            color: var(--accent-green);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .card-action {
+            font-size: 0.875rem;
+            color: var(--accent-cyan);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .card-action:hover {
+            text-shadow: 0 0 10px var(--accent-cyan);
+        }
+        
+        /* Activity Chart */
+        .chart-container {
+            height: 200px;
+            background: linear-gradient(180deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .chart-bar {
+            width: 40px;
+            background: var(--gradient-1);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .chart-bar:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .chart-bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        /* Agent List */
+        .agent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .agent-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .agent-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border);
+            transform: translateX(4px);
+        }
+        
+        .agent-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+        }
+        
+        .agent-info {
+            flex: 1;
+        }
+        
+        .agent-name {
+            font-weight: 600;
+            margin-bottom: 0.125rem;
+        }
+        
+        .agent-status {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .agent-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        .agent-indicator.online {
+            background: var(--accent-green);
+            color: var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+        
+        .agent-indicator.working {
+            background: var(--accent-yellow);
+            color: var(--accent-yellow);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px currentColor; }
+            50% { opacity: 0.6; box-shadow: 0 0 20px currentColor; }
+        }
+        
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+        
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .activity-item {
+            cursor: pointer;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast-icon {
+            font-size: 1.25rem;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: all 0.3s;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Agent Detail Expand */
+        .agent-detail {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .agent-detail.expanded {
+            max-height: 200px;
+        }
+        
+        .agent-detail-content {
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        /* Action Items Widget */
+        .action-items-card {
+            background: linear-gradient(135deg, rgba(255, 0, 110, 0.05) 0%, rgba(123, 44, 191, 0.05) 100%);
+            border: 1px solid rgba(255, 0, 110, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-items-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff006e, #8338ec);
+        }
+        
+        .action-item-focus {
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+        
+        .action-item-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .action-item-agent {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .action-item-agent.dexter { color: #00d4ff; background: rgba(0, 212, 255, 0.1); }
+        .action-item-agent.blossom { color: #ff69b4; background: rgba(255, 105, 180, 0.1); }
+        .action-item-agent.samurai { color: #ffd700; background: rgba(255, 215, 0, 0.1); }
+        .action-item-agent.johnny { color: #ff8c00; background: rgba(255, 140, 0, 0.1); }
+        .action-item-agent.courage { color: #9b59b6; background: rgba(155, 89, 182, 0.1); }
+        
+        .action-item-type {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+        
+        .action-item-type.clarification { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        .action-item-type.approval { background: rgba(255, 0, 110, 0.2); color: #ff006e; }
+        .action-item-type.decision { background: rgba(255, 183, 3, 0.2); color: #ffb703; }
+        .action-item-type.review { background: rgba(0, 245, 212, 0.2); color: #00f5d4; }
+        
+        .action-item-priority {
+            margin-left: auto;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .action-item-priority.urgent { background: rgba(255, 0, 0, 0.2); color: #ff4444; }
+        .action-item-priority.high { background: rgba(255, 140, 0, 0.2); color: #ff8c00; }
+        .action-item-priority.medium { background: rgba(255, 183, 3, 0.2); color: #ffb703; }
+        .action-item-priority.low { background: rgba(107, 107, 123, 0.2); color: #6b6b7b; }
+        
+        .action-item-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .action-item-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .action-item-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .action-item-link {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.625rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-item-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+        
+        .action-item-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .action-btn-resolve {
+            background: linear-gradient(135deg, #00f5d4 0%, #00d4ff 100%);
+            color: #0f0f1a;
+        }
+        
+        .action-btn-resolve:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 245, 212, 0.3);
+        }
+        
+        .action-btn-skip {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        
+        .action-btn-skip:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+        
+        .action-btn-more {
+            background: rgba(255, 0, 110, 0.1);
+            color: #ff006e;
+            border: 1px solid rgba(255, 0, 110, 0.3);
+        }
+        
+        .action-btn-more:hover {
+            background: rgba(255, 0, 110, 0.2);
+        }
+        
+        .action-items-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .progress-info {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .progress-info strong {
+            color: var(--text-primary);
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            margin: 0 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff006e, #8338ec);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        .view-all-link {
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .view-all-link:hover {
+            text-shadow: 0 0 10px var(--accent-cyan);
+        }
+        
+        .no-action-items {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-muted);
+        }
+        
+        .no-action-items-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .no-action-items h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-hover);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">🎯</div>
+                <div class="logo-text">Mission Control</div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Main</div>
+                <a href="./index.html" class="nav-item active">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="./agents.html" class="nav-item">
+                    <span class="nav-icon">🤖</span>
+                    <span>Agents</span>
+                    <span class="nav-badge">5</span>
+                </a>
+                <a href="./tasks.html" class="nav-item">
+                    <span class="nav-icon">📋</span>
+                    <span>Tasks</span>
+                    <span class="nav-badge" id="tasksBadge">2</span>
+                </a>
+                <a href="./content.html" class="nav-item">
+                    <span class="nav-icon">📝</span>
+                    <span>Content</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Operations</div>
+                <a href="./leads.html" class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    <span>Leads</span>
+                    <span class="nav-badge">50</span>
+                </a>
+                <a href="./chat.html" class="nav-item">
+                    <span class="nav-icon">💬</span>
+                    <span>Chat</span>
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-title">
+                    <h1>Dashboard</h1>
+                    <p>Welcome back, Ishan. Your agents are working autonomously.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search anything...">
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-avatar">IR</div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card cyan">
+                    <div class="stat-header">
+                        <div class="stat-icon cyan">🤖</div>
+                        <span class="stat-trend">+2</span>
+                    </div>
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Active Agents</div>
+                </div>
+                
+                <div class="stat-card pink">
+                    <div class="stat-header">
+                        <div class="stat-icon pink">📝</div>
+                        <span class="stat-trend">Ready</span>
+                    </div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Content Ready</div>
+                </div>
+                
+                <div class="stat-card green">
+                    <div class="stat-header">
+                        <div class="stat-icon green">👥</div>
+                        <span class="stat-trend">+5</span>
+                    </div>
+                    <div class="stat-value">50</div>
+                    <div class="stat-label">Leads Found</div>
+                </div>
+                
+                <div class="stat-card orange">
+                    <div class="stat-header">
+                        <div class="stat-icon orange">📁</div>
+                        <span class="stat-trend">+12</span>
+                    </div>
+                    <div class="stat-value">30+</div>
+                    <div class="stat-label">Files Created</div>
+                </div>
+            </div>
+            
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Left Column -->
+                <div class="left-column">
+                    <!-- Activity Chart -->
+                    <div class="card" style="margin-bottom: 1.5rem;">
+                        <div class="card-header">
+                            <div class="card-title">Agent Activity</div>
+                            <span class="card-action">View All</span>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-bar" style="height: 40%;">
+                                <span class="chart-bar-label">Mon</span>
+                            </div>
+                            <div class="chart-bar" style="height: 65%;">
+                                <span class="chart-bar-label">Tue</span>
+                            </div>
+                            <div class="chart-bar" style="height: 45%;">
+                                <span class="chart-bar-label">Wed</span>
+                            </div>
+                            <div class="chart-bar" style="height: 80%;">
+                                <span class="chart-bar-label">Thu</span>
+                            </div>
+                            <div class="chart-bar" style="height: 55%;">
+                                <span class="chart-bar-label">Fri</span>
+                            </div>
+                            <div class="chart-bar" style="height: 90%;">
+                                <span class="chart-bar-label">Sat</span>
+                            </div>
+                            <div class="chart-bar" style="height: 70%;">
+                                <span class="chart-bar-label">Sun</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Recent Activity</div>
+                            <span class="card-action">View All</span>
+                        </div>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon">🧪</div>
+                                <div class="activity-content">
+                                    <div class="activity-text"><strong>Dexter</strong> started autonomous research mode</div>
+                                    <div class="activity-time">2 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">🌸</div>
+                                <div class="activity-content">
+                                    <div class="activity-text"><strong>Blossom</strong> delivered sports content calendar</div>
+                                    <div class="activity-time">3 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">⚔️</div>
+                                <div class="activity-content">
+                                    <div class="activity-text"><strong>Samurai Jack</strong> deployed heartbeat fix</div>
+                                    <div class="activity-time">4 hours ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div class="right-column">
+                    <!-- My Action Items Widget -->
+                    <div class="card action-items-card" id="actionItemsCard">
+                        <div class="card-header">
+                            <div class="card-title">🎯 My Action Items</div>
+                            <span class="view-all-link" onclick="viewAllActionItems()">View All</span>
+                        </div>
+                        <div id="actionItemsContainer">
+                            <!-- Action item will be rendered here -->
+                            <div class="action-item-focus" id="currentActionItem">
+                                <div class="action-item-header">
+                                    <div class="action-item-agent courage" id="actionAgent">
+                                        <span>🐾</span>
+                                        <span>Courage</span>
+                                    </div>
+                                    <span class="action-item-type approval" id="actionType">Approval</span>
+                                    <span class="action-item-priority urgent" id="actionPriority">Urgent</span>
+                                </div>
+                                <h3 class="action-item-title" id="actionTitle">Client asking about pricing, need your input</h3>
+                                <p class="action-item-description" id="actionDescription">
+                                    A prospect replied to the nurture sequence asking about pricing packages. Should I send the standard rate card ($5K/month retainer) or schedule a discovery call first? They're a Series A startup, 50 employees, potentially high value.
+                                </p>
+                                <div class="action-item-links" id="actionLinks">
+                                    <span class="action-item-link">📄 client-conversations.md</span>
+                                    <span class="action-item-link">💰 rate-card-2026.md</span>
+                                </div>
+                                <div class="action-item-actions">
+                                    <button class="action-btn action-btn-resolve" onclick="resolveActionItem()">
+                                        ✓ Resolve
+                                    </button>
+                                    <button class="action-btn action-btn-skip" onclick="skipActionItem()">
+                                        ↷ Skip
+                                    </button>
+                                    <button class="action-btn action-btn-more" onclick="needMoreInfo()">
+                                        ? More Info
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="action-items-progress">
+                                <span class="progress-info"><strong id="currentCount">1</strong> of <strong id="totalCount">5</strong></span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+                                </div>
+                                <span class="progress-info" id="remainingText">4 remaining</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Agent Status -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Agent Status</div>
+                        </div>
+                        <div class="agent-list">
+                            <div class="agent-item" data-agent="dexter">
+                                <div class="agent-avatar">🧪</div>
+                                <div class="agent-info">
+                                    <div class="agent-name">Dexter</div>
+                                    <div class="agent-status">Researching...</div>
+                                </div>
+                                <div class="agent-indicator working"></div>
+                                <div class="agent-detail">
+                                    <div class="agent-detail-content">
+                                        <strong>Current Focus:</strong> Autonomous research on market trends, Liverpool FC news, and RCB updates.<br>
+                                        <strong>Last Output:</strong> 12 research notes delivered to agents<br>
+                                        <strong>Next Check-in:</strong> 2 hours
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="agent-item" data-agent="blossom">
+                                <div class="agent-avatar">🌸</div>
+                                <div class="agent-info">
+                                    <div class="agent-name">Blossom</div>
+                                    <div class="agent-status">Standby</div>
+                                </div>
+                                <div class="agent-indicator online"></div>
+                                <div class="agent-detail">
+                                    <div class="agent-detail-content">
+                                        <strong>Current Focus:</strong> Awaiting research drops from Dexter<br>
+                                        <strong>Ready to Create:</strong> LinkedIn posts, YouTube scripts, content calendars<br>
+                                        <strong>Capacity:</strong> High - can process immediately
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="agent-item" data-agent="samurai">
+                                <div class="agent-avatar">⚔️</div>
+                                <div class="agent-info">
+                                    <div class="agent-name">Samurai Jack</div>
+                                    <div class="agent-status">Online</div>
+                                </div>
+                                <div class="agent-indicator online"></div>
+                                <div class="agent-detail">
+                                    <div class="agent-detail-content">
+                                        <strong>Current Focus:</strong> Building tools from agent needs<br>
+                                        <strong>Systems:</strong> Heartbeat execution, agent spawning<br>
+                                        <strong>Code Quality:</strong> Zero bugs, clean architecture
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="agent-item" data-agent="johnny">
+                                <div class="agent-avatar">🕶️</div>
+                                <div class="agent-info">
+                                    <div class="agent-name">Johnny Bravo</div>
+                                    <div class="agent-status">Working</div>
+                                </div>
+                                <div class="agent-indicator working"></div>
+                                <div class="agent-detail">
+                                    <div class="agent-detail-content">
+                                        <strong>Current Focus:</strong> Lead prospecting and qualification<br>
+                                        <strong>Pipeline:</strong> 50 leads, 5 Tier 1 priority<br>
+                                        <strong>Waiting for:</strong> Deep research from Dexter on top prospects
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="agent-item" data-agent="courage">
+                                <div class="agent-avatar">🐾</div>
+                                <div class="agent-info">
+                                    <div class="agent-name">Courage</div>
+                                    <div class="agent-status">Online</div>
+                                </div>
+                                <div class="agent-indicator online"></div>
+                                <div class="agent-detail">
+                                    <div class="agent-detail-content">
+                                        <strong>Current Focus:</strong> Email automation and workflow<br>
+                                        <strong>Templates:</strong> 23 ready-to-use templates<br>
+                                        <strong>Status:</strong> Monitoring inbox for responses
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toastIcon">✓</span>
+        <span id="toastMessage">Action completed</span>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Activity Details</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalContent">
+                <p>Activity details will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show toast notification
+        function showToast(message, icon = '✓') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMessage.textContent = message;
+            toastIcon.textContent = icon;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Modal functions
+        function openModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Close modal on overlay click
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modal')) {
+                closeModal();
+            }
+        });
+
+        // Navigation active state based on current page
+        function setActiveNav() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').includes(currentPage)) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Chart bar hover effects with data
+        const chartData = {
+            'Mon': { tasks: 12, agents: 3, status: 'Normal' },
+            'Tue': { tasks: 18, agents: 4, status: 'High' },
+            'Wed': { tasks: 14, agents: 4, status: 'Normal' },
+            'Thu': { tasks: 22, agents: 5, status: 'Peak' },
+            'Fri': { tasks: 16, agents: 5, status: 'Normal' },
+            'Sat': { tasks: 25, agents: 5, status: 'Peak' },
+            'Sun': { tasks: 20, agents: 5, status: 'High' }
+        };
+
+        document.querySelectorAll('.chart-bar').forEach(bar => {
+            const label = bar.querySelector('.chart-bar-label').textContent;
+            
+            bar.addEventListener('mouseenter', () => {
+                const data = chartData[label];
+                showToast(`${label}: ${data.tasks} tasks, ${data.agents} agents active`, '📊');
+            });
+        });
+
+        // Agent items click to expand
+        document.querySelectorAll('.agent-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const detail = item.querySelector('.agent-detail');
+                const isExpanded = detail.classList.contains('expanded');
+                
+                // Close all others
+                document.querySelectorAll('.agent-detail').forEach(d => d.classList.remove('expanded'));
+                
+                if (!isExpanded) {
+                    detail.classList.add('expanded');
+                    const agentName = item.querySelector('.agent-name').textContent;
+                    showToast(`${agentName} details expanded`, '🤖');
+                }
+            });
+        });
+
+        // Activity items click
+        const activityData = {
+            0: {
+                title: 'Dexter - Autonomous Research',
+                content: '<p><strong>Action:</strong> Started autonomous research mode at 12:00 AM</p><p><strong>Focus Areas:</strong></p><ul><li>Liverpool FC transfer news and match analysis</li><li>RCB IPL performance tracking</li><li>Zero-to-one startup market trends</li><li>Web3/AI industry developments</li></ul><p><strong>Expected Output:</strong> Research notes for all agents within 2 hours</p>'
+            },
+            1: {
+                title: 'Blossom - Content Delivery',
+                content: '<p><strong>Deliverable:</strong> Sports Content Calendar</p><p><strong>Contents:</strong></p><ul><li>10 YouTube scripts for @theishantake</li><li>Transfer news reaction templates</li><li>Match day reaction formats</li><li>RCB emotional support series outline</li></ul><p><strong>Status:</strong> Ready for filming</p>'
+            },
+            2: {
+                title: 'Samurai Jack - Deployment',
+                content: '<p><strong>Deployment:</strong> Heartbeat execution fix</p><p><strong>Changes:</strong></p><ul><li>Fixed agent spawning mechanism</li><li>Improved task distribution</li><li>Enhanced error handling</li></ul><p><strong>Impact:</strong> All agents now receive tasks correctly</p>'
+            }
+        };
+
+        document.querySelectorAll('.activity-item').forEach((item, index) => {
+            item.addEventListener('click', () => {
+                const data = activityData[index];
+                if (data) {
+                    openModal(data.title, data.content);
+                }
+            });
+        });
+
+        // Card action buttons
+        document.querySelectorAll('.card-action').forEach(action => {
+            action.addEventListener('click', () => {
+                showToast('View All clicked - Full view coming soon', '👁️');
+            });
+        });
+
+        // Search box
+        const searchInput = document.querySelector('.search-box input');
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                showToast(`Searching for: ${searchInput.value}`, '🔍');
+                searchInput.value = '';
+            }
+        });
+
+        // User menu
+        document.querySelector('.user-menu').addEventListener('click', () => {
+            showToast('User profile coming soon', '👤');
+        });
+
+        // Initialize
+        setActiveNav();
+
+        // Animate stat values on load
+        window.addEventListener('load', () => {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach((stat, index) => {
+                setTimeout(() => {
+                    stat.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        stat.style.transform = 'scale(1)';
+                    }, 200);
+                }, index * 100);
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // ==========================================
+        // ACTION ITEMS WIDGET
+        // ==========================================
+        
+        // Sample action items data (in production, this would be fetched from the API)
+        let actionItems = [
+            {
+                id: 'ai-001',
+                agent: 'dexter',
+                type: 'clarification',
+                title: 'Need clarification on research scope for zero-to-one content',
+                description: 'I\'m researching zero-to-one startup trends, but need to know: Should I focus on B2B SaaS only, or include D2C/consumer apps? Also, any specific industries you want prioritized (fintech, healthtech, AI infra)?',
+                priority: 'high',
+                created_at: '2026-02-06T06:30:00Z',
+                status: 'pending',
+                context_links: ['mission-control/memory/dexter/research-queue.md']
+            },
+            {
+                id: 'ai-002',
+                agent: 'blossom',
+                type: 'review',
+                title: 'Review this LinkedIn post before I finalize',
+                description: 'I\'ve drafted your next LinkedIn post about \'The Project That Almost Broke Me\' - a personal story about the early startup days. It\'s emotional and vulnerable. Want your eyes on it before scheduling.',
+                priority: 'medium',
+                created_at: '2026-02-06T07:15:00Z',
+                status: 'pending',
+                context_links: ['content/linkedin/personal-story-draft.md', 'content/calendar/week-1-schedule.md']
+            },
+            {
+                id: 'ai-003',
+                agent: 'johnny',
+                type: 'decision',
+                title: 'Which of these 3 outreach templates should I use?',
+                description: 'I\'ve created 3 variations of the cold outreach email for Tier 1 prospects. Template A is direct/aggressive, Template B is consultative/educational, Template C uses social proof heavily. Which voice fits your brand best?',
+                priority: 'high',
+                created_at: '2026-02-06T08:00:00Z',
+                status: 'pending',
+                context_links: ['mission-control/memory/johnny/outreach-templates.md']
+            },
+            {
+                id: 'ai-004',
+                agent: 'samurai',
+                type: 'decision',
+                title: 'Technical decision needed on database choice',
+                description: 'Building the new lead scoring system. Should I use PostgreSQL for relational integrity (better for complex queries) or stick with JSON files for simplicity (easier to version control)?',
+                priority: 'medium',
+                created_at: '2026-02-06T09:45:00Z',
+                status: 'pending',
+                context_links: ['mission-control/tools/lead-scorer-design.md']
+            },
+            {
+                id: 'ai-005',
+                agent: 'courage',
+                type: 'approval',
+                title: 'Client asking about pricing, need your input',
+                description: 'A prospect replied to the nurture sequence asking about pricing packages. Should I send the standard rate card ($5K/month retainer) or schedule a discovery call first? They\'re a Series A startup, 50 employees, potentially high value.',
+                priority: 'urgent',
+                created_at: '2026-02-06T11:30:00Z',
+                status: 'pending',
+                context_links: ['mission-control/memory/courage/client-conversations.md', 'pricing/rate-card-2026.md']
+            }
+        ];
+        
+        let currentActionIndex = 0;
+        let resolvedCount = 0;
+        
+        const AGENT_INFO = {
+            dexter: { emoji: '🧪', name: 'Dexter', class: 'dexter' },
+            blossom: { emoji: '🌸', name: 'Blossom', class: 'blossom' },
+            samurai: { emoji: '⚔️', name: 'Samurai Jack', class: 'samurai' },
+            johnny: { emoji: '🕶️', name: 'Johnny Bravo', class: 'johnny' },
+            courage: { emoji: '🐾', name: 'Courage', class: 'courage' }
+        };
+        
+        const TYPE_LABELS = {
+            clarification: 'Clarification',
+            approval: 'Approval',
+            decision: 'Decision',
+            review: 'Review'
+        };
+        
+        // Render the current action item
+        function renderActionItem() {
+            const pendingItems = actionItems.filter(item => item.status === 'pending' || item.status === 'in_progress');
+            const total = actionItems.length;
+            const remaining = pendingItems.length;
+            
+            if (remaining === 0) {
+                showNoActionItems();
+                return;
+            }
+            
+            // Sort by priority (urgent > high > medium > low)
+            const priorityOrder = { urgent: 0, high: 1, medium: 2, low: 3 };
+            pendingItems.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+            
+            const item = pendingItems[0];
+            const agent = AGENT_INFO[item.agent] || { emoji: '🤖', name: item.agent, class: item.agent };
+            
+            // Update DOM
+            document.getElementById('actionAgent').className = `action-item-agent ${agent.class}`;
+            document.getElementById('actionAgent').innerHTML = `<span>${agent.emoji}</span><span>${agent.name}</span>`;
+            
+            document.getElementById('actionType').className = `action-item-type ${item.type}`;
+            document.getElementById('actionType').textContent = TYPE_LABELS[item.type] || item.type;
+            
+            document.getElementById('actionPriority').className = `action-item-priority ${item.priority}`;
+            document.getElementById('actionPriority').textContent = item.priority;
+            
+            document.getElementById('actionTitle').textContent = item.title;
+            document.getElementById('actionDescription').textContent = item.description;
+            
+            // Render context links
+            const linksContainer = document.getElementById('actionLinks');
+            linksContainer.innerHTML = '';
+            item.context_links.forEach(link => {
+                const fileName = link.split('/').pop();
+                const icon = link.endsWith('.md') ? '📄' : link.includes('pricing') ? '💰' : '📁';
+                linksContainer.innerHTML += `<span class="action-item-link">${icon} ${fileName}</span>`;
+            });
+            
+            // Update progress
+            const currentPosition = total - remaining + 1;
+            document.getElementById('currentCount').textContent = currentPosition;
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('progressFill').style.width = `${(resolvedCount / total) * 100}%`;
+            document.getElementById('remainingText').textContent = `${remaining} remaining`;
+            
+            // Store current item ID
+            document.getElementById('currentActionItem').dataset.itemId = item.id;
+        }
+        
+        function showNoActionItems() {
+            document.getElementById('actionItemsContainer').innerHTML = `
+                <div class="no-action-items">
+                    <div class="no-action-items-icon">🎉</div>
+                    <h3>All Caught Up!</h3>
+                    <p>No action items pending. Your agents are working smoothly.</p>
+                </div>
+            `;
+        }
+        
+        function resolveActionItem() {
+            const itemId = document.getElementById('currentActionItem').dataset.itemId;
+            const item = actionItems.find(i => i.id === itemId);
+            
+            if (item) {
+                item.status = 'resolved';
+                item.resolved_at = new Date().toISOString();
+                resolvedCount++;
+                
+                showToast(`✓ ${AGENT_INFO[item.agent]?.name || item.agent} notified`, '🎉');
+                renderActionItem();
+                
+                // In production, this would call the API
+                console.log(`[ActionItems] Resolved: ${itemId}`);
+            }
+        }
+        
+        function skipActionItem() {
+            const itemId = document.getElementById('currentActionItem').dataset.itemId;
+            const item = actionItems.find(i => i.id === itemId);
+            
+            if (item) {
+                // Move to end of queue (cycle through)
+                const index = actionItems.findIndex(i => i.id === itemId);
+                actionItems.splice(index, 1);
+                actionItems.push(item);
+                
+                showToast('Skipped — will return to this later', '↷');
+                renderActionItem();
+            }
+        }
+        
+        function needMoreInfo() {
+            const itemId = document.getElementById('currentActionItem').dataset.itemId;
+            const item = actionItems.find(i => i.id === itemId);
+            
+            if (item) {
+                openModal(
+                    'Request More Information',
+                    `<p>What additional information does <strong>${AGENT_INFO[item.agent]?.name || item.agent}</strong> need?</p>
+                    <textarea id="moreInfoText" style="width: 100%; height: 100px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; color: var(--text-primary); margin: 1rem 0; resize: none;" placeholder="Describe what you need..."></textarea>
+                    <button class="action-btn action-btn-resolve" onclick="submitMoreInfo('${itemId}')" style="width: 100%;">Send to Agent</button>`
+                );
+            }
+        }
+        
+        function submitMoreInfo(itemId) {
+            const feedback = document.getElementById('moreInfoText').value;
+            const item = actionItems.find(i => i.id === itemId);
+            
+            if (item && feedback) {
+                item.status = 'pending';
+                item.agent_feedback = feedback;
+                
+                closeModal();
+                showToast(`Feedback sent to ${AGENT_INFO[item.agent]?.name || item.agent}`, '📨');
+                renderActionItem();
+                
+                console.log(`[ActionItems] More info requested for: ${itemId}`);
+            }
+        }
+        
+        function viewAllActionItems() {
+            const pendingItems = actionItems.filter(item => item.status === 'pending' || item.status === 'in_progress');
+            
+            let content = '<div style="max-height: 400px; overflow-y: auto;">';
+            
+            if (pendingItems.length === 0) {
+                content += '<p style="text-align: center; color: var(--text-muted); padding: 2rem;">No pending action items 🎉</p>';
+            } else {
+                pendingItems.forEach(item => {
+                    const agent = AGENT_INFO[item.agent] || { emoji: '🤖', name: item.agent };
+                    content += `
+                        <div style="padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 0.75rem; border-left: 3px solid ${getPriorityColor(item.priority)};">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span>${agent.emoji}</span>
+                                <span style="font-weight: 600;">${agent.name}</span>
+                                <span style="margin-left: auto; font-size: 0.7rem; text-transform: uppercase; color: ${getPriorityColor(item.priority)};">${item.priority}</span>
+                            </div>
+                            <p style="font-size: 0.9rem; margin-bottom: 0.25rem;">${item.title}</p>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${TYPE_LABELS[item.type]}</span>
+                        </div>
+                    `;
+                });
+            }
+            
+            content += '</div>';
+            
+            openModal('All Action Items', content);
+        }
+        
+        function getPriorityColor(priority) {
+            const colors = {
+                urgent: '#ff4444',
+                high: '#ff8c00',
+                medium: '#ffb703',
+                low: '#6b6b7b'
+            };
+            return colors[priority] || '#6b6b7b';
+        }
+        
+        // Initialize action items on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadActionItems();
+            loadAdvice();
+        });
+        
+        // Load action items from JSON
+        async function loadActionItems() {
+            try {
+                const response = await fetch('mission-control/database/action-items.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.actionItems && data.actionItems.length > 0) {
+                        actionItems = data.actionItems;
+                        resolvedCount = actionItems.filter(i => i.status === 'resolved').length;
+                        renderActionItem();
+                    }
+                }
+            } catch (e) {
+                console.log('Using default action items');
+                renderActionItem();
+            }
+        }
+        
+        // Advice Carousel Data
+        let adviceItems = [];
+        let currentAdviceIndex = 0;
+        
+        async function loadAdvice() {
+            try {
+                const response = await fetch('mission-control/database/advice.json');
+                if (response.ok) {
+                    adviceItems = await response.json();
+                    renderAdviceCarousel();
+                }
+            } catch (e) {
+                console.log('Could not load advice');
+            }
+        }
+        
+        function renderAdviceCarousel() {
+            const container = document.getElementById('adviceCarousel');
+            if (!container || adviceItems.length === 0) return;
+            
+            const activeAdvice = adviceItems.filter(a => a.status === 'active' && !a.dismissed);
+            
+            container.innerHTML = activeAdvice.map(advice => {
+                const agent = AGENT_INFO[advice.agent] || { emoji: '🤖', name: advice.agent };
+                return `
+                    <div class="advice-card" data-advice-id="${advice.id}">
+                        <div class="advice-header">
+                            <div class="advice-avatar">${agent.emoji}</div>
+                            <div>
+                                <div class="advice-agent">${agent.name}</div>
+                                <div class="advice-role">${advice.category}</div>
+                            </div>
+                        </div>
+                        <div class="advice-text">"${advice.advice}"</div>
+                        <div class="advice-context">${advice.context}</div>
+                        ${advice.actionable ? `
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                                <button class="action-btn action-btn-resolve" style="width: 100%; font-size: 0.8rem;" onclick="actOnAdvice('${advice.id}')">
+                                    ${advice.action}
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function actOnAdvice(adviceId) {
+            const advice = adviceItems.find(a => a.id === adviceId);
+            if (advice) {
+                advice.acted_on = true;
+                advice.acted_at = new Date().toISOString();
+                showToast(`${AGENT_INFO[advice.agent]?.name} is on it!`, '💡');
+                renderAdviceCarousel();
+            }
+        }
+        
+        // Sync tasks badge from localStorage
+        function updateTasksBadge() {
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || {};
+            const pendingCount = Object.values(tasks).filter(t => !t.done).length;
+            const badge = document.getElementById('tasksBadge');
+            if (badge) {
+                badge.textContent = pendingCount;
+                badge.style.display = pendingCount > 0 ? 'block' : 'none';
+            }
+        }
+        
+        // Update badge on load
+        updateTasksBadge();
+    </script>
+</body>
+</html>

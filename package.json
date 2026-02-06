@@ -1,0 +1,15 @@
+{
+  "name": "mission-control-dashboard",
+  "version": "1.0.0",
+  "description": "Live dashboard for Mission Control agent monitoring",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": "18.x"
+  }
+}

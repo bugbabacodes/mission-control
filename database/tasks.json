@@ -1,0 +1,74 @@
+[
+  {
+    "id": "task_setup_mission_control",
+    "title": "Setup Mission Control System",
+    "description": "Initialize shared database, setup cron jobs, test heartbeats, generate first standup",
+    "status": "done",
+    "assignee_ids": ["raven"],
+    "priority": "high",
+    "created_at": "2026-02-03T00:00:00.000Z",
+    "updated_at": "2026-02-03T00:38:00.000Z",
+    "due_date": "2026-02-03",
+    "tags": ["setup", "infrastructure", "mission-control"]
+  },
+  {
+    "id": "task_dexter_research_template",
+    "title": "Create Research Report Template",
+    "description": "Build standardized template for competitive analysis reports",
+    "status": "inbox",
+    "assignee_ids": ["dexter"],
+    "priority": "medium",
+    "created_at": "2026-02-03T00:00:00.000Z",
+    "updated_at": "2026-02-03T00:00:00.000Z",
+    "due_date": null,
+    "tags": ["template", "research"]
+  },
+  {
+    "id": "task_blossom_content_calendar",
+    "title": "Q1 Content Calendar Planning",
+    "description": "Plan content schedule for Q1 2026 including LinkedIn posts and blog articles",
+    "status": "inbox",
+    "assignee_ids": ["blossom"],
+    "priority": "medium",
+    "created_at": "2026-02-03T00:00:00.000Z",
+    "updated_at": "2026-02-03T00:00:00.000Z",
+    "due_date": "2026-02-07",
+    "tags": ["content", "planning", "q1"]
+  },
+  {
+    "id": "task_samurai_code_review",
+    "title": "Code Review: Mission Control Scripts",
+    "description": "Review and optimize database.js, heartbeat.js, and standup.js for production",
+    "status": "inbox",
+    "assignee_ids": ["samurai_jack"],
+    "priority": "medium",
+    "created_at": "2026-02-03T00:00:00.000Z",
+    "updated_at": "2026-02-03T00:00:00.000Z",
+    "due_date": null,
+    "tags": ["code-review", "optimization"]
+  },
+  {
+    "id": "task_johnny_lead_list",
+    "title": "Build Target Lead List",
+    "description": "Research and compile list of 50 potential leads in SaaS space",
+    "status": "inbox",
+    "assignee_ids": ["johnny_bravo"],
+    "priority": "high",
+    "created_at": "2026-02-03T00:00:00.000Z",
+    "updated_at": "2026-02-03T00:00:00.000Z",
+    "due_date": "2026-02-10",
+    "tags": ["leads", "research", "outreach"]
+  },
+  {
+    "id": "task_courage_email_setup",
+    "title": "Setup Email Monitoring Workflow",
+    "description": "Configure email monitoring and response templates for client success",
+    "status": "inbox",
+    "assignee_ids": ["courage"],
+    "priority": "medium",
+    "created_at": "2026-02-03T00:00:00.000Z",
+    "updated_at": "2026-02-03T00:00:00.000Z",
+    "due_date": null,
+    "tags": ["email", "workflow", "automation"]
+  }
+]

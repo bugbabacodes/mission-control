@@ -1,0 +1,31 @@
+[
+  {
+    "id": "activity_init_001",
+    "type": "system_initialization",
+    "agent_id": "raven",
+    "message": "Mission Control database initialized with 5 agents",
+    "timestamp": "2026-02-03T00:38:00.000Z",
+    "metadata": { "agent_count": 5, "version": "1.0.0" }
+  },
+  {
+    "id": "activity_init_002",
+    "type": "task_created",
+    "agent_id": "raven",
+    "message": "Created 6 initial tasks for agent squad",
+    "timestamp": "2026-02-03T00:38:00.000Z",
+    "metadata": { "task_count": 6 }
+  },
+  {
+    "id": "activity_setup_complete",
+    "type": "system_setup_complete",
+    "agent_id": "raven",
+    "message": "Mission Control setup completed — all agents operational, heartbeats tested, first standup generated",
+    "timestamp": "2026-02-03T00:40:00.000Z",
+    "metadata": { 
+      "cron_jobs": 6,
+      "agents": ["dexter", "blossom", "samurai_jack", "johnny_bravo", "courage"],
+      "heartbeats_tested": true,
+      "standup_generated": true
+    }
+  }
+]

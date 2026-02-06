@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="dexterBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:0.1"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Circle Background -->
+  <circle cx="100" cy="100" r="95" fill="url(#dexterBg)" stroke="#00d4ff" stroke-width="3"/>
+  
+  <!-- Lab Coat -->
+  <path d="M60 140 L60 180 L140 180 L140 140 Q140 120 100 120 Q60 120 60 140" fill="#ffffff"/>
+  <path d="M60 140 L70 180 L130 180 L140 140" fill="#f0f0f0"/>
+  
+  <!-- Coat Collar -->
+  <path d="M70 120 L85 150 L100 135 L115 150 L130 120" fill="#ffffff" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <!-- Neck -->
+  <rect x="85" y="100" width="30" height="25" fill="#ffdbac"/>
+  
+  <!-- Face -->
+  <ellipse cx="100" cy="85" rx="35" ry="40" fill="#ffdbac"/>
+  
+  <!-- Ears -->
+  <ellipse cx="65" cy="85" rx="8" ry="12" fill="#ffdbac"/>
+  <ellipse cx="135" cy="85" rx="8" ry="12" fill="#ffdbac"/>
+  
+  <!-- Hair (Wild scientist style) -->
+  <path d="M65 60 Q50 40 70 35 Q75 25 90 30 Q100 20 110 30 Q125 25 130 35 Q150 40 135 60 Q140 70 130 75 L130 55 Q115 45 100 50 Q85 45 70 55 L70 75 Q60 70 65 60" fill="#2d2d2d"/>
+  
+  <!-- Oversized Round Glasses -->
+  <g>
+    <!-- Left Lens Frame -->
+    <circle cx="85" cy="80" r="18" fill="rgba(255,255,255,0.3)" stroke="#1a1a2e" stroke-width="4"/>
+    <!-- Right Lens Frame -->
+    <circle cx="115" cy="80" r="18" fill="rgba(255,255,255,0.3)" stroke="#1a1a2e" stroke-width="4"/>
+    <!-- Bridge -->
+    <line x1="103" y1="80" x2="97" y2="80" stroke="#1a1a2e" stroke-width="3"/>
+    <!-- Temple arms -->
+    <line x1="67" y1="80" x2="60" y2="75" stroke="#1a1a2e" stroke-width="3"/>
+    <line x1="133" y1="80" x2="140" y2="75" stroke="#1a1a2e" stroke-width="3"/>
+    <!-- Lens Reflection -->
+    <circle cx="80" cy="75" r="5" fill="rgba(255,255,255,0.6)"/>
+    <circle cx="110" cy="75" r="5" fill="rgba(255,255,255,0.6)"/>
+  </g>
+  
+  <!-- Eyes behind glasses -->
+  <circle cx="85" cy="82" r="5" fill="#1a1a2e"/>
+  <circle cx="115" cy="82" r="5" fill="#1a1a2e"/>
+  <circle cx="86" cy="80" r="2" fill="#ffffff"/>
+  <circle cx="116" cy="80" r="2" fill="#ffffff"/>
+  
+  <!-- Enthusiastic Eyebrows -->
+  <path d="M75 65 Q85 60 95 65" stroke="#2d2d2d" stroke-width="3" fill="none"/>
+  <path d="M105 65 Q115 60 125 65" stroke="#2d2d2d" stroke-width="3" fill="none"/>
+  
+  <!-- Excited Smile -->
+  <path d="M85 105 Q100 120 115 105" stroke="#1a1a2e" stroke-width="3" fill="none"/>
+  <path d="M85 105 Q100 118 115 105" fill="#ff9999"/>
+  
+  <!-- Blush of excitement -->
+  <ellipse cx="75" cy="95" rx="8" ry="5" fill="#ff9999" opacity="0.5"/>
+  <ellipse cx="125" cy="95" rx="8" ry="5" fill="#ff9999" opacity="0.5"/>
+  
+  <!-- Lab Coat Buttons -->
+  <circle cx="100" cy="150" r="3" fill="#cccccc"/>
+  <circle cx="100" cy="165" r="3" fill="#cccccc"/>
+</svg>

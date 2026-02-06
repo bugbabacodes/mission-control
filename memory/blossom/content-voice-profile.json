@@ -1,0 +1,52 @@
+{
+  "voiceProfile": {
+    "author": {
+      "name": "Ishan",
+      "title": "Tech Consultant & Founder",
+      "experience": "100+ projects delivered",
+      "beliefSystem": "Magic exists in the intersection of code, belief, and execution"
+    },
+    "writingStyle": {
+      "format": "Lowercase conversational with occasional all-caps emphasis",
+      "paragraphStructure": "Short, punchy paragraphs. One-sentence paragraphs for impact.",
+      "tone": "Authentic, slightly vulnerable, confident but not arrogant",
+      "punctuation": "Minimal - lowercase preferred, periods over exclamation marks",
+      "signaturePhrases": [
+        "here's what i learned:",
+        "the magic happens when",
+        "spent [time/amount] so you don't have to",
+        "it was project #XX",
+        "and then i found it"
+      ]
+    },
+    "contentThemes": [
+      "War stories from the trenches",
+      "Tool reviews with real spend data",
+      "Founder journey reflections",
+      "AI/tech disruption analysis",
+      "Sports passion (Liverpool, RCB)",
+      "Personal growth experiments"
+    ],
+    "whatWorks": {
+      "highEngagement": [
+        "Personal failure stories with lessons",
+        "Specific numbers ($847, project #47)",
+        "Contrarian tech takes",
+        "Sports emotional content"
+      ],
+      "lowEngagement": [
+        "Generic advice without personal angle",
+        "Listicles without context",
+        "Overly polished content"
+      ]
+    },
+    "platformPreferences": {
+      "linkedin": "Long-form storytelling, 800-1000 words",
+      "xThreads": "5-10 tweets, punchy insights, thread hooks",
+      "youtube": "8-12 min scripts, emotional hooks, strong CTAs",
+      "reels": "30-60s, fast-paced, text overlays",
+      "carousels": "5-10 slides, one idea per slide"
+    },
+    "learningLog": []
+  }
+}
