@@ -1,83 +1,119 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <!-- Background -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="blossomBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#ff006e;stop-opacity:0.3"/>
-      <stop offset="100%" style="stop-color:#ff006e;stop-opacity:0.1"/>
+    <linearGradient id="bg-blossom" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1025"/>
+      <stop offset="100%" style="stop-color:#2d1b4e"/>
+    </linearGradient>
+    <linearGradient id="petal1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffb7d5"/>
+      <stop offset="100%" style="stop-color:#ff85a2"/>
+    </linearGradient>
+    <linearGradient id="petal2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffc4e1"/>
+      <stop offset="100%" style="stop-color:#ff9ecd"/>
+    </linearGradient>
+    <linearGradient id="glow-blossom" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700"/>
+      <stop offset="100%" style="stop-color:#ff85a2"/>
     </linearGradient>
   </defs>
   
-  <!-- Circle Background -->
-  <circle cx="100" cy="100" r="95" fill="url(#blossomBg)" stroke="#ff006e" stroke-width="3"/>
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#bg-blossom)"/>
   
-  <!-- Body/Outfit -->
-  <path d="M70 130 L70 180 L130 180 L130 130 Q130 110 100 110 Q70 110 70 130" fill="#ff006e"/>
-  
-  <!-- Black Belt -->
-  <rect x="70" y="145" width="60" height="8" fill="#1a1a2e"/>
-  <rect x="95" y="143" width="10" height="12" fill="#1a1a2e"/>
-  
-  <!-- Neck -->
-  <rect x="88" y="95" width="24" height="20" fill="#ffdbac"/>
-  
-  <!-- Head (Powerpuff style - large, round) -->
-  <ellipse cx="100" cy="75" rx="45" ry="42" fill="#ffdbac"/>
-  
-  <!-- Hair (Back ponytail) -->
-  <path d="M55 70 Q45 100 50 130 Q60 140 70 120 L70 70" fill="#ff006e"/>
-  <path d="M145 70 Q155 100 150 130 Q140 140 130 120 L130 70" fill="#ff006e"/>
-  
-  <!-- Hair (Main with part) -->
-  <path d="M55 75 Q55 30 100 30 Q145 30 145 75 Q145 60 130 55 Q100 50 100 55 Q100 50 70 55 Q55 60 55 75" fill="#ff006e"/>
-  
-  <!-- Bow (Big red bow) -->
-  <g>
-    <!-- Left loop -->
-    <ellipse cx="75" cy="45" rx="22" ry="18" fill="#ff0000" transform="rotate(-20 75 45)"/>
-    <!-- Right loop -->
-    <ellipse cx="125" cy="45" rx="22" ry="18" fill="#ff0000" transform="rotate(20 125 45)"/>
-    <!-- Center knot -->
-    <circle cx="100" cy="48" r="12" fill="#ff0000"/>
-    <!-- Highlight -->
-    <ellipse cx="70" cy="40" rx="8" ry="5" fill="#ff6666" transform="rotate(-20 70 40)"/>
-    <ellipse cx="130" cy="40" rx="8" ry="5" fill="#ff6666" transform="rotate(20 130 40)"/>
+  <!-- Flowing data streams / petals -->
+  <g opacity="0.4">
+    <path d="M0 300 Q100 250 150 350 T300 400" fill="none" stroke="#ffb7d5" stroke-width="2"/>
+    <path d="M512 200 Q400 150 350 250 T200 300" fill="none" stroke="#ffc4e1" stroke-width="2"/>
+    <path d="M100 512 Q150 400 250 350 T400 300" fill="none" stroke="#ff9ecd" stroke-width="1.5"/>
   </g>
   
-  <!-- Big Anime Eyes (Determined) -->
-  <g>
-    <!-- Left Eye -->
-    <ellipse cx="80" cy="80" rx="18" ry="22" fill="#ffffff"/>
-    <ellipse cx="80" cy="82" rx="14" ry="17" fill="#ff69b4"/>
-    <ellipse cx="80" cy="84" rx="10" ry="12" fill="#1a1a2e"/>
-    <circle cx="84" cy="76" r="5" fill="#ffffff"/>
-    <circle cx="77" cy="88" r="3" fill="#ffffff" opacity="0.7"/>
-    <!-- Eyelashes -->
-    <path d="M62 75 Q65 60 80 58 Q95 60 98 75" stroke="#1a1a2e" stroke-width="2" fill="none"/>
+  <!-- Floating cherry blossoms -->
+  <g opacity="0.6">
+    <ellipse cx="80" cy="120" rx="20" ry="10" fill="url(#petal1)" transform="rotate(30 80 120)"/>
+    <ellipse cx="80" cy="120" rx="20" ry="10" fill="url(#petal1)" transform="rotate(90 80 120)"/>
+    <ellipse cx="80" cy="120" rx="20" ry="10" fill="url(#petal1)" transform="rotate(150 80 120)"/>
+    <circle cx="80" cy="120" r="5" fill="#ffd700"/>
     
-    <!-- Right Eye -->
-    <ellipse cx="120" cy="80" rx="18" ry="22" fill="#ffffff"/>
-    <ellipse cx="120" cy="82" rx="14" ry="17" fill="#ff69b4"/>
-    <ellipse cx="120" cy="84" rx="10" ry="12" fill="#1a1a2e"/>
-    <circle cx="124" cy="76" r="5" fill="#ffffff"/>
-    <circle cx="117" cy="88" r="3" fill="#ffffff" opacity="0.7"/>
-    <!-- Eyelashes -->
-    <path d="M102 75 Q105 60 120 58 Q135 60 138 75" stroke="#1a1a2e" stroke-width="2" fill="none"/>
+    <ellipse cx="420" cy="80" rx="15" ry="8" fill="url(#petal2)" transform="rotate(45 420 80)"/>
+    <ellipse cx="420" cy="80" rx="15" ry="8" fill="url(#petal2)" transform="rotate(105 420 80)"/>
+    <ellipse cx="420" cy="80" rx="15" ry="8" fill="url(#petal2)" transform="rotate(165 420 80)"/>
+    <circle cx="420" cy="80" r="4" fill="#ffd700"/>
+    
+    <ellipse cx="450" cy="400" rx="18" ry="9" fill="url(#petal1)" transform="rotate(20 450 400)"/>
+    <ellipse cx="450" cy="400" rx="18" ry="9" fill="url(#petal1)" transform="rotate(80 450 400)"/>
+    <ellipse cx="450" cy="400" rx="18" ry="9" fill="url(#petal1)" transform="rotate(140 450 400)"/>
+    <circle cx="450" cy="400" r="4" fill="#ffd700"/>
   </g>
   
-  <!-- Determined Eyebrows -->
-  <path d="M70 60 Q80 55 90 60" stroke="#1a1a2e" stroke-width="3" fill="none"/>
-  <path d="M110 60 Q120 55 130 60" stroke="#1a1a2e" stroke-width="3" fill="none"/>
+  <!-- Digital particles -->
+  <g fill="#ffd700" opacity="0.5">
+    <circle cx="120" cy="180" r="2"/>
+    <circle cx="140" cy="160" r="3"/>
+    <circle cx="380" cy="150" r="2"/>
+    <circle cx="400" cy="350" r="3"/>
+    <circle cx="150" cy="400" r="2"/>
+    <circle cx="350" cy="420" r="2"/>
+  </g>
   
-  <!-- Small confident smile -->
-  <path d="M92 105 Q100 108 108 105" stroke="#1a1a2e" stroke-width="2" fill="none"/>
+  <!-- Character -->
+  <g transform="translate(256, 280)">
+    <!-- Flowing hair with petal elements -->
+    <path d="M-70 -140 Q-90 -100 -80 -40 Q-75 0 -90 40 Q-100 80 -70 100" fill="none" stroke="#ffb7d5" stroke-width="20" opacity="0.3"/>
+    <path d="M70 -140 Q90 -100 80 -40 Q75 0 90 40 Q100 80 70 100" fill="none" stroke="#ffc4e1" stroke-width="20" opacity="0.3"/>
+    
+    <!-- Main hair -->
+    <path d="M-60 -130 Q-70 -180 0 -185 Q70 -180 60 -130 L55 -80 Q60 -40 50 0 Q40 40 60 80 L-60 80 Q-40 40 -50 0 Q-60 -40 -55 -80 Z" fill="#3d2914"/>
+    
+    <!-- Face -->
+    <ellipse cx="0" cy="-100" rx="50" ry="60" fill="#fdbcb4"/>
+    
+    <!-- Eyes - artistic and warm -->
+    <ellipse cx="-20" cy="-105" rx="10" ry="8" fill="#fff"/>
+    <ellipse cx="20" cy="-105" rx="10" ry="8" fill="#fff"/>
+    <circle cx="-20" cy="-105" r="5" fill="#4a6741"/>
+    <circle cx="20" cy="-105" r="5" fill="#4a6741"/>
+    <circle cx="-20" cy="-105" r="2" fill="#000"/>
+    <circle cx="20" cy="-105" r="2" fill="#000"/>
+    <circle cx="-18" cy="-107" r="1.5" fill="#fff"/>
+    <circle cx="22" cy="-107" r="1.5" fill="#fff"/>
+    
+    <!-- Eyelashes -->
+    <path d="M-30 -115 Q-20 -120 -10 -115" fill="none" stroke="#3d2914" stroke-width="1.5"/>
+    <path d="M10 -115 Q20 -120 30 -115" fill="none" stroke="#3d2914" stroke-width="1.5"/>
+    
+    <!-- Eyebrows -->
+    <path d="M-30 -125 Q-20 -130 -10 -125" fill="none" stroke="#3d2914" stroke-width="2"/>
+    <path d="M10 -125 Q20 -130 30 -125" fill="none" stroke="#3d2914" stroke-width="2"/>
+    
+    <!-- Nose -->
+    <path d="M0 -100 L-4 -85 L4 -85" fill="#e8b4a0"/>
+    
+    <!-- Smile -->
+    <path d="M-15 -75 Q0 -65 15 -75" fill="none" stroke="#c4886a" stroke-width="2"/>
+    <path d="M-15 -75 Q0 -70 15 -75" fill="#ff9999" opacity="0.3"/>
+    
+    <!-- Neck -->
+    <rect x="-15" y="-45" width="30" height="25" fill="#fdbcb4"/>
+    
+    <!-- Elegant outfit -->
+    <path d="M-40 -25 Q-50 20 -45 80 L45 80 Q50 20 40 -25 L25 -45 L-25 -45 Z" fill="#2d1b4e"/>
+    <!-- Golden accents -->
+    <path d="M-25 -45 L0 20 L25 -45" fill="none" stroke="#ffd700" stroke-width="2"/>
+    <circle cx="0" cy="20" r="5" fill="#ffd700"/>
+  </g>
   
-  <!-- Arms (Hands on hips - confident pose) -->
-  <path d="M70 130 Q50 140 55 160" stroke="#ffdbac" stroke-width="12" fill="none" stroke-linecap="round"/>
-  <path d="M130 130 Q150 140 145 160" stroke="#ffdbac" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <!-- Additional floating petals -->
+  <g opacity="0.5">
+    <ellipse cx="150" cy="300" rx="12" ry="6" fill="#ffb7d5" transform="rotate(60 150 300)"/>
+    <ellipse cx="380" cy="250" rx="10" ry="5" fill="#ffc4e1" transform="rotate(-30 380 250)"/>
+    <ellipse cx="200" cy="450" rx="8" ry="4" fill="#ff9ecd" transform="rotate(45 200 450)"/>
+  </g>
   
-  <!-- Legs -->
-  <rect x="80" y="180" width="18" height="15" fill="#ffffff"/>
-  <rect x="102" y="180" width="18" height="15" fill="#ffffff"/>
-  <rect x="78" y="193" width="22" height="7" fill="#1a1a2e"/>
-  <rect x="100" y="193" width="22" height="7" fill="#1a1a2e"/>
+  <!-- Digital stream lines -->
+  <g opacity="0.3" stroke="url(#glow-blossom)" stroke-width="1" fill="none">
+    <path d="M50 100 Q100 150 80 200"/>
+    <path d="M450 150 Q400 200 420 280"/>
+    <path d="M200 50 Q250 100 220 150"/>
+  </g>
 </svg>

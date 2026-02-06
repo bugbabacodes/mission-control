@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tasks | Mission Control</title>
+    <title>Mission Control | Tasks</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -17,6 +17,7 @@
                         'accent-pink': '#ff006e',
                         'accent-green': '#00f5d4',
                         'accent-yellow': '#ffb703',
+                        'accent-red': '#ff4757',
                     }
                 }
             }
@@ -29,7 +30,11 @@
         .glass { background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
         .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); }
         .gradient-1 { background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%); }
+        .gradient-2 { background: linear-gradient(135deg, #ff006e 0%, #8338ec 100%); }
+        .gradient-3 { background: linear-gradient(135deg, #00f5d4 0%, #00d4ff 100%); }
         .text-gradient { background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glow-cyan { box-shadow: 0 0 40px rgba(0, 212, 255, 0.15); }
+        .glow-pink { box-shadow: 0 0 40px rgba(255, 0, 110, 0.15); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         @keyframes bgPulse {
@@ -47,14 +52,47 @@
             pointer-events: none;
             z-index: 0;
         }
-        .checkbox-custom { width: 22px; height: 22px; border: 2px solid rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
-        .checkbox-custom.checked { background: #00f5d4; border-color: #00f5d4; }
-        .task-card { transition: all 0.2s; }
-        .task-card.completed { opacity: 0.5; }
-        .task-card.completed .task-name { text-decoration: line-through; color: #6b6b7b; }
+        /* Custom Checkbox */
+        .custom-checkbox {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .custom-checkbox:checked {
+            background: linear-gradient(135deg, #00f5d4 0%, #00d4ff 100%);
+            border-color: transparent;
+        }
+        .custom-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #0f0f1a;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        /* Modal Animation */
+        .modal-enter { opacity: 0; transform: scale(0.95); }
+        .modal-enter-active { opacity: 1; transform: scale(1); transition: all 0.2s ease-out; }
+        .modal-exit { opacity: 1; transform: scale(1); }
+        .modal-exit-active { opacity: 0; transform: scale(0.95); transition: all 0.2s ease-in; }
+        /* Swipe Card */
+        .task-card {
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .task-card.swiped {
+            transform: translateX(100px);
+            opacity: 0.5;
+        }
     </style>
 </head>
-<body class="bg-animated min-h-screen pb-20 md:pb-0">
+<body class="bg-animated min-h-screen pb-24 md:pb-0">
     <!-- Desktop Sidebar -->
     <aside class="hidden lg:flex fixed left-0 top-0 h-screen w-72 glass flex-col p-6 z-20">
         <div class="flex items-center gap-3 mb-8">
@@ -65,7 +103,7 @@
             <p class="text-xs text-gray-500 uppercase tracking-wider mb-3 px-3">Main</p>
             <a href="./index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
                 <span class="text-xl">📊</span>
-                <span>Dashboard</span>
+                <span class="font-medium">Dashboard</span>
             </a>
             <a href="./agents.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
                 <span class="text-xl">🤖</span>
@@ -74,8 +112,8 @@
             </a>
             <a href="./tasks.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                 <span class="text-xl">📋</span>
-                <span class="font-medium">Tasks</span>
-                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full" id="tasksBadge">2</span>
+                <span>Tasks</span>
+                <span class="ml-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs px-2 py-1 rounded-full" id="sidebarTasksBadge">2</span>
             </a>
             <a href="./content.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all">
                 <span class="text-xl">📝</span>
@@ -100,54 +138,76 @@
         <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold">Tasks</h1>
-                <p class="text-gray-400 text-sm mt-1">Track all agent work and progress</p>
+                <p class="text-gray-400 text-sm mt-1">Manage and track agent assignments</p>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="addTask()" class="bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-4 py-3 rounded-xl font-medium text-sm hover:opacity-90 transition-all flex items-center gap-2">
-                    <span>+</span> Add Task
-                </button>
+                <div class="relative flex-1 md:w-64">
+                    <input type="text" id="searchInput" placeholder="Search tasks..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pl-10 text-sm focus:outline-none focus:border-cyan-500/50">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">🔍</span>
+                </div>
                 <div class="w-10 h-10 gradient-1 rounded-xl flex items-center justify-center text-sm font-bold shrink-0">IR</div>
             </div>
         </header>
 
-        <!-- Progress Section -->
-        <div class="glass-card rounded-2xl p-4 md:p-6 mb-6">
-            <div class="flex justify-between items-center mb-3">
-                <span class="text-sm md:text-base font-medium">Overall Progress</span>
-                <span class="text-xl md:text-2xl font-bold text-cyan-400" id="progressPercent">0%</span>
+        <!-- Progress Overview -->
+        <div class="glass-card rounded-2xl p-4 md:p-5 mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <h3 class="font-semibold text-lg">Overall Progress</h3>
+                    <p class="text-gray-400 text-sm" id="progressText">Loading...</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-2xl md:text-3xl font-bold text-gradient" id="progressPercent">0%</span>
+                </div>
             </div>
-            <div class="h-2.5 bg-white/10 rounded-full overflow-hidden">
-                <div id="progressFill" class="h-full gradient-1 rounded-full transition-all duration-500" style="width: 0%"></div>
+            <div class="h-3 bg-white/10 rounded-full overflow-hidden">
+                <div id="progressBar" class="h-full gradient-1 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <div class="flex justify-between mt-3 text-xs text-gray-400">
+                <span id="statsCompleted">0 Done</span>
+                <span id="statsRemaining">0 Remaining</span>
             </div>
         </div>
 
         <!-- Filter Tabs -->
         <div class="flex gap-2 mb-6 overflow-x-auto hide-scrollbar pb-2">
-            <button onclick="filterTasks('all')" class="filter-tab active whitespace-nowrap px-4 py-2.5 rounded-xl text-sm font-medium bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 transition-all">
-                All <span class="ml-1 text-xs opacity-70" id="count-all">0</span>
+            <button onclick="filterTasks('all')" id="filterAll" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 whitespace-nowrap transition-all">
+                All Tasks
             </button>
-            <button onclick="filterTasks('done')" class="filter-tab whitespace-nowrap px-4 py-2.5 rounded-xl text-sm font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all">
-                Done <span class="ml-1 text-xs opacity-70" id="count-done">0</span>
+            <button onclick="filterTasks('pending')" id="filterPending" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white/5 text-gray-400 border border-white/10 whitespace-nowrap hover:bg-white/10 transition-all">
+                Pending
             </button>
-            <button onclick="filterTasks('in-progress')" class="filter-tab whitespace-nowrap px-4 py-2.5 rounded-xl text-sm font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all">
-                In Progress <span class="ml-1 text-xs opacity-70" id="count-inprogress">0</span>
+            <button onclick="filterTasks('in-progress')" id="filterInProgress" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white/5 text-gray-400 border border-white/10 whitespace-nowrap hover:bg-white/10 transition-all">
+                In Progress
             </button>
-            <button onclick="filterTasks('pending')" class="filter-tab whitespace-nowrap px-4 py-2.5 rounded-xl text-sm font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all">
-                Pending <span class="ml-1 text-xs opacity-70" id="count-pending">0</span>
+            <button onclick="filterTasks('done')" id="filterDone" class="filter-btn px-4 py-2 rounded-xl text-sm font-medium bg-white/5 text-gray-400 border border-white/10 whitespace-nowrap hover:bg-white/10 transition-all">
+                Done
             </button>
         </div>
 
-        <!-- Search -->
-        <div class="relative mb-4">
-            <input type="text" id="searchInput" placeholder="Search tasks..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pl-10 text-sm focus:outline-none focus:border-cyan-500/50">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">🔍</span>
-        </div>
-
-        <!-- Tasks List -->
-        <div id="tasksList" class="space-y-3">
+        <!-- Task List -->
+        <div id="taskList" class="space-y-3">
             <!-- Tasks will be rendered here -->
         </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-12">
+            <div class="w-20 h-20 bg-white/5 rounded-2xl flex items-center justify-center text-4xl mx-auto mb-4">📋</div>
+            <h3 class="text-xl font-semibold mb-2">No tasks found</h3>
+            <p class="text-gray-400 text-sm">Create a new task to get started</p>
+        </div>
     </main>
+
+    <!-- Floating Add Button (Mobile) -->
+    <button onclick="openModal()" class="lg:hidden fixed bottom-20 right-4 w-14 h-14 gradient-1 rounded-full flex items-center justify-center text-2xl shadow-lg shadow-cyan-500/30 z-40 hover:scale-110 transition-transform">
+        +
+    </button>
+
+    <!-- Desktop Add Button -->
+    <button onclick="openModal()" class="hidden lg:flex fixed bottom-8 right-8 gradient-1 px-6 py-3 rounded-xl items-center gap-2 text-sm font-semibold shadow-lg shadow-cyan-500/30 hover:opacity-90 transition-all z-40">
+        <span class="text-xl">+</span>
+        <span>Add Task</span>
+    </button>
 
     <!-- Mobile Bottom Navigation -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 glass border-t border-white/10 z-50 pb-safe">
@@ -175,150 +235,300 @@
         </div>
     </nav>
 
+    <!-- Add Task Modal -->
+    <div id="taskModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="glass rounded-2xl p-6 w-full max-w-md modal-enter">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">Add New Task</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                <form id="addTaskForm" onsubmit="addTask(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Task Title</label>
+                            <input type="text" id="taskTitle" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50" placeholder="Enter task title...">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Assigned Agent</label>
+                            <select id="taskAgent" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500/50">
+                                <option value="">Select an agent...</option>
+                                <option value="Dexter">🧪 Dexter</option>
+                                <option value="Blossom">🌸 Blossom</option>
+                                <option value="Samurai Jack">⚔️ Samurai Jack</option>
+                                <option value="Johnny Bravo">🕶️ Johnny Bravo</option>
+                                <option value="Courage">🐾 Courage</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Priority</label>
+                            <div class="flex gap-2">
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="priority" value="high" class="hidden peer">
+                                    <div class="text-center py-3 rounded-xl border border-white/10 bg-white/5 peer-checked:bg-red-500/20 peer-checked:border-red-500/50 peer-checked:text-red-400 transition-all text-sm">
+                                        🔴 High
+                                    </div>
+                                </label>
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="priority" value="medium" class="hidden peer" checked>
+                                    <div class="text-center py-3 rounded-xl border border-white/10 bg-white/5 peer-checked:bg-yellow-500/20 peer-checked:border-yellow-500/50 peer-checked:text-yellow-400 transition-all text-sm">
+                                        🟡 Medium
+                                    </div>
+                                </label>
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="priority" value="low" class="hidden peer">
+                                    <div class="text-center py-3 rounded-xl border border-white/10 bg-white/5 peer-checked:bg-green-500/20 peer-checked:border-green-500/50 peer-checked:text-green-400 transition-all text-sm">
+                                        🟢 Low
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button type="button" onclick="closeModal()" class="flex-1 bg-white/10 py-3 rounded-xl text-sm font-medium hover:bg-white/20 transition-all">Cancel</button>
+                        <button type="submit" class="flex-1 gradient-1 py-3 rounded-xl text-sm font-semibold text-black hover:opacity-90 transition-all">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast -->
     <div id="toast" class="fixed bottom-24 md:bottom-8 right-4 md:right-8 glass rounded-xl px-4 py-3 flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <span id="toastIcon" class="text-xl">✓</span>
         <span id="toastMessage">Action completed</span>
     </div>
 
     <script>
+        // Task Store
         let tasks = JSON.parse(localStorage.getItem('mc_tasks') || '[]');
         let currentFilter = 'all';
 
-        const defaultTasks = [
-            {id: 1, name: "Create master navigation (index.html)", agent: "main", status: "complete", priority: "high", completed: true},
-            {id: 2, name: "Fix heartbeat execution system", agent: "samurai", status: "complete", priority: "high", completed: true},
-            {id: 3, name: "Research DeepSeek disruption for content", agent: "dexter", status: "complete", priority: "medium", completed: true},
-            {id: 4, name: "Draft LinkedIn post on AI agents", agent: "blossom", status: "in-progress", priority: "high", completed: false},
-            {id: 5, name: "Build lead tracker MVP", agent: "samurai", status: "in-progress", priority: "high", completed: false},
-            {id: 6, name: "Research 50 qualified prospects", agent: "johnny", status: "complete", priority: "high", completed: true},
-            {id: 7, name: "Set up email automation workflow", agent: "courage", status: "in-progress", priority: "medium", completed: false},
-            {id: 8, name: "Create content calendar", agent: "blossom", status: "complete", priority: "high", completed: true},
-            {id: 9, name: "Build dashboard UI", agent: "samurai", status: "in-progress", priority: "high", completed: false},
-            {id: 10, name: "Deploy autonomous agent protocol", agent: "samurai", status: "complete", priority: "high", completed: true}
-        ];
-
-        if (tasks.length === 0) { tasks = defaultTasks; saveTasks(); }
+        // Initialize sample tasks if empty
+        function initSampleTasks() {
+            if (tasks.length === 0) {
+                tasks = [
+                    { id: 1, title: 'Research competitor analysis', agent: 'Dexter', priority: 'high', status: 'in-progress', completed: false, createdAt: Date.now() },
+                    { id: 2, title: 'Create social media content calendar', agent: 'Blossom', priority: 'medium', status: 'pending', completed: false, createdAt: Date.now() - 86400000 },
+                    { id: 3, title: 'Fix authentication bug', agent: 'Samurai Jack', priority: 'high', status: 'done', completed: true, createdAt: Date.now() - 172800000 },
+                    { id: 4, title: 'Update landing page copy', agent: 'Johnny Bravo', priority: 'low', status: 'pending', completed: false, createdAt: Date.now() - 259200000 },
+                    { id: 5, title: 'Qualify new leads from campaign', agent: 'Courage', priority: 'medium', status: 'done', completed: true, createdAt: Date.now() - 345600000 },
+                ];
+                saveTasks();
+            }
+        }
 
         function saveTasks() {
             localStorage.setItem('mc_tasks', JSON.stringify(tasks));
-            updateStats();
+            updateUI();
+        }
+
+        function updateUI() {
             renderTasks();
-            updateTasksBadge();
-        }
-
-        function updateStats() {
-            const done = tasks.filter(t => t.completed).length;
-            const total = tasks.length;
-            const percent = total > 0 ? Math.round((done / total) * 100) : 0;
-            document.getElementById('progressPercent').textContent = percent + '%';
-            document.getElementById('progressFill').style.width = percent + '%';
-            document.getElementById('count-all').textContent = total;
-            document.getElementById('count-done').textContent = done;
-            document.getElementById('count-inprogress').textContent = tasks.filter(t => t.status === 'in-progress').length;
-            document.getElementById('count-pending').textContent = tasks.filter(t => t.status === 'pending' || !t.completed).length;
-        }
-
-        function getStatusColor(status) {
-            switch(status) {
-                case 'complete': return 'bg-green-500/20 text-green-400';
-                case 'in-progress': return 'bg-yellow-500/20 text-yellow-400';
-                default: return 'bg-gray-500/20 text-gray-400';
-            }
+            updateProgress();
+            updateBadges();
         }
 
         function getPriorityColor(priority) {
             switch(priority) {
-                case 'high': return 'text-red-400';
-                case 'medium': return 'text-yellow-400';
-                default: return 'text-green-400';
+                case 'high': return 'bg-red-500/20 text-red-400 border-red-500/30';
+                case 'medium': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+                case 'low': return 'bg-green-500/20 text-green-400 border-green-500/30';
+                default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+            }
+        }
+
+        function getPriorityLabel(priority) {
+            switch(priority) {
+                case 'high': return '🔴 High';
+                case 'medium': return '🟡 Medium';
+                case 'low': return '🟢 Low';
+                default: return '⚪ None';
+            }
+        }
+
+        function getAgentEmoji(agent) {
+            const emojis = {
+                'Dexter': '🧪',
+                'Blossom': '🌸',
+                'Samurai Jack': '⚔️',
+                'Johnny Bravo': '🕶️',
+                'Courage': '🐾'
+            };
+            return emojis[agent] || '🤖';
+        }
+
+        function getStatusBadge(status) {
+            switch(status) {
+                case 'done': return '<span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full border border-green-500/30">✓ Done</span>';
+                case 'in-progress': return '<span class="text-xs bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded-full border border-cyan-500/30">⏳ In Progress</span>';
+                case 'pending': return '<span class="text-xs bg-gray-500/20 text-gray-400 px-2 py-1 rounded-full border border-gray-500/30">⏸ Pending</span>';
+                default: return '';
             }
         }
 
         function renderTasks() {
-            const list = document.getElementById('tasksList');
-            const filtered = currentFilter === 'all' ? tasks : tasks.filter(t => {
-                if (currentFilter === 'done') return t.completed;
-                if (currentFilter === 'in-progress') return t.status === 'in-progress';
-                if (currentFilter === 'pending') return !t.completed;
-                return true;
+            const taskList = document.getElementById('taskList');
+            const emptyState = document.getElementById('emptyState');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            let filteredTasks = tasks.filter(task => {
+                const matchesSearch = task.title.toLowerCase().includes(searchTerm) || 
+                                    (task.agent && task.agent.toLowerCase().includes(searchTerm));
+                const matchesFilter = currentFilter === 'all' || 
+                                    (currentFilter === 'done' && task.completed) ||
+                                    (currentFilter === 'pending' && !task.completed && task.status === 'pending') ||
+                                    (currentFilter === 'in-progress' && !task.completed && task.status === 'in-progress');
+                return matchesSearch && matchesFilter;
             });
 
-            list.innerHTML = filtered.map(task => `
-                <div class="task-card glass-card rounded-xl p-4 ${task.completed ? 'completed' : ''}">
-                    <div class="flex items-start gap-3">
-                        <div class="checkbox-custom ${task.completed ? 'checked' : ''} shrink-0 mt-0.5" onclick="toggleTask(${task.id})">
-                            ${task.completed ? '✓' : ''}
-                        </div>
+            // Sort: incomplete first, then by priority
+            filteredTasks.sort((a, b) => {
+                if (a.completed !== b.completed) return a.completed ? 1 : -1;
+                const priorityOrder = { 'high': 0, 'medium': 1, 'low': 2 };
+                return priorityOrder[a.priority] - priorityOrder[b.priority];
+            });
+
+            if (filteredTasks.length === 0) {
+                taskList.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            taskList.innerHTML = filteredTasks.map(task => `
+                <div class="task-card glass-card rounded-2xl p-4 ${task.completed ? 'opacity-60' : ''}" data-task-id="${task.id}">
+                    <div class="flex items-start gap-4">
+                        <input type="checkbox" 
+                               class="custom-checkbox shrink-0 mt-1" 
+                               ${task.completed ? 'checked' : ''} 
+                               onchange="toggleTask(${task.id})">
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-start justify-between gap-2 flex-wrap">
-                                <p class="task-name font-medium text-sm md:text-base">${task.name}</p>
-                                <span class="${getPriorityColor(task.priority)} text-xs font-medium">${task.priority}</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-2">
+                                <span class="text-xs ${getPriorityColor(task.priority)} px-2 py-1 rounded-full border">${getPriorityLabel(task.priority)}</span>
+                                ${getStatusBadge(task.status)}
                             </div>
-                            <div class="flex items-center gap-3 mt-2 flex-wrap">
-                                <span class="text-xs bg-white/10 px-2 py-1 rounded-full text-gray-400">${task.agent}</span>
-                                <span class="text-xs ${getStatusColor(task.status)} px-2 py-1 rounded-full">${task.status}</span>
-                            </div>
+                            <h4 class="font-semibold text-sm md:text-base ${task.completed ? 'line-through text-gray-500' : ''}">${escapeHtml(task.title)}</h4>
+                            ${task.agent ? `<p class="text-gray-400 text-xs mt-1 flex items-center gap-1"><span>${getAgentEmoji(task.agent)}</span> ${escapeHtml(task.agent)}</p>` : ''}
                         </div>
+                        <button onclick="deleteTask(${task.id})" class="text-gray-500 hover:text-red-400 transition-colors p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function updateProgress() {
+            const total = tasks.length;
+            const completed = tasks.filter(t => t.completed).length;
+            const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `${completed} of ${total} tasks completed`;
+            document.getElementById('statsCompleted').textContent = `${completed} Done`;
+            document.getElementById('statsRemaining').textContent = `${total - completed} Remaining`;
+        }
+
+        function updateBadges() {
+            const pending = tasks.filter(t => !t.completed).length;
+            const sidebarBadge = document.getElementById('sidebarTasksBadge');
+            if (sidebarBadge) sidebarBadge.textContent = pending;
+        }
+
+        function filterTasks(filter) {
+            currentFilter = filter;
+            
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
+                btn.classList.add('bg-white/5', 'text-gray-400', 'border-white/10');
+            });
+            
+            const activeBtn = document.getElementById('filter' + filter.charAt(0).toUpperCase() + filter.slice(1).replace('-', ''));
+            activeBtn.classList.remove('bg-white/5', 'text-gray-400', 'border-white/10');
+            activeBtn.classList.add('bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
+            
+            renderTasks();
         }
 
         function toggleTask(id) {
             const task = tasks.find(t => t.id === id);
             if (task) {
                 task.completed = !task.completed;
-                task.status = task.completed ? 'complete' : 'pending';
+                task.status = task.completed ? 'done' : 'pending';
                 saveTasks();
                 showToast(task.completed ? 'Task completed!' : 'Task reopened');
             }
         }
 
-        function filterTasks(filter) {
-            currentFilter = filter;
-            document.querySelectorAll('.filter-tab').forEach(t => {
-                t.classList.remove('bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
-                t.classList.add('bg-white/5', 'text-gray-400', 'border-white/10');
-            });
-            event.target.closest('.filter-tab').classList.remove('bg-white/5', 'text-gray-400', 'border-white/10');
-            event.target.closest('.filter-tab').classList.add('bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/30');
-            renderTasks();
-        }
-
-        function addTask() {
-            const name = prompt('Task name:');
-            if (name) {
-                tasks.push({id: Date.now(), name, agent: 'main', status: 'pending', priority: 'medium', completed: false});
+        function deleteTask(id) {
+            if (confirm('Delete this task?')) {
+                tasks = tasks.filter(t => t.id !== id);
                 saveTasks();
-                showToast('Task added!');
+                showToast('Task deleted', '🗑️');
             }
         }
 
-        function showToast(message) {
+        function openModal() {
+            document.getElementById('taskModal').classList.remove('hidden');
+            document.getElementById('taskTitle').focus();
+        }
+
+        function closeModal() {
+            document.getElementById('taskModal').classList.add('hidden');
+            document.getElementById('addTaskForm').reset();
+        }
+
+        function addTask(e) {
+            e.preventDefault();
+            const title = document.getElementById('taskTitle').value;
+            const agent = document.getElementById('taskAgent').value;
+            const priority = document.querySelector('input[name="priority"]:checked').value;
+
+            const newTask = {
+                id: Date.now(),
+                title,
+                agent,
+                priority,
+                status: 'pending',
+                completed: false,
+                createdAt: Date.now()
+            };
+
+            tasks.unshift(newTask);
+            saveTasks();
+            closeModal();
+            showToast('Task added successfully');
+        }
+
+        function showToast(message, icon = '✓') {
             const toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = message;
+            document.getElementById('toastIcon').textContent = icon;
             toast.classList.remove('translate-y-20', 'opacity-0');
             setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
 
-        function updateTasksBadge() {
-            const pending = tasks.filter(t => !t.completed).length;
-            const badge = document.getElementById('tasksBadge');
-            if (badge) badge.textContent = pending;
-        }
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', renderTasks);
 
-        // Search
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            document.querySelectorAll('.task-card').forEach(card => {
-                card.style.display = card.textContent.toLowerCase().includes(term) ? '' : 'none';
-            });
+        // Initialize
+        initSampleTasks();
+        updateUI();
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
         });
-
-        // Init
-        updateStats();
-        renderTasks();
-        updateTasksBadge();
     </script>
 </body>
 </html>
