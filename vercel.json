@@ -14,41 +14,34 @@
       "use": "@vercel/static"
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/dashboard/:path*",
-      "destination": "/api/live-dashboard.js"
+      "src": "/api/(.*)",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      },
+      "continue": true
     },
     {
-      "source": "/api/:path*",
-      "destination": "/api/index.js"
+      "src": "/dashboard/(.*)",
+      "headers": { "Cache-Control": "no-cache, no-store, must-revalidate" },
+      "continue": true
     },
     {
-      "source": "/",
-      "destination": "/dashboard/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/dashboard/:path*",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
-      ]
+      "src": "/database/(.*)",
+      "headers": { 
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Access-Control-Allow-Origin": "*"
+      },
+      "continue": true
     },
-    {
-      "source": "/database/:path*",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" }
-      ]
-    },
-    {
-      "source": "/api/:path*",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
-      ]
-    }
+    { "src": "/api/data", "dest": "/api/data.js" },
+    { "src": "/api/control", "dest": "/api/control.js" },
+    { "src": "/api/logs", "dest": "/api/logs.js" },
+    { "src": "/api/dashboard/(.*)", "dest": "/api/live-dashboard.js" },
+    { "src": "/api/(.*)", "dest": "/api/index.js" },
+    { "src": "/", "dest": "/dashboard/index.html" }
   ]
 }
