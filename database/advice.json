@@ -168,5 +168,39 @@
     "acted_on": false,
     "dismissed_at": null,
     "acted_at": null
+  },
+  {
+    "id": "adv_02f80a6929ec",
+    "agent": "johnny",
+    "category": "leads",
+    "advice": "3 prospects viewed your profile this week. Want me to reach out?",
+    "context": "Profile views = buying intent. Don't let them go cold.",
+    "priority": "medium",
+    "created_at": "2026-02-06T22:00:03.949Z",
+    "expires_at": "2026-02-09T22:00:03.949Z",
+    "actionable": true,
+    "action": "Review and take action",
+    "status": "active",
+    "dismissed": false,
+    "acted_on": false,
+    "dismissed_at": null,
+    "acted_at": null
+  },
+  {
+    "id": "adv_67326107889c",
+    "agent": "courage",
+    "category": "strategy",
+    "advice": "Inbox at 4 unread. Clear it before sleep for better rest.",
+    "context": "Cluttered inbox = cluttered mind. 10-minute cleanup.",
+    "priority": "medium",
+    "created_at": "2026-02-06T22:00:03.949Z",
+    "expires_at": "2026-02-09T22:00:03.949Z",
+    "actionable": true,
+    "action": "Review and take action",
+    "status": "active",
+    "dismissed": false,
+    "acted_on": false,
+    "dismissed_at": null,
+    "acted_at": null
   }
 ]
