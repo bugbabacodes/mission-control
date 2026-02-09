@@ -1,11 +1,11 @@
 {
-  "id": "task_1770670326218",
-  "agentId": "marie_curie",
-  "action": "research_company",
+  "id": "task_1770670525033",
+  "agentId": "shakespeare",
+  "action": "generate_post",
   "params": {
-    "company": "Notion"
+    "topic": "AI automation"
   },
-  "prompt": "Research Notion. Brief: what they do, key people, recent news, opportunity score 1-10, outreach angle. Concise bullets.",
+  "prompt": "Write a LinkedIn post about \"AI automation\". Use Ishan's voice: direct, 100+ projects experience. Strong hook, 3-5 insights, engagement question. 1300-1800 chars. Output ONLY the post.",
   "status": "pending",
-  "createdAt": "2026-02-09T20:52:06.218Z"
+  "createdAt": "2026-02-09T20:55:25.033Z"
 }

@@ -446,23 +446,35 @@
             
             showToast('⏳ Processing...', '⚡');
             
+            // Try local API first (real AI), fall back to Vercel templates
+            const LOCAL_API = 'https://mission-control-ishan.loca.lt';
+            let resp;
+            
             try {
-                const resp = await fetch('/api/quick-action', {
+                resp = await fetch(`${LOCAL_API}/api/execute`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action, params })
                 });
-                
-                const result = await resp.json();
-                
-                if (result.success && result.result) {
-                    // Show result in modal
-                    showQuickActionResult(action, result.result);
-                } else {
-                    showToast('❌ ' + (result.error || 'Action failed'), '❌');
-                }
-            } catch (err) {
-                showToast('❌ Error: ' + err.message, '❌');
+            } catch {
+                // Fall back to Vercel API
+                resp = await fetch('/api/quick-action', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action, params })
+                });
+            }
+            
+            const result = await resp.json();
+            
+            if (result.success) {
+                // Handle both local API (artifact.content) and Vercel API (result.content)
+                const content = result.artifact?.content || result.result?.content || 'Action completed';
+                const agent = result.agent || result.result?.agent || '🤖 Agent';
+                showQuickActionResult(action, { content, agent });
+                loadArtifacts(); // Refresh artifacts panel
+            } else {
+                showToast('❌ ' + (result.error || 'Action failed'), '❌');
             }
         }
 

@@ -1,5 +1,17 @@
 [
   {
+    "id": "art_1770670525034",
+    "agentId": "shakespeare",
+    "type": "linkedin_post",
+    "title": "Post: AI automation",
+    "content": "I've shipped 100+ products over the last 5 years.\n\nHere's what nobody tells you about AI automation:\n\nThe biggest lie in startups? \"We need more features.\"\n\nNo. You need fewer features, done well.\n\nI've watched founders burn 6 months building:\n→ Complex user dashboards nobody uses\n→ Admin panels for edge cases\n→ Integrations \"just in case\"\n\nMeanwhile, their MVP could've shipped in 8 weeks.\n\nThe pattern I see in successful launches:\n\n1. One core feature, executed perfectly\n2. Ship to 10 users before building feature #2\n3. Let paying customers drive the roadmap\n\nYour users don't want options. They want outcomes.\n\nWhat feature are you building that nobody asked for? 👇\n\n#startup #buildinpublic #founder",
+    "params": {
+      "topic": "AI automation"
+    },
+    "createdAt": "2026-02-09T20:55:25.034Z",
+    "status": "completed"
+  },
+  {
     "id": "art_1770670326218",
     "agentId": "marie_curie",
     "type": "research_report",
