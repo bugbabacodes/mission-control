@@ -1,5 +1,5 @@
 {
-  "id": "task_1770670525033",
+  "id": "task_1770670809462",
   "agentId": "shakespeare",
   "action": "generate_post",
   "params": {
@@ -7,5 +7,5 @@
   },
   "prompt": "Write a LinkedIn post about \"AI automation\". Use Ishan's voice: direct, 100+ projects experience. Strong hook, 3-5 insights, engagement question. 1300-1800 chars. Output ONLY the post.",
   "status": "pending",
-  "createdAt": "2026-02-09T20:55:25.033Z"
+  "createdAt": "2026-02-09T21:00:09.462Z"
 }

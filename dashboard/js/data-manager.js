@@ -199,5 +199,79 @@ const DataManager = {
     }
 };
 
+// Local Server (AI Execution)
+    localServer: {
+        // Try local first, fall back to tunnel
+        urls: ['http://localhost:3847', 'https://afraid-quail-9.loca.lt'],
+        currentUrl: null,
+        tunnelPassword: '223.233.67.187'
+    },
+
+    async getLocalServerUrl() {
+        if (this.localServer.currentUrl) return this.localServer.currentUrl;
+        
+        for (const url of this.localServer.urls) {
+            try {
+                const headers = url.includes('loca.lt') 
+                    ? { 'bypass-tunnel-reminder': 'true' } 
+                    : {};
+                const res = await fetch(`${url}/health`, { 
+                    headers, 
+                    mode: 'cors',
+                    signal: AbortSignal.timeout(3000)
+                });
+                if (res.ok) {
+                    this.localServer.currentUrl = url;
+                    console.log('[DataManager] Local server found at:', url);
+                    return url;
+                }
+            } catch (e) {
+                console.warn(`[DataManager] ${url} not reachable`);
+            }
+        }
+        return null;
+    },
+
+    async executeTask(agentId, action, params = {}) {
+        const baseUrl = await this.getLocalServerUrl();
+        if (!baseUrl) {
+            return { success: false, error: 'Local server not running. Start it with: node local-server.js' };
+        }
+
+        const headers = { 
+            'Content-Type': 'application/json',
+            'bypass-tunnel-reminder': 'true'
+        };
+
+        try {
+            const res = await fetch(`${baseUrl}/api/execute`, {
+                method: 'POST',
+                headers,
+                mode: 'cors',
+                body: JSON.stringify({ agentId, action, params })
+            });
+            return await res.json();
+        } catch (e) {
+            console.error('[DataManager] Execute failed:', e);
+            return { success: false, error: e.message };
+        }
+    },
+
+    async checkServerHealth() {
+        const baseUrl = await this.getLocalServerUrl();
+        if (!baseUrl) return { status: 'offline', message: 'Server not reachable' };
+        
+        try {
+            const headers = baseUrl.includes('loca.lt') 
+                ? { 'bypass-tunnel-reminder': 'true' } 
+                : {};
+            const res = await fetch(`${baseUrl}/health`, { headers, mode: 'cors' });
+            return await res.json();
+        } catch (e) {
+            return { status: 'error', message: e.message };
+        }
+    }
+};
+
 // Auto-initialize on load
 console.log('[DataManager] Initialized, base path:', DataManager.getBasePath());
