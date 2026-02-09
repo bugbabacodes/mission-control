@@ -1,0 +1,11 @@
+{
+  "id": "task_1770670326218",
+  "agentId": "marie_curie",
+  "action": "research_company",
+  "params": {
+    "company": "Notion"
+  },
+  "prompt": "Research Notion. Brief: what they do, key people, recent news, opportunity score 1-10, outreach angle. Concise bullets.",
+  "status": "pending",
+  "createdAt": "2026-02-09T20:52:06.218Z"
+}

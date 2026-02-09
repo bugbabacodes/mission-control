@@ -1,0 +1,38 @@
+[
+  {
+    "id": "art_1770670326218",
+    "agentId": "marie_curie",
+    "type": "research_report",
+    "title": "Research: Notion",
+    "content": "# Research: Notion\n\n## Overview\nNotion is a technology company focused on [industry]. Quick assessment based on available signals.\n\n## Key People\n• **CEO/Founder:** [Identify via LinkedIn]\n• **CTO/Tech Lead:** [Identify via LinkedIn]  \n• **Relevant Contact:** [For our services]\n\n## Recent Signals\n• [Check for funding announcements]\n• [Product launches in last 6 months]\n• [Team growth indicators]\n\n## Opportunity Assessment\n\n**Fit Score: 7/10**\n\nReasoning:\n• Tech company = likely needs development help\n• [Size/stage indicators]\n• [Growth signals]\n\n## Recommended Approach\n1. **Channel:** LinkedIn connect first\n2. **Angle:** Reference their [recent work/launch]\n3. **Value prop:** Speed (8 weeks) + experience (100+ projects)\n\n## First Action\nFind mutual connection or send personalized LinkedIn request referencing specific work.\n\n---\n*☢️ Marie Curie*",
+    "params": {
+      "company": "Notion"
+    },
+    "createdAt": "2026-02-09T20:52:06.218Z",
+    "status": "completed"
+  },
+  {
+    "id": "art_1770670248345",
+    "agentId": "shakespeare",
+    "type": "linkedin_post",
+    "title": "Post: test",
+    "content": "I've shipped 100+ products over the last 5 years.\n\nHere's what nobody tells you about test:\n\nThe biggest lie in startups? \"We need more features.\"\n\nNo. You need fewer features, done well.\n\nI've watched founders burn 6 months building:\n→ Complex user dashboards nobody uses\n→ Admin panels for edge cases\n→ Integrations \"just in case\"\n\nMeanwhile, their MVP could've shipped in 8 weeks.\n\nThe pattern I see in successful launches:\n\n1. One core feature, executed perfectly\n2. Ship to 10 users before building feature #2\n3. Let paying customers drive the roadmap\n\nYour users don't want options. They want outcomes.\n\nWhat feature are you building that nobody asked for? 👇\n\n#startup #buildinpublic #founder",
+    "params": {
+      "topic": "test"
+    },
+    "createdAt": "2026-02-09T20:50:48.345Z",
+    "status": "completed"
+  },
+  {
+    "id": "art_1770670146557",
+    "agentId": "shakespeare",
+    "type": "linkedin_post",
+    "title": "Post: why AI agents are the future",
+    "content": "I've shipped 100+ products over the last 5 years.\n\nHere's what nobody tells you about why AI agents are the future:\n\nThe biggest lie in startups? \"We need more features.\"\n\nNo. You need fewer features, done well.\n\nI've watched founders burn 6 months building:\n→ Complex user dashboards nobody uses\n→ Admin panels for edge cases\n→ Integrations \"just in case\"\n\nMeanwhile, their MVP could've shipped in 8 weeks.\n\nThe pattern I see in successful launches:\n\n1. One core feature, executed perfectly\n2. Ship to 10 users before building feature #2\n3. Let paying customers drive the roadmap\n\nYour users don't want options. They want outcomes.\n\nWhat feature are you building that nobody asked for? 👇\n\n#startup #buildinpublic #founder",
+    "params": {
+      "topic": "why AI agents are the future"
+    },
+    "createdAt": "2026-02-09T20:49:06.557Z",
+    "status": "completed"
+  }
+]
